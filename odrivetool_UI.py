@@ -15,9 +15,8 @@ import os
 
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
-import numpy as np
 
-from odrive_thread import odriveWorker
+from serialThread import odriveWorker
 
 ICON_TRUE = "/home/imu/Projects/odrive/odrive_ui/Icons/True.jpg"
 ICON_FALSE = "/home/imu/Projects/odrive/odrive_ui/Icons/False.jpg"

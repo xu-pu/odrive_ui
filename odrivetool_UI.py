@@ -42,6 +42,8 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 		self.actionScan_config.triggered.connect(self.scan_all_config)
 
+		self.pushButton_saveConfiguration.clicked.connect(self.save_odrive_configuration)
+		self.pushButton_eraseConfiguration.clicked.connect(self.erase_odrive_configuration)
 		self.pushButton_scanConfiguration.clicked.connect(self.scan_all_config)
 		self.pushButton_writeConfiguration.clicked.connect(self.write_config)
 		self.pushButton_connect.clicked.connect(self.odrive_connect)
@@ -276,6 +278,12 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			elif current_state == AXIS_STATE_CLOSED_LOOP_CONTROL:
 				self.closed_loop_control_state()
 
+	def save_odrive_configuration(self):
+		self.my_drive.save_configuration()
+
+	def erase_odrive_configuration(self):
+		self.my_drive.erase_configuration()
+
 	def write_config(self):
 		self.my_drive.axis0.motor.config.phase_inductance = float(self.doubleSpinBox_phaseInductanceValue.value())
 		self.my_drive.axis0.motor.config.phase_resistance = float(self.doubleSpinBox_phaseResistanceValue.value())
@@ -329,7 +337,6 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.config.enable_uart = self.radioButton_enableUartTrue.isChecked()
 		self.my_drive.config.enable_i2c_instead_of_can = self.radioButton_enableI2cInsteadOfCanTrue.isChecked()
 		self.my_drive.config.brake_resistance = float(self.doubleSpinBox_brakeResistanceValue.value())
-
 
 	def scan_all_config(self):
 		print("Scanning all config")

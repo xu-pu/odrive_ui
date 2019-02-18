@@ -37,8 +37,8 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.Scan_config_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+F"), self)
 		self.Scan_config_shortcut.activated.connect(self.scan_all_config)
 
-		# self.odrive_connect_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+C"), self)
-		# self.odrive_connect_shortcut.activated.connect(self.odrive_connect)
+		self.odrive_connect_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+C"), self)
+		self.odrive_connect_shortcut.activated.connect(self.odrive_connect)
 
 		self.actionScan_config.triggered.connect(self.scan_all_config)
 
@@ -119,6 +119,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.odrive_worker = odriveWorker()
 		self.odrive_worker.odrive_found_sig.connect(self.odrive_connected)
 		self.odrive_worker.start()
+		self.pushButton_connect.setDisabled(True)
 
 
 	def odrive_connected(self, my_drive):
@@ -137,9 +138,9 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 		self.setDisabled_odrive_ui(False)
 
-		self.axis0_listWidget_controller.setDisabled(False)
-		self.groupBox_controller.setDisabled(False)
-		self.groupBox_13.setDisabled(False)
+		# self.axis0_listWidget_controller.setDisabled(False)
+		# self.groupBox_controller.setDisabled(False)
+		# self.groupBox_13.setDisabled(False)
 
 		self.update_controller_mode()
 		self.scan_all_config()
@@ -167,10 +168,32 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 	def update_graphs(self):
 		delta = pg.ptime.time() - self.axis_dict["start_time"]
 		self.axis_dict["time_array"].append(delta)
-		self.update_velocity_graph()
-		self.update_position_graph()
-		self.update_current_graph()
-		self.update_X_range()
+		try:
+			self.update_velocity_graph()
+			self.update_position_graph()
+			self.update_current_graph()
+			self.update_X_range()
+		except Exception as e:
+			print(e)
+			self.odrive_disconnected_exception()
+
+
+	def odrive_disconnected_exception(self):
+		self.timer.stop()
+		self.timer2.stop()
+		self.odrive_worker.stop()
+		self.pushButton_connect.setDisabled(False)
+		self.setDisabled_odrive_ui(True)
+		self.axis_dict["time_array"] = []
+		self.axis_dict["velocity"]["set_point"] = []
+		self.axis_dict["velocity"]["estimate"] = []
+		self.axis_dict["current"]["set_point"] = []
+		self.axis_dict["current"]["estimate"] = []
+		self.axis_dict["position"]["set_point"] = []
+		self.axis_dict["position"]["estimate"] = []
+
+
+
 
 	def update_velocity_graph(self):
 		self.axis_dict["velocity"]["estimate"].append(self.my_drive.axis0.encoder.vel_estimate)
@@ -215,7 +238,12 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	def update(self):
 		# self.update_voltage()
-		self.update_machine_state()
+		try:
+			self.update_machine_state()
+		except Exception as e:
+			print(e)
+			self.odrive_disconnected_exception()
+
 
 	def update_voltage(self):
 		self.label_vbusVoltageValue.setText(str(round(self.my_drive.vbus_voltage, 2)))

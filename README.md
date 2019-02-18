@@ -1,5 +1,7 @@
 # UI_odrivetool
 
+Tested on Ubuntu 16.04 - Python 3.5.2
+
 ## Repo setup
 
 ### Python env setup

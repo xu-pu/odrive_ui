@@ -18,16 +18,14 @@ from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
 
 from serialThread import odriveWorker
 
-ICON_TRUE = "/home/imu/Projects/odrive/odrive_ui/Icons/True.jpg"
-ICON_FALSE = "/home/imu/Projects/odrive/odrive_ui/Icons/False.jpg"
-ICON_NOSTATE = "/home/imu/Projects/odrive/odrive_ui/Icons/NoState.jpg"
+ICON_TRUE = "Icons/True.jpg"
+ICON_FALSE = "Icons/False.jpg"
+ICON_NOSTATE = "Icons/NoState.jpg"
 
 class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	app_name = "Odrive Tester"
 	def __init__(self):
-		# Explaining super is out of the scope of this article
-		# So please google it if you're not familar with it
 		# Simple reason why we use it here is that it allows us to
 		# access variables, methods etc in the design.py file
 		super(self.__class__, self).__init__()
@@ -39,8 +37,8 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.Scan_config_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+F"), self)
 		self.Scan_config_shortcut.activated.connect(self.scan_all_config)
 
-		self.odrive_connect_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+C"), self)
-		self.odrive_connect_shortcut.activated.connect(self.odrive_connect)
+		# self.odrive_connect_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+C"), self)
+		# self.odrive_connect_shortcut.activated.connect(self.odrive_connect)
 
 		self.actionScan_config.triggered.connect(self.scan_all_config)
 
@@ -369,7 +367,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.label_addrMatchCnt_2.setText(str(self.my_drive.system_stats.i2c.addr_match_cnt))
 		self.label_errorCntValue.setText(str(self.my_drive.system_stats.i2c.error_cnt))
 
-
+	def load_config_template(self):
+		config_template = {}
+		with open("config_template.json") as f:
+			config_template = json.load(f)
+		return config_template
 
 
 	def scan_axis_config(self):

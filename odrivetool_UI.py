@@ -639,9 +639,14 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 		print(self.axis0_listWidget_controller.currentRow())
 		print(self.my_drive.axis0.controller.config.control_mode)
+
 		if self.my_drive.axis0.controller.config.control_mode == self.axis0_listWidget_controller.currentRow():
 			if self.axis0_listWidget_controller.currentRow() == 3:
 				self.my_drive.axis0.controller.pos_setpoint = self.axis0_spinBox_controllerValue.value()
+			elif self.axis0_listWidget_controller.currentRow() == 2:
+				self.my_drive.axis0.controller.vel_setpoint = self.axis0_spinBox_controllerValue.value()
+			elif self.axis0_listWidget_controller.currentRow() == 1:
+				self.my_drive.axis0.controller.current_setpoint = self.axis0_spinBox_controllerValue.value()
 
 		# self.my_drive.axis0.
 	#

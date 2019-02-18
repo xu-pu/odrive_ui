@@ -123,6 +123,9 @@
             <layout class="QGridLayout" name="gridLayout_21">
              <item row="1" column="0" alignment="Qt::AlignTop">
               <widget class="QGroupBox" name="groupBox_startupSequence">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Startup Sequence</string>
                </property>
@@ -517,6 +520,9 @@ Control</string>
             <layout class="QGridLayout" name="gridLayout_23">
              <item row="1" column="0" alignment="Qt::AlignTop">
               <widget class="QGroupBox" name="groupBox_startupSequence_2">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Startup Sequence</string>
                </property>

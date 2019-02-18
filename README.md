@@ -2,6 +2,8 @@
 
 Tested on Ubuntu 16.04 - Python 3.5.2
 
+Make sure you can run odrivetool and it can find odrive board connected.
+
 ## Repo setup
 
 ### Python env setup

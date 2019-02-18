@@ -29,5 +29,5 @@ pip install -r requirements.txt
 
 **Run Python file**
 ```
-python3 UI_odrivetool.py
+python3 odrivetool_UI.py
 ```

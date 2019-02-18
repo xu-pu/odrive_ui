@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/imu/Projects/odrive/odrive_ui/odrive_qt/mainwindow.ui'
+# Form implementation generated from reading ui file '/home/imu/Projects/UI_odrivetool/mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.10
 #
@@ -870,7 +870,7 @@ class Ui_MainWindow(object):
         self.radioButton_enableUartTrue.setMinimumSize(QtCore.QSize(0, 28))
         self.radioButton_enableUartTrue.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../Icons/True.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("Icons/True.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.radioButton_enableUartTrue.setIcon(icon)
         self.radioButton_enableUartTrue.setIconSize(QtCore.QSize(26, 26))
         self.radioButton_enableUartTrue.setObjectName("radioButton_enableUartTrue")
@@ -882,7 +882,7 @@ class Ui_MainWindow(object):
         self.radioButton_enableUartFalse.setMinimumSize(QtCore.QSize(0, 28))
         self.radioButton_enableUartFalse.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../Icons/False.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("Icons/False.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.radioButton_enableUartFalse.setIcon(icon1)
         self.radioButton_enableUartFalse.setIconSize(QtCore.QSize(26, 26))
         self.radioButton_enableUartFalse.setObjectName("radioButton_enableUartFalse")

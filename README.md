@@ -22,7 +22,7 @@ source env/bin/activate
 pip install --upgrade pip
 ```
 
-#### 4. Install requirements (if requirements file is present)
+#### 4. Install requirements
 ```
 pip install -r requirements.txt
 ```

@@ -737,6 +737,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			self.my_drive.axis0.controller.config.control_mode = CTRL_MODE_CURRENT_CONTROL
 		elif name == "Velocity":
 			self.my_drive.axis0.controller.config.control_mode = CTRL_MODE_VELOCITY_CONTROL
+		self.spinBox_controlModeValue.setValue(self.my_drive.axis0.controller.config.control_mode)
 
 
 

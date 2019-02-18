@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1368</width>
+    <width>1501</width>
     <height>957</height>
    </rect>
   </property>
@@ -3339,6 +3339,9 @@ Control</string>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
+                     <property name="decimals">
+                      <number>18</number>
+                     </property>
                      <property name="maximum">
                       <double>1000000.000000000000000</double>
                      </property>
@@ -3368,6 +3371,9 @@ Control</string>
                     <widget class="QDoubleSpinBox" name="doubleSpinBox_velIntegratorGainValue">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="decimals">
+                      <number>18</number>
                      </property>
                      <property name="maximum">
                       <double>1000000.000000000000000</double>
@@ -5271,7 +5277,7 @@ Control</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1368</width>
+     <width>1501</width>
      <height>22</height>
     </rect>
    </property>

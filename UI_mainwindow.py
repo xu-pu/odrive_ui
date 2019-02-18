@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1368, 957)
+        MainWindow.resize(1501, 957)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1568,6 +1568,7 @@ class Ui_MainWindow(object):
         self.gridLayout_18.addWidget(self.label_controlMode, 4, 0, 1, 1)
         self.doubleSpinBox_velGainValue = QtWidgets.QDoubleSpinBox(self.groupBox_controller_config)
         self.doubleSpinBox_velGainValue.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.doubleSpinBox_velGainValue.setDecimals(18)
         self.doubleSpinBox_velGainValue.setMaximum(1000000.0)
         self.doubleSpinBox_velGainValue.setObjectName("doubleSpinBox_velGainValue")
         self.gridLayout_18.addWidget(self.doubleSpinBox_velGainValue, 1, 1, 1, 1)
@@ -1583,6 +1584,7 @@ class Ui_MainWindow(object):
         self.gridLayout_18.addWidget(self.spinBox_controlModeValue, 4, 1, 1, 1)
         self.doubleSpinBox_velIntegratorGainValue = QtWidgets.QDoubleSpinBox(self.groupBox_controller_config)
         self.doubleSpinBox_velIntegratorGainValue.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.doubleSpinBox_velIntegratorGainValue.setDecimals(18)
         self.doubleSpinBox_velIntegratorGainValue.setMaximum(1000000.0)
         self.doubleSpinBox_velIntegratorGainValue.setObjectName("doubleSpinBox_velIntegratorGainValue")
         self.gridLayout_18.addWidget(self.doubleSpinBox_velIntegratorGainValue, 2, 1, 1, 1)
@@ -2492,7 +2494,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addLayout(self.gridLayout_2, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralWidget)
         self.menuBar = QtWidgets.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1368, 22))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1501, 22))
         self.menuBar.setObjectName("menuBar")
         self.menuSave_config = QtWidgets.QMenu(self.menuBar)
         self.menuSave_config.setObjectName("menuSave_config")

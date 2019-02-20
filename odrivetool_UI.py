@@ -74,49 +74,91 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		# self.axis1Forward_pushButton.clicked.connect(self.send_axis1_velocity_current_forward)
 		# self.axis0_pushButton_sendController.clicked.connect(self.send_axis_control)
 
+
+		self.showAxis0_checkBox.stateChanged.connect(self.axis0_graph_state_changed)
+		self.showAxis1_checkBox.stateChanged.connect(self.axis1_graph_state_changed)
+		self.clearGraph_pushButton.clicked.connect(self.clearGraph_clicked)
+
 		self.plotWidget_velocity.setLabel('bottom', 'Time', 's')
 		self.plotWidget_velocity.setLabel('left', 'Velocity', 'rpm')
-		#self.plotWidget_velocity.setXRange(0,self.spinBox_graphTime.value())
-		#self.plotWidget_velocity.setYRange(0, 12)
 		self.plotWidget_velocity.setTitle("Velocity")
-		# self.plotWidget_velocity.addLegend()
-		self.velocity_setpoint_curve = self.plotWidget_velocity.plot(name="Setpoint", pen=pg.mkPen(color=(0, 128, 255), width=2))
-		self.velocity_estimate_curve = self.plotWidget_velocity.plot(name="Estimate", pen=pg.mkPen(color=(255, 192, 0), width=2))
 
 		self.plotWidget_position.setLabel('bottom', 'Time', 's')
 		self.plotWidget_position.setLabel('left', 'Position', 'counts')
-		#self.plotWidget_position.setXRange(0,self.spinBox_graphTime.value())
-		#self.plotWidget_position.setYRange(0, 12)
 		self.plotWidget_position.setTitle("Position")
-		self.position_setpoint_curve = self.plotWidget_position.plot(name="Setpoint", pen=pg.mkPen(color=(0, 128, 255), width=2))
-		self.position_estimate_curve = self.plotWidget_position.plot(name="Estimate", pen=pg.mkPen(color=(255, 192, 0), width=2))
 
 		self.plotWidget_current.setLabel('bottom', 'Time', 's')
 		self.plotWidget_current.setLabel('left', 'Current', 'Iq')
-		#self.plotWidget_current.setXRange(0,self.spinBox_graphTime.value())
-		#self.plotWidget_current.setYRange(0, 12)
 		self.plotWidget_current.setTitle("Current")
-		self.current_setpoint_curve = self.plotWidget_current.plot(name="Setpoint", pen=pg.mkPen(color=(0, 128, 255), width=2))
-		self.current_estimate_curve = self.plotWidget_current.plot(name="Estimate", pen=pg.mkPen(color=(255, 192, 0), width=2))
 
-		self.axis_dict = {}
-		self.axis_dict["position"] = {}
-		self.axis_dict["position"]["estimate"] = []
-		self.axis_dict["position"]["set_point"] = []
-		self.axis_dict["velocity"] = {}
-		self.axis_dict["velocity"]["estimate"] = []
-		self.axis_dict["velocity"]["set_point"] = []
-		self.axis_dict["current"] = {}
-		self.axis_dict["current"]["estimate"] = []
-		self.axis_dict["current"]["set_point"] = []
+		self.ad = {} #axis_dcit
 
-		self.axis_dict["time_array"] = []
+		pen_sp_axis0 = pg.mkPen(color=(0, 128, 255), width=2)
+		pen_est_axis0 = pg.mkPen(color=(255, 192, 0), width=2)
+
+		self.ad["axis0"] = {}
+		self.ad["axis0"]["time_array"] = []
+		self.ad["axis0"]["position"] = {}
+		self.ad["axis0"]["position"]["estimate"] = []
+		self.ad["axis0"]["position"]["set_point"] = []
+		self.ad["axis0"]["velocity"] = {}
+		self.ad["axis0"]["velocity"]["estimate"] = []
+		self.ad["axis0"]["velocity"]["set_point"] = []
+		self.ad["axis0"]["current"] = {}
+		self.ad["axis0"]["current"]["estimate"] = []
+		self.ad["axis0"]["current"]["set_point"] = []
+		self.ad["axis0"]["vel_sp_curve"] = self.plotWidget_velocity.plot(name="Setpoint", pen=pen_sp_axis0)
+		self.ad["axis0"]["vel_est_curve"] = self.plotWidget_velocity.plot(name="Estimate", pen=pen_est_axis0)
+		self.ad["axis0"]["pos_sp_curve"] = self.plotWidget_position.plot(name="Setpoint", pen=pen_sp_axis0)
+		self.ad["axis0"]["pos_est_curve"] = self.plotWidget_position.plot(name="Estimate", pen=pen_est_axis0)
+		self.ad["axis0"]["current_sp_curve"] = self.plotWidget_current.plot(name="Setpoint", pen=pen_sp_axis0)
+		self.ad["axis0"]["current_est_curve"] = self.plotWidget_current.plot(name="Estimate", pen=pen_est_axis0)
+
+# self.position_setpoint_curve =
+# self.position_estimate_curve =
+# self.current_setpoint_curve =
+# self.current_estimate_curve =
+
+		self.ad["axis1"] = {}
+		self.ad["axis1"]["time_array"] = []
+		self.ad["axis1"]["position"] = {}
+		self.ad["axis1"]["position"]["estimate"] = []
+		self.ad["axis1"]["position"]["set_point"] = []
+		self.ad["axis1"]["velocity"] = {}
+		self.ad["axis1"]["velocity"]["estimate"] = []
+		self.ad["axis1"]["velocity"]["set_point"] = []
+		self.ad["axis1"]["current"] = {}
+		self.ad["axis1"]["current"]["estimate"] = []
+		self.ad["axis1"]["current"]["set_point"] = []
+
+
 
 		self.axis0_state = None
 
 		self.setDisabled_odrive_ui(True)
 
 		self.odrive_connect()
+
+	def axis0_graph_state_changed(self, state):
+		if state != QtCore.Qt.Checked:
+			self.clear_axis_graph_lists("axis0")
+		self.axis_graph_state_changed()
+
+	def axis1_graph_state_changed(self, state):
+		if state != QtCore.Qt.Checked:
+			self.clear_axis_graph_lists("axis1")
+		self.axis_graph_state_changed()
+
+	def axis_graph_state_changed(self):
+		axis0_state = self.showAxis0_checkBox.isChecked()
+		axis1_state = self.showAxis1_checkBox.isChecked()
+		if axis0_state == False and axis1_state == False:
+			self.timer_graphUpdate.stop()
+			# add something to clear graphs
+		else:
+			if self.timer_graphUpdate.isActive() == False:
+				self.timer_graphUpdate.start(20)
+				self.ad["start_time"] = pg.ptime.time()
 
 	def update_controller_mode(self):
 		# print("Controller mode {}".format(self.my_drive.axis0.controller.config.control_mode))
@@ -190,10 +232,10 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.timer.timeout.connect(self.update)
 		self.timer.start(500)
 
-		self.axis_dict["start_time"] = pg.ptime.time()
-		self.timer2 = pg.QtCore.QTimer()
-		self.timer2.timeout.connect(self.update_graphs)
-		self.timer2.start(20)
+		self.ad["start_time"] = pg.ptime.time()
+		self.timer_graphUpdate = pg.QtCore.QTimer()
+		self.timer_graphUpdate.timeout.connect(self.update_graphs)
+		self.timer_graphUpdate.start(20)
 
 		self.setDisabled_odrive_ui(False)
 
@@ -213,69 +255,85 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.pushButton_getTemp.setDisabled(state)
 
 	def update_graphs(self):
-		delta = pg.ptime.time() - self.axis_dict["start_time"]
-		self.axis_dict["time_array"].append(delta)
+		delta = pg.ptime.time() - self.ad["start_time"]
 		try:
-			self.update_velocity_graph()
-			self.update_position_graph()
-			self.update_current_graph()
+			if self.showAxis0_checkBox.isChecked():
+				self.ad["axis0"]["time_array"].append(delta)
+				self.update_velocity_graph("axis0", self.my_drive.axis0)
+				self.update_position_graph("axis0", self.my_drive.axis0)
+				self.update_current_graph("axis0", self.my_drive.axis0)
+			if self.showAxis1_checkBox.isChecked():
+				print("Update Axis1")
 			self.update_X_range()
 		except Exception as e:
 			print(e)
 			self.odrive_disconnected_exception()
 
-
 	def odrive_disconnected_exception(self):
 		self.timer.stop()
-		self.timer2.stop()
+		self.timer_graphUpdate.stop()
 		self.odrive_worker.stop()
 		self.pushButton_connect.setDisabled(False)
 		self.pushButton_connect.setText("Connect")
 		self.setDisabled_odrive_ui(True)
-		self.axis_dict["time_array"] = []
-		self.axis_dict["velocity"]["set_point"] = []
-		self.axis_dict["velocity"]["estimate"] = []
-		self.axis_dict["current"]["set_point"] = []
-		self.axis_dict["current"]["estimate"] = []
-		self.axis_dict["position"]["set_point"] = []
-		self.axis_dict["position"]["estimate"] = []
+
+		self.clear_axis_graph_lists("axis0")
+		# self.clear_axis_graph_lists("axis1")
+
+	def clearGraph_clicked(self):
+		self.clear_axis_graph_lists("axis0")
+		# self.clear_axis_graph_lists("axis1")
+		self.ad["start_time"] = pg.ptime.time()
 
 
+	def clear_axis_graph_lists(self, axis_key):
+		self.ad[axis_key]["time_array"] = []
+		self.ad[axis_key]["velocity"]["set_point"] = []
+		self.ad[axis_key]["velocity"]["estimate"] = []
+		self.ad[axis_key]["current"]["set_point"] = []
+		self.ad[axis_key]["current"]["estimate"] = []
+		self.ad[axis_key]["position"]["set_point"] = []
+		self.ad[axis_key]["position"]["estimate"] = []
+		self.ad[axis_key]["vel_sp_curve"].setData([],[])
+		self.ad[axis_key]["vel_est_curve"].setData([],[])
+		self.ad[axis_key]["current_sp_curve"].setData([],[])
+		self.ad[axis_key]["current_est_curve"].setData([],[])
+		self.ad[axis_key]["pos_sp_curve"].setData([],[])
+		self.ad[axis_key]["pos_est_curve"].setData([],[])
 
+	def update_velocity_graph(self, axis_key, odrv_axis):
+		self.ad[axis_key]["velocity"]["estimate"].append(odrv_axis.encoder.vel_estimate)
+		self.ad[axis_key]["velocity"]["set_point"].append(odrv_axis.controller.vel_setpoint)
+		self.ad[axis_key]["vel_sp_curve"].setData(self.ad[axis_key]["time_array"], self.ad[axis_key]["velocity"]["set_point"])
+		self.ad[axis_key]["vel_est_curve"].setData(self.ad[axis_key]["time_array"], self.ad[axis_key]["velocity"]["estimate"])
 
-	def update_velocity_graph(self):
-		self.axis_dict["velocity"]["estimate"].append(self.my_drive.axis0.encoder.vel_estimate)
-		self.axis_dict["velocity"]["set_point"].append(self.my_drive.axis0.controller.vel_setpoint)
-		self.velocity_setpoint_curve.setData(self.axis_dict["time_array"], self.axis_dict["velocity"]["set_point"])
-		self.velocity_estimate_curve.setData(self.axis_dict["time_array"], self.axis_dict["velocity"]["estimate"])
+	def update_current_graph(self, axis_key, odrv_axis):
+		self.ad[axis_key]["current"]["estimate"].append(odrv_axis.motor.current_control.Iq_measured)
+		self.ad[axis_key]["current"]["set_point"].append(odrv_axis.motor.current_control.Iq_setpoint)
+		self.ad[axis_key]["current_sp_curve"].setData(self.ad[axis_key]["time_array"], self.ad[axis_key]["current"]["set_point"])
+		self.ad[axis_key]["current_est_curve"].setData(self.ad[axis_key]["time_array"], self.ad[axis_key]["current"]["estimate"])
 
-	def update_current_graph(self):
-		self.axis_dict["current"]["estimate"].append(self.my_drive.axis0.motor.current_control.Iq_measured)
-		self.axis_dict["current"]["set_point"].append(self.my_drive.axis0.motor.current_control.Iq_setpoint)
-		self.current_setpoint_curve.setData(self.axis_dict["time_array"], self.axis_dict["current"]["set_point"])
-		self.current_estimate_curve.setData(self.axis_dict["time_array"], self.axis_dict["current"]["estimate"])
-
-	def update_position_graph(self):
-		self.axis_dict["position"]["estimate"].append(self.my_drive.axis0.encoder.pos_estimate)
-		self.axis_dict["position"]["set_point"].append(self.my_drive.axis0.controller.pos_setpoint)
-		self.position_setpoint_curve.setData(self.axis_dict["time_array"], self.axis_dict["position"]["set_point"])
-		self.position_estimate_curve.setData(self.axis_dict["time_array"], self.axis_dict["position"]["estimate"])
+	def update_position_graph(self, axis_key, odrv_axis):
+		self.ad[axis_key]["position"]["estimate"].append(odrv_axis.encoder.pos_estimate)
+		self.ad[axis_key]["position"]["set_point"].append(odrv_axis.controller.pos_setpoint)
+		self.ad[axis_key]["pos_sp_curve"].setData(self.ad[axis_key]["time_array"], self.ad[axis_key]["position"]["set_point"])
+		self.ad[axis_key]["pos_est_curve"].setData(self.ad[axis_key]["time_array"], self.ad[axis_key]["position"]["estimate"])
 
 	def update_X_range(self):
-		upper_limit = self.axis_dict["time_array"][-1]
-		lower_limit = self.axis_dict["time_array"][0]
+		upper_limit = self.ad["axis0"]["time_array"][-1]
+		lower_limit = self.ad["axis0"]["time_array"][0]
 		delta = self.spinBox_graphTime.value()
 		if (upper_limit - lower_limit) > delta:
 			while((upper_limit - lower_limit) > delta):
-				self.axis_dict["time_array"].pop(0)
-				self.axis_dict["velocity"]["estimate"].pop(0)
-				self.axis_dict["velocity"]["set_point"].pop(0)
-				self.axis_dict["current"]["estimate"].pop(0)
-				self.axis_dict["current"]["set_point"].pop(0)
-				self.axis_dict["position"]["estimate"].pop(0)
-				self.axis_dict["position"]["set_point"].pop(0)
-				upper_limit = self.axis_dict["time_array"][-1]
-				lower_limit = self.axis_dict["time_array"][0]
+				self.ad["axis0"]["time_array"].pop(0)
+				self.ad["axis0"]["velocity"]["estimate"].pop(0)
+				self.ad["axis0"]["velocity"]["set_point"].pop(0)
+				self.ad["axis0"]["current"]["estimate"].pop(0)
+				self.ad["axis0"]["current"]["set_point"].pop(0)
+				self.ad["axis0"]["position"]["estimate"].pop(0)
+				self.ad["axis0"]["position"]["set_point"].pop(0)
+				upper_limit = self.ad["axis0"]["time_array"][-1]
+				lower_limit = self.ad["axis0"]["time_array"][0]
 
 		# if upper_limit >= delta:
 		# 	lower_l = upper_limit - delta

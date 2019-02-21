@@ -114,11 +114,6 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.ad["axis0"]["current_sp_curve"] = self.plotWidget_current.plot(name="Setpoint", pen=pen_sp_axis0)
 		self.ad["axis0"]["current_est_curve"] = self.plotWidget_current.plot(name="Estimate", pen=pen_est_axis0)
 
-# self.position_setpoint_curve =
-# self.position_estimate_curve =
-# self.current_setpoint_curve =
-# self.current_estimate_curve =
-
 		self.ad["axis1"] = {}
 		self.ad["axis1"]["time_array"] = []
 		self.ad["axis1"]["position"] = {}
@@ -131,13 +126,101 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.ad["axis1"]["current"]["estimate"] = []
 		self.ad["axis1"]["current"]["set_point"] = []
 
-
-
 		self.axis0_state = None
-
 		self.setDisabled_odrive_ui(True)
-
 		self.odrive_connect()
+		self.error_checks()
+
+	def error_checks(self):
+		axis0_error = hex(self.my_drive.axis0.error)
+		self.check_axis_errors(axis_error0)
+		axis1_error = hex(self.my_drive.axis1.error)
+		self.check_axis_errors(axis_error1)
+
+	def check_axis_errors(self, axis_error):
+		error_string = ""
+
+		if axis_error == "0x00": #ERROR_NONE = 0x00,
+			# error_string = "No errors"
+			return None
+		elif axis_error == "0x01": #ERROR_INVALID_STATE = 0x01, //<! an invalid state was requested
+			error_string = "ERROR_INVALID_STATE"
+		elif axis_error == "0x02": #ERROR_DC_BUS_UNDER_VOLTAGE = 0x02,
+			error_string = "ERROR_DC_BUS_UNDER_VOLTAGE"
+		elif axis_error == "0x04": #ERROR_DC_BUS_OVER_VOLTAGE = 0x04,
+			error_string = "ERROR_DC_BUS_OVER_VOLTAGE"
+		elif axis_error == "0x08": #ERROR_CURRENT_MEASUREMENT_TIMEOUT = 0x08,
+			error_string = "ERROR_CURRENT_MEASUREMENT_TIMEOUT"
+		elif axis_error == "0x10": #ERROR_BRAKE_RESISTOR_DISARMED = 0x10, //<! the brake resistor was unexpectedly disarmed
+			error_string = "ERROR_BRAKE_RESISTOR_DISARMED"
+		elif axis_error == "0x20": #ERROR_MOTOR_DISARMED = 0x20, //<! the motor was unexpectedly disarmed
+			error_string = "ERROR_MOTOR_DISARMED"
+		elif axis_error == "0x40": #ERROR_MOTOR_FAILED = 0x40, // Go to motor.hpp for information, check odrvX.axisX.motor.error for error value
+			error_string = "ERROR_MOTOR_FAILED"
+		elif axis_error == "0x80": #ERROR_SENSORLESS_ESTIMATOR_FAILED = 0x80,
+			error_string = "RROR_SENSORLESS_ESTIMATOR_FAILED"
+		elif axis_error == "0x100": #ERROR_ENCODER_FAILED = 0x100, // Go to encoder.hpp for information, check odrvX.axisX.encoder.error for error value
+			error_string = "ERROR_ENCODER_FAILED"
+		elif axis_error == "0x200": #ERROR_CONTROLLER_FAILED = 0x200,
+			error_string = "ERROR_CONTROLLER_FAILED"
+		elif axis_error == "0x400": #ERROR_POS_CTRL_DURING_SENSORLESS = 0x400,
+			error_string = "ERROR_POS_CTRL_DURING_SENSORLESS"
+
+		return error_string
+
+	def check_motor_errors(self, axis_error):
+		pass
+		# Axis errors
+#         ERROR_NONE = 0x00,
+#         ERROR_INVALID_STATE = 0x01, //<! an invalid state was requested
+#         ERROR_DC_BUS_UNDER_VOLTAGE = 0x02,
+#         ERROR_DC_BUS_OVER_VOLTAGE = 0x04,
+#         ERROR_CURRENT_MEASUREMENT_TIMEOUT = 0x08,
+#         ERROR_BRAKE_RESISTOR_DISARMED = 0x10, //<! the brake resistor was unexpectedly disarmed
+#         ERROR_MOTOR_DISARMED = 0x20, //<! the motor was unexpectedly disarmed
+#         ERROR_MOTOR_FAILED = 0x40, // Go to motor.hpp for information, check odrvX.axisX.motor.error for error value
+#         ERROR_SENSORLESS_ESTIMATOR_FAILED = 0x80,
+#         ERROR_ENCODER_FAILED = 0x100, // Go to encoder.hpp for information, check odrvX.axisX.encoder.error for error value
+#         ERROR_CONTROLLER_FAILED = 0x200,
+#         ERROR_POS_CTRL_DURING_SENSORLESS = 0x400,
+		#Motor Errors
+#         ERROR_NONE = 0,
+#         ERROR_PHASE_RESISTANCE_OUT_OF_RANGE = 0x0001,
+#         ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE = 0x0002,
+#         ERROR_ADC_FAILED = 0x0004,
+#         ERROR_DRV_FAULT = 0x0008,
+#         ERROR_CONTROL_DEADLINE_MISSED = 0x0010,
+#         ERROR_NOT_IMPLEMENTED_MOTOR_TYPE = 0x0020,
+#         ERROR_BRAKE_CURRENT_OUT_OF_RANGE = 0x0040,
+#         ERROR_MODULATION_MAGNITUDE = 0x0080,
+#         ERROR_BRAKE_DEADTIME_VIOLATION = 0x0100,
+#         ERROR_UNEXPECTED_TIMER_CALLBACK = 0x0200,
+#         ERROR_CURRENT_SENSE_SATURATION = 0x0400
+		#Encoder error
+# 		        ERROR_NONE = 0,
+#         ERROR_UNSTABLE_GAIN = 0x01,
+#         ERROR_CPR_OUT_OF_RANGE = 0x02,
+#         ERROR_NO_RESPONSE = 0x04,
+#         ERROR_UNSUPPORTED_ENCODER_MODE = 0x08,
+#         ERROR_ILLEGAL_HALL_STATE = 0x10,
+# ERROR_INDEX_NOT_FOUND_YET = 0x20,
+		#Controller error
+# ERROR_NONE = 0,
+# ERROR_OVERSPEED = 0x01,
+		#sensorless error
+        # ERROR_NONE = 0,
+		# ERROR_OVERSPEED = 0x01,
+	# self.my_drive.can.unexpected_errors
+	# self.my_drive.system_stats.i2c.error_cnt
+	# self.my_drive.axis0.error
+	# self.my_drive.axis0.encoder.error
+	# self.my_drive.axis0.motor.error
+	# controller and sensorless
+		error_message_text = "more args"
+		message_box_error = QtWidgets.QMessageBox.warning(self, "Error occured", error_message_text,  QtWidgets.QMessageBox.Help | QtWidgets.QMessageBox.Ignore)
+		if message_box_error == QtWidgets.QMessageBox.Help:
+			QtGui.QDesktopServices.openUrl(QtCore.QUrl("https://docs.odriverobotics.com/troubleshooting"))
+
 
 	def axis0_graph_state_changed(self, state):
 		if state != QtCore.Qt.Checked:

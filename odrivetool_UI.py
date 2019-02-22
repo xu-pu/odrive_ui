@@ -541,6 +541,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.erase_configuration()
 
 	def write_config(self):
+		# AXIS0
 		self.my_drive.axis0.motor.config.phase_inductance = float(self.doubleSpinBox_phaseInductanceValue_axis0.value())
 		self.my_drive.axis0.motor.config.phase_resistance = float(self.doubleSpinBox_phaseResistanceValue_axis0.value())
 		self.my_drive.axis0.motor.config.pole_pairs = int(self.spinBox_poleParisValue_axis0.value())
@@ -586,6 +587,54 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis0.encoder.config.idx_search_speed = float(self.doubleSpinBox_idxSearchSpeedValue_axis0.value())
 		self.my_drive.axis0.encoder.config.offset_float = float(self.doubleSpinBox_offsetFloatValue_axis0.value())
 		self.my_drive.axis0.encoder.config.bandwidth = float(self.doubleSpinBox_bandwidthValue_axis0.value())
+
+
+		# AXIS1
+		self.my_drive.axis1.motor.config.phase_inductance = float(self.doubleSpinBox_phaseInductanceValue_axis1.value())
+		self.my_drive.axis1.motor.config.phase_resistance = float(self.doubleSpinBox_phaseResistanceValue_axis1.value())
+		self.my_drive.axis1.motor.config.pole_pairs = int(self.spinBox_poleParisValue_axis1.value())
+		self.my_drive.axis1.motor.config.motor_type = int(self.spinBox_motorTypeValue_axis1.value())
+		self.my_drive.axis1.motor.config.direction = int(self.spinBox_directionValue_axis1.value())
+		self.my_drive.axis1.motor.config.calibration_current = float(self.doubleSpinBox_calibrationCurrentValue_axis1.value())
+		self.my_drive.axis1.motor.config.current_lim = float(self.doubleSpinBox_currentLimValue_axis1.value())
+		self.my_drive.axis1.motor.config.pre_calibrated = self.radioButton_motorPreCalibratedTrue_axis1.isChecked()
+		self.my_drive.axis1.motor.config.requested_current_range = float(self.doubleSpinBox_requestedCurrentRangeValue_axis1.value())
+		# self.my_drive.axis1.motor.config.current_control_bandwidth = float(self.doubleSpinBox_currentControlBandwidthValue.value())
+		self.my_drive.axis1.motor.config.resistance_calib_max_voltage = float(self.doubleSpinBox_resistanceCalibMaxVoltageValue_axis1.value())
+
+		# self.my_drive.axis1.sensorless_estimator.config.pm_flux_linkage = float(self..value())
+		# self.my_drive.axis1.sensorless_estimator.config.pll_bandwidth = float(self..value())
+		# self.my_drive.axis1.sensorless_estimator.config.observer_gain = float(self..value())
+
+		self.my_drive.axis1.controller.config.vel_gain = float(self.doubleSpinBox_velGainValue_axis1.value())
+		self.my_drive.axis1.controller.config.vel_integrator_gain = float(self.doubleSpinBox_velIntegratorGainValue_axis1.value())
+		self.my_drive.axis1.controller.config.pos_gain = float(self.doubleSpinBox_posGainValue_axis1.value())
+		self.my_drive.axis1.controller.config.vel_limit = float(self.doubleSpinBox_velLimitValue_axis1.value())
+		self.my_drive.axis1.controller.config.control_mode = int(self.spinBox_controlModeValue_axis1.value())
+
+		self.my_drive.axis1.config.startup_encoder_index_search = self.radioButton_startupEncoderIndexSearchTrue_axis1.isChecked()
+		self.my_drive.axis1.config.startup_motor_calibration = self.radioButton_startupMotorCalibrationTrue_axis1.isChecked()
+		self.my_drive.axis1.config.startup_sensorless_control = self.radioButton_startupSensorlessControlTrue_axis1.isChecked()
+		self.my_drive.axis1.config.startup_closed_loop_control = self.radioButton_startupLoopControlTrue_axis1.isChecked()
+		self.my_drive.axis1.config.startup_encoder_offset_calibration = self.radioButton_startupEncoderOffsetCalibrationTrue_axis1.isChecked()
+		self.my_drive.axis1.config.enable_step_dir = self.radioButton_enableStepDirTrue_axis1.isChecked()
+
+		self.my_drive.axis1.config.ramp_up_distance = float(self.doubleSpinBox_rampUpDistanceValue_axis1.value())
+		self.my_drive.axis1.config.spin_up_current = float(self.doubleSpinBox_spinUpCurrentValue_axis1.value())
+		self.my_drive.axis1.config.spin_up_target_vel = float(self.doubleSpinBox_spinUpTargetVelValue_axis1.value())
+		self.my_drive.axis1.config.ramp_up_time = float(self.doubleSpinBox_rampUpTimeValue_axis1.value())
+		self.my_drive.axis1.config.counts_per_step = float(self.doubleSpinBox_countPerStepValue_axis1.value())
+		self.my_drive.axis1.config.spin_up_acceleration = float(self.doubleSpinBox_spinUpAccelerationValue_axis1.value())
+
+		self.my_drive.axis1.encoder.config.calib_range = float(self.doubleSpinBox_calibRangeValue_axis1.value())
+		self.my_drive.axis1.encoder.config.mode = int(self.spinBox_modeEncoderValue_axis1.value())
+		self.my_drive.axis1.encoder.config.offset = int(self.spinBox_offsetValue_axis1.value())
+		self.my_drive.axis1.encoder.config.pre_calibrated = self.radioButton_encoderPreCalibratedTrue_axis1.isChecked()
+		self.my_drive.axis1.encoder.config.use_index = self.radioButton_useIndexTrue_axis1.isChecked()
+		self.my_drive.axis1.encoder.config.cpr = int(self.spinBox_cprValue_axis1.value())
+		self.my_drive.axis1.encoder.config.idx_search_speed = float(self.doubleSpinBox_idxSearchSpeedValue_axis1.value())
+		self.my_drive.axis1.encoder.config.offset_float = float(self.doubleSpinBox_offsetFloatValue_axis1.value())
+		self.my_drive.axis1.encoder.config.bandwidth = float(self.doubleSpinBox_bandwidthValue_axis1.value())
 
 		self.my_drive.config.dc_bus_overvoltage_trip_level = float(self.doubleSpinBox_dcBusOvervoltageTripLevelValue.value())
 		self.my_drive.config.enable_ascii_protocol_on_usb = self.radioButton_enableAsciiProtocolOnUsbTrue.isChecked()
@@ -723,6 +772,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	def scan_axis_config(self):
 		self.scan_axis0_config()
+		self.scan_axis1_config()
 
 	def scan_axis0_config(self):
 		self.label_generalErrorValue_axis0.setText(hex(self.my_drive.axis0.error))
@@ -880,7 +930,157 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.doubleSpinBox_calibrationCurrentValue_axis0.setValue(self.my_drive.axis0.motor.config.calibration_current)
 
 	def scan_axis1_config(self):
-		pass
+		self.label_generalErrorValue_axis1.setText(hex(self.my_drive.axis1.error))
+		self.label_loopCounterValue_axis1.setText(str(self.my_drive.axis1.loop_counter))
+		if self.my_drive.axis1.config.startup_motor_calibration:
+			self.radioButton_startupMotorCalibrationTrue_axis1.setChecked(True)
+		else:
+			self.radioButton_startupMotorCalibrationFalse_axis1.setChecked(True)
+
+		if self.my_drive.axis1.config.startup_encoder_index_search:
+			self.radioButton_startupEncoderIndexSearchTrue_axis1.setChecked(True)
+		else:
+			self.radioButton_startupEncoderIndexSearchFalse_axis1.setChecked(True)
+
+		if self.my_drive.axis1.config.startup_encoder_offset_calibration:
+			self.radioButton_startupEncoderOffsetCalibrationTrue_axis1.setChecked(True)
+		else:
+			self.radioButton_startupEncoderOffsetCalibrationFalse_axis1.setChecked(True)
+
+		if self.my_drive.axis1.config.startup_closed_loop_control:
+			self.radioButton_startupLoopControlTrue_axis1.setChecked(True)
+		else:
+			self.radioButton_startupLoopControlFalse_axis1.setChecked(True)
+
+		if self.my_drive.axis1.config.startup_sensorless_control:
+			self.radioButton_startupSensorlessControlTrue_axis1.setChecked(True)
+		else:
+			self.radioButton_startupSensorlessControlFalse_axis1.setChecked(True)
+
+		if self.my_drive.axis1.config.enable_step_dir:
+			self.radioButton_enableStepDirTrue_axis1.setChecked(True)
+		else:
+			self.radioButton_enableStepDirFalse_axis1.setChecked(True)
+
+		self.doubleSpinBox_countPerStepValue_axis1.setValue(self.my_drive.axis1.config.counts_per_step)
+		self.doubleSpinBox_rampUpTimeValue_axis1.setValue(self.my_drive.axis1.config.ramp_up_time)
+		self.doubleSpinBox_rampUpDistanceValue_axis1.setValue(self.my_drive.axis1.config.ramp_up_distance)
+		self.doubleSpinBox_spinUpCurrentValue_axis1.setValue(self.my_drive.axis1.config.spin_up_current)
+		self.doubleSpinBox_spinUpAccelerationValue_axis1.setValue(self.my_drive.axis1.config.spin_up_acceleration)
+		self.doubleSpinBox_spinUpTargetVelValue_axis1.setValue(self.my_drive.axis1.config.spin_up_target_vel)
+
+		self.scan_axis1_encoder_config()
+		self.scan_axis1_controller_config()
+		self.scan_axis1_motor_config()
+
+	def scan_axis1_motor_config(self):
+		self.scan_axis1_motor_config_config()
+		self.scan_axis1_motor_general_config()
+		self.scan_axis1_motor_currentControl_config()
+
+	def scan_axis1_motor_currentControl_config(self):
+		self.label_maxAllowedCurrentValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.max_allowed_current))
+		self.label_ibusValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.Ibus))
+		self.label_vCurrentControlIntegralDValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.v_current_control_integral_d))
+		self.label_vCurrentControlIntegralQValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.v_current_control_integral_q))
+		self.label_finalVAlphaValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.final_v_alpha))
+		self.label_finalVBetaValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.final_v_beta))
+		self.label_pGainValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.p_gain))
+		self.label_iGainValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.i_gain))
+		self.label_iqSetpointValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.Iq_setpoint))
+		self.label_iqMeasuredValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.Iq_measured))
+
+
+	def scan_axis1_motor_general_config(self):
+		self.label_drvFaultValue_axis1.setText(str(self.my_drive.axis1.motor.gate_driver.drv_fault))
+		self.label_dcCalibPhBValue_axis1.setText(str(self.my_drive.axis1.motor.DC_calib_phB))
+		self.label_dcCalibPhCValue_axis1.setText(str(self.my_drive.axis1.motor.DC_calib_phC))
+		self.label_motorErrorValue_axis1.setText(hex(self.my_drive.axis1.motor.error))
+		self.label_currentMeasPhCValue_axis1.setText(str(self.my_drive.axis1.motor.current_meas_phC))
+
+		if self.my_drive.axis1.motor.is_calibrated:
+			self.icon_isCalibratedValue_axis1.setPixmap(QtGui.QPixmap(ICON_TRUE))
+		else:
+			self.icon_isCalibratedValue_axis1.setPixmap(QtGui.QPixmap(ICON_FALSE))
+
+		self.label_phaseCurrentRevGainValue_axis1.setText(str(self.my_drive.axis1.motor.phase_current_rev_gain))
+		self.label_currentMeasPhBValue_axis1.setText(str(self.my_drive.axis1.motor.current_meas_phB))
+		self.label_armedStateValue_axis1.setText(str(self.my_drive.axis1.motor.armed_state))
+
+	def scan_axis1_motor_config_config(self):
+		if self.my_drive.axis1.motor.config.pre_calibrated:
+			self.radioButton_motorPreCalibratedTrue_axis1.setChecked(True)
+		else:
+			self.radioButton_motorPreCalibratedFalse_axis1.setChecked(True)
+
+		self.doubleSpinBox_phaseInductanceValue_axis1.setValue(self.my_drive.axis1.motor.config.phase_inductance)
+		self.doubleSpinBox_phaseResistanceValue_axis1.setValue(self.my_drive.axis1.motor.config.phase_resistance)
+		self.spinBox_motorTypeValue_axis1.setValue(self.my_drive.axis1.motor.config.motor_type)
+		self.doubleSpinBox_currentControlBandwidthValue_axis1.setValue(self.my_drive.axis1.motor.config.current_control_bandwidth)
+		self.doubleSpinBox_requestedCurrentRangeValue_axis1.setValue(self.my_drive.axis1.motor.config.requested_current_range)
+		self.spinBox_directionValue_axis1.setValue(self.my_drive.axis1.motor.config.direction)
+		self.doubleSpinBox_resistanceCalibMaxVoltageValue_axis1.setValue(self.my_drive.axis1.motor.config.resistance_calib_max_voltage)
+		self.doubleSpinBox_currentLimValue_axis1.setValue(self.my_drive.axis1.motor.config.current_lim)
+		self.spinBox_poleParisValue_axis1.setValue(self.my_drive.axis1.motor.config.pole_pairs)
+		self.doubleSpinBox_calibrationCurrentValue_axis1.setValue(self.my_drive.axis1.motor.config.calibration_current)
+
+	def scan_axis1_controller_config(self):
+		self.label_velSetpointValue_axis1.setText(str(self.my_drive.axis1.controller.vel_setpoint))
+		self.label_velIntegratorCurrent_axis1.setText(str(self.my_drive.axis1.controller.vel_integrator_current))
+		self.label_posSetpointValue_axis1.setText(str(self.my_drive.axis1.controller.pos_setpoint))
+		self.label_currentSetpointValue_axis1.setText(str(self.my_drive.axis1.controller.current_setpoint))
+		self.scan_axis1_controller_config_config()
+
+	def scan_axis1_controller_config_config(self):
+		self.doubleSpinBox_posGainValue_axis1.setValue(self.my_drive.axis1.controller.config.pos_gain)
+		self.doubleSpinBox_velGainValue_axis1.setValue(self.my_drive.axis1.controller.config.vel_gain)
+		self.doubleSpinBox_velIntegratorGainValue_axis1.setValue(self.my_drive.axis1.controller.config.vel_integrator_gain)
+		self.doubleSpinBox_velLimitValue_axis1.setValue(self.my_drive.axis1.controller.config.vel_limit)
+		self.spinBox_controlModeValue_axis1.setValue(self.my_drive.axis1.controller.config.control_mode)
+
+	def scan_axis1_encoder_config(self):
+		if self.my_drive.axis1.encoder.index_found:
+			self.icon_indexFoundValue_axis1.setPixmap(QtGui.QPixmap(ICON_TRUE))
+		else:
+			self.icon_indexFoundValue_axis1.setPixmap(QtGui.QPixmap(ICON_FALSE))
+
+		if self.my_drive.axis1.encoder.is_ready:
+			self.icon_isReadyEncoderValue_axis1.setPixmap(QtGui.QPixmap(ICON_TRUE))
+		else:
+			self.icon_isReadyEncoderValue_axis1.setPixmap(QtGui.QPixmap(ICON_FALSE))
+
+		self.label_posCprValue_axis1.setText(str(self.my_drive.axis1.encoder.pos_cpr))
+		self.label_posEstimateValue_axis1.setText(str(self.my_drive.axis1.encoder.pos_estimate))
+		self.label_shadowCountValue_axis1.setText(str(self.my_drive.axis1.encoder.shadow_count))
+		self.label_interpolationValue_axis1.setText(str(self.my_drive.axis1.encoder.interpolation))
+		self.label_countInCprValue_axis1.setText(str(self.my_drive.axis1.encoder.count_in_cpr))
+		self.label_hallStateValue_axis1.setText(str(self.my_drive.axis1.encoder.hall_state))
+		self.label_encoderErrorValue_axis1.setText(hex(self.my_drive.axis1.encoder.error))
+		self.label_phaseValue_axis1.setText(str(self.my_drive.axis1.encoder.phase))
+
+		self.scan_axis1_encoder_config_config()
+
+	def scan_axis1_encoder_config_config(self):
+		if self.my_drive.axis1.encoder.config.pre_calibrated:
+			self.radioButton_encoderPreCalibratedTrue_axis1.setChecked(True)
+		else:
+			self.radioButton_encoderPreCalibratedFalse_axis1.setChecked(True)
+
+		if self.my_drive.axis1.encoder.config.use_index:
+			self.radioButton_useIndexTrue_axis1.setChecked(True)
+		else:
+			self.radioButton_useIndexFalse_axis1.setChecked(True)
+
+
+		self.doubleSpinBox_idxSearchSpeedValue_axis1.setValue(self.my_drive.axis1.encoder.config.idx_search_speed)
+		self.spinBox_cprValue_axis1.setValue(self.my_drive.axis1.encoder.config.cpr)
+		self.spinBox_modeEncoderValue_axis1.setValue(self.my_drive.axis1.encoder.config.mode)
+		self.spinBox_offsetValue_axis1.setValue(self.my_drive.axis1.encoder.config.offset)
+		self.doubleSpinBox_offsetFloatValue_axis1.setValue(self.my_drive.axis1.encoder.config.offset_float)
+		self.doubleSpinBox_calibRangeValue_axis1.setValue(self.my_drive.axis1.encoder.config.calib_range)
+		self.doubleSpinBox_bandwidthValue_axis1.setValue(self.my_drive.axis1.encoder.config.bandwidth)
+
+
 
 	def send_axis0_position_go(self):
 		self.my_drive.axis0.controller.pos_setpoint = self.axis0Position_doubleSpinBox.value()

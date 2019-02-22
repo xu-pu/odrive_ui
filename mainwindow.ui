@@ -6148,7 +6148,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="1">
-                    <widget class="QSpinBox" name="spinBox_modeValue_axis1">
+                    <widget class="QSpinBox" name="spinBox_modeEncoderValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6331,7 +6331,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="2">
-                    <widget class="QLabel" name="icon_isReadyValue_axis1">
+                    <widget class="QLabel" name="icon_isReadyEncoderValue_axis1">
                      <property name="text">
                       <string/>
                      </property>

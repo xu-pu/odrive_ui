@@ -47,33 +47,40 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.pushButton_scanConfiguration.clicked.connect(self.scan_all_config)
 		self.pushButton_writeConfiguration.clicked.connect(self.write_config)
 		self.pushButton_connect.clicked.connect(self.odrive_connect)
-		# self.pushButton_save_config.clicked.connect(self.save_config)
 		self.pushButton_reboot.clicked.connect(self.odrive_reboot)
 
-		self.axis0_pushButton_idle.clicked.connect(self.idle_state_clicked)
-		self.axis0_pushButton_startupSequence.clicked.connect(self.startupSequence_state_clicked)
-		self.axis0_pushButton_fullCalibrationSequence.clicked.connect(self.fullCalibrationSequence_state_clicked)
-		self.axis0_pushButton_motorCalibration.clicked.connect(self.motorCalibration_state_clicked)
-		self.axis0_pushButton_sensorlessControl.clicked.connect(self.sensorlessControl_state_clicked)
-		self.axis0_pushButton_econderIndexSearch.clicked.connect(self.econderIndexSearch_state_clicked)
-		self.axis0_pushButton_encoderOffsetCalibration.clicked.connect(self.encoderOffsetCalibration_state_clicked)
-		self.axis0_pushButton_closedLoopControl.clicked.connect(self.closedLoopControl_state_clicked)
+		# maybe add all buttons to the group and do only one connector for the whole group
+		self.axis0_pushButton_idle.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_startupSequence.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_fullCalibrationSequence.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_motorCalibration.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_sensorlessControl.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_encoderIndexSearch.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_encoderOffsetCalibration.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_closedLoopControl.clicked.connect(self.machine_state_clicked)
+
+		self.axis1_pushButton_idle.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_startupSequence.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_fullCalibrationSequence.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_motorCalibration.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_sensorlessControl.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_encoderIndexSearch.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_encoderOffsetCalibration.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_closedLoopControl.clicked.connect(self.machine_state_clicked)
 
 		# Axis Controlls
-		self.buttonGroup_13.buttonClicked.connect(self.axis0_controller_mode_changed)
+		self.buttonGroup_13.buttonClicked.connect(self.axis_controller_mode_changed)
+		self.buttonGroup_14.buttonClicked.connect(self.axis_controller_mode_changed)
 
 		self.axis0PositionGo_pushButton.clicked.connect(self.send_axis0_position_go)
 		self.axis0Backward_pushButton.clicked.connect(self.send_axis0_velocity_current_backward)
 		self.axis0Stop_pushButton.clicked.connect(self.send_axis0_velocity_current_stop)
 		self.axis0Forward_pushButton.clicked.connect(self.send_axis0_velocity_current_forward)
 
-		# self.buttonGroup_14.buttonClicked.connect(self.axis1_controller_mode_changed)
-		# self.axis1PositionGo_pushButton.clicked.connect(self.send_axis1_position_go)
-		# self.axis1Backward_pushButton.clicked.connect(self.send_axis1_velocity_current_backward)
-		# self.axis1Stop_pushButton.clicked.connect(self.send_axis1_velocity_current_stop)
-		# self.axis1Forward_pushButton.clicked.connect(self.send_axis1_velocity_current_forward)
-		# self.axis0_pushButton_sendController.clicked.connect(self.send_axis_control)
-
+		self.axis1PositionGo_pushButton.clicked.connect(self.send_axis1_position_go)
+		self.axis1Backward_pushButton.clicked.connect(self.send_axis1_velocity_current_backward)
+		self.axis1Stop_pushButton.clicked.connect(self.send_axis1_velocity_current_stop)
+		self.axis1Forward_pushButton.clicked.connect(self.send_axis1_velocity_current_forward)
 
 		self.showAxis0_checkBox.stateChanged.connect(self.axis0_graph_state_changed)
 		self.showAxis1_checkBox.stateChanged.connect(self.axis1_graph_state_changed)
@@ -93,8 +100,12 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 		self.ad = {} #axis_dcit
 
-		pen_sp_axis0 = pg.mkPen(color=(0, 128, 255), width=2)
-		pen_est_axis0 = pg.mkPen(color=(255, 192, 0), width=2)
+		pen_sp_axis0 = pg.mkPen(color=(0, 128, 255), width=1) # Blue: 0 128 255
+		pen_est_axis0 = pg.mkPen(color=(135, 0, 191), width=1) # Purple: 135 0 191
+
+		pen_sp_axis1 = pg.mkPen(color=(255, 78, 0), width=1) # Red: 255 78 0
+		pen_est_axis1 = pg.mkPen(color=(155, 170, 0), width=1) # Orange: 155 170 0
+		# old orange (color=(255, 192, 0)
 
 		self.ad["axis0"] = {}
 		self.ad["axis0"]["time_array"] = []
@@ -114,11 +125,6 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.ad["axis0"]["current_sp_curve"] = self.plotWidget_current.plot(name="Setpoint", pen=pen_sp_axis0)
 		self.ad["axis0"]["current_est_curve"] = self.plotWidget_current.plot(name="Estimate", pen=pen_est_axis0)
 
-# self.position_setpoint_curve =
-# self.position_estimate_curve =
-# self.current_setpoint_curve =
-# self.current_estimate_curve =
-
 		self.ad["axis1"] = {}
 		self.ad["axis1"]["time_array"] = []
 		self.ad["axis1"]["position"] = {}
@@ -130,14 +136,79 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.ad["axis1"]["current"] = {}
 		self.ad["axis1"]["current"]["estimate"] = []
 		self.ad["axis1"]["current"]["set_point"] = []
-
-
+		self.ad["axis1"]["vel_sp_curve"] = self.plotWidget_velocity.plot(name="Setpoint", pen=pen_sp_axis1)
+		self.ad["axis1"]["vel_est_curve"] = self.plotWidget_velocity.plot(name="Estimate", pen=pen_est_axis1)
+		self.ad["axis1"]["pos_sp_curve"] = self.plotWidget_position.plot(name="Setpoint", pen=pen_sp_axis1)
+		self.ad["axis1"]["pos_est_curve"] = self.plotWidget_position.plot(name="Estimate", pen=pen_est_axis1)
+		self.ad["axis1"]["current_sp_curve"] = self.plotWidget_current.plot(name="Setpoint", pen=pen_sp_axis1)
+		self.ad["axis1"]["current_est_curve"] = self.plotWidget_current.plot(name="Estimate", pen=pen_est_axis1)
 
 		self.axis0_state = None
-
+		self.axis1_state = None
 		self.setDisabled_odrive_ui(True)
-
 		self.odrive_connect()
+
+
+#
+# 	def check_motor_errors(self, axis_error):
+# 		if axis_error == "0x00": #ERROR_NONE = 0x00,
+# 			# error_string = "No errors"
+# 			return None
+# 		elif axis_error == "0x0001": #ERROR_PHASE_RESISTANCE_OUT_OF_RANGE = 0x0001,
+# 			error_string = "ERROR_PHASE_RESISTANCE_OUT_OF_RANGE"
+# 		elif axis_error == "0x0002": #ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE = 0x0002,
+# 			error_string = "ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE"
+# 		# Axis errors
+# #         ERROR_NONE = 0x00,
+# #         ERROR_INVALID_STATE = 0x01, //<! an invalid state was requested
+# #         ERROR_DC_BUS_UNDER_VOLTAGE = 0x02,
+# #         ERROR_DC_BUS_OVER_VOLTAGE = 0x04,
+# #         ERROR_CURRENT_MEASUREMENT_TIMEOUT = 0x08,
+# #         ERROR_BRAKE_RESISTOR_DISARMED = 0x10, //<! the brake resistor was unexpectedly disarmed
+# #         ERROR_MOTOR_DISARMED = 0x20, //<! the motor was unexpectedly disarmed
+# #         ERROR_MOTOR_FAILED = 0x40, // Go to motor.hpp for information, check odrvX.axisX.motor.error for error value
+# #         ERROR_SENSORLESS_ESTIMATOR_FAILED = 0x80,
+# #         ERROR_ENCODER_FAILED = 0x100, // Go to encoder.hpp for information, check odrvX.axisX.encoder.error for error value
+# #         ERROR_CONTROLLER_FAILED = 0x200,
+# #         ERROR_POS_CTRL_DURING_SENSORLESS = 0x400,
+# 		#Motor Errors
+# #         ERROR_NONE = 0,
+# #         ERROR_PHASE_RESISTANCE_OUT_OF_RANGE = 0x0001,
+# #         ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE = 0x0002,
+# #         ERROR_ADC_FAILED = 0x0004,
+# #         ERROR_DRV_FAULT = 0x0008,
+# #         ERROR_CONTROL_DEADLINE_MISSED = 0x0010,
+# #         ERROR_NOT_IMPLEMENTED_MOTOR_TYPE = 0x0020,
+# #         ERROR_BRAKE_CURRENT_OUT_OF_RANGE = 0x0040,
+# #         ERROR_MODULATION_MAGNITUDE = 0x0080,
+# #         ERROR_BRAKE_DEADTIME_VIOLATION = 0x0100,
+# #         ERROR_UNEXPECTED_TIMER_CALLBACK = 0x0200,
+# #         ERROR_CURRENT_SENSE_SATURATION = 0x0400
+# 		#Encoder error
+# # 		        ERROR_NONE = 0,
+# #         ERROR_UNSTABLE_GAIN = 0x01,
+# #         ERROR_CPR_OUT_OF_RANGE = 0x02,
+# #         ERROR_NO_RESPONSE = 0x04,
+# #         ERROR_UNSUPPORTED_ENCODER_MODE = 0x08,
+# #         ERROR_ILLEGAL_HALL_STATE = 0x10,
+# # ERROR_INDEX_NOT_FOUND_YET = 0x20,
+# 		#Controller error
+# # ERROR_NONE = 0,
+# # ERROR_OVERSPEED = 0x01,
+# 		#sensorless error
+#         # ERROR_NONE = 0,
+# 		# ERROR_OVERSPEED = 0x01,
+# 	# self.my_drive.can.unexpected_errors
+# 	# self.my_drive.system_stats.i2c.error_cnt
+# 	# self.my_drive.axis0.error
+# 	# self.my_drive.axis0.encoder.error
+# 	# self.my_drive.axis0.motor.error
+# 	# controller and sensorless
+# 		error_message_text = "more args"
+# 		message_box_error = QtWidgets.QMessageBox.warning(self, "Error occured", error_message_text,  QtWidgets.QMessageBox.Help | QtWidgets.QMessageBox.Ignore)
+# 		if message_box_error == QtWidgets.QMessageBox.Help:
+# 			QtGui.QDesktopServices.openUrl(QtCore.QUrl("https://docs.odriverobotics.com/troubleshooting"))
+
 
 	def axis0_graph_state_changed(self, state):
 		if state != QtCore.Qt.Checked:
@@ -163,50 +234,84 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 	def update_controller_mode(self):
 		# print("Controller mode {}".format(self.my_drive.axis0.controller.config.control_mode))
 		axis0_control_mode = self.my_drive.axis0.controller.config.control_mode
-		axis1_control_mode = self.my_drive.axis1.controller.config.control_mode
-
 		if axis0_control_mode == CTRL_MODE_POSITION_CONTROL:
 			self.axis0Position_radioButton.setChecked(True)
-			self.axis0_controller_fields_position_enabled(True)
+			self.axis_controller_fields_position_enabled(True, 0)
 		elif axis0_control_mode == CTRL_MODE_CURRENT_CONTROL:
 			self.axis0Current_radioButton.setChecked(True)
-			self.axis0_controller_fields_position_enabled(False)
+			self.axis_controller_fields_position_enabled(False, 0)
 		elif axis0_control_mode == CTRL_MODE_VELOCITY_CONTROL:
 			self.axis0Velocity_radioButton.setChecked(True)
-			self.axis0_controller_fields_position_enabled(False)
+			self.axis_controller_fields_position_enabled(False, 0)
 
-	def axis0_controller_mode_changed(self, id):
+		axis1_control_mode = self.my_drive.axis1.controller.config.control_mode
+		if axis1_control_mode == CTRL_MODE_POSITION_CONTROL:
+			self.axis1Position_radioButton.setChecked(True)
+			self.axis_controller_fields_position_enabled(True, 1)
+		elif axis1_control_mode == CTRL_MODE_CURRENT_CONTROL:
+			self.axis1Current_radioButton.setChecked(True)
+			self.axis_controller_fields_position_enabled(False, 1)
+		elif axis1_control_mode == CTRL_MODE_VELOCITY_CONTROL:
+			self.axis1Velocity_radioButton.setChecked(True)
+			self.axis_controller_fields_position_enabled(False, 1)
+
+
+
+	def axis_controller_mode_changed(self, id):
 		button_name = id.text()
 		group_name = id.sender().objectName()
-		# print()
-		if button_name == "Position":
-			self.axis_control_mode_changed(CTRL_MODE_POSITION_CONTROL)
-		elif button_name == "Current":
-			self.axis_control_mode_changed(CTRL_MODE_CURRENT_CONTROL)
-		elif button_name == "Velocity":
-			self.axis_control_mode_changed(CTRL_MODE_VELOCITY_CONTROL)
+		if group_name == "buttonGroup_13":
+			if button_name == "Position":
+				self.axis_control_mode_changed(CTRL_MODE_POSITION_CONTROL, 0)
+			elif button_name == "Current":
+				self.axis_control_mode_changed(CTRL_MODE_CURRENT_CONTROL, 0)
+			elif button_name == "Velocity":
+				self.axis_control_mode_changed(CTRL_MODE_VELOCITY_CONTROL, 0)
+		elif group_name == "buttonGroup_14":
+			if button_name == "Position":
+				self.axis_control_mode_changed(CTRL_MODE_POSITION_CONTROL, 1)
+			elif button_name == "Current":
+				self.axis_control_mode_changed(CTRL_MODE_CURRENT_CONTROL, 1)
+			elif button_name == "Velocity":
+				self.axis_control_mode_changed(CTRL_MODE_VELOCITY_CONTROL, 1)
 
-	def axis_control_mode_changed(self, control_mode):
+
+	def axis_control_mode_changed(self, control_mode, axis):
 		if control_mode == CTRL_MODE_POSITION_CONTROL:
-			self.axis0_controller_fields_position_enabled(True)
+			self.axis_controller_fields_position_enabled(True, axis)
 		elif control_mode == CTRL_MODE_CURRENT_CONTROL:
-			self.axis0_controller_fields_position_enabled(False)
+			self.axis_controller_fields_position_enabled(False, axis)
 		elif control_mode == CTRL_MODE_VELOCITY_CONTROL:
-			self.axis0_controller_fields_position_enabled(False)
+			self.axis_controller_fields_position_enabled(False, axis)
 		# Updated mode inside odrive board
-		self.my_drive.axis0.controller.config.control_mode = control_mode
-		self.spinBox_controlModeValue.setValue(control_mode)
+		if axis == 0:
+			self.my_drive.axis0.controller.config.control_mode = control_mode
+			self.spinBox_controlModeValue_axis0.setValue(control_mode)
+		elif axis == 1:
+			self.my_drive.axis1.controller.config.control_mode = control_mode
+			self.spinBox_controlModeValue_axis1.setValue(control_mode)
 
-	def axis0_controller_fields_position_enabled(self, state):
-		#Enabled Position objects
-		self.axis0Position_doubleSpinBox.setEnabled(state)
-		self.axis0PositionGo_pushButton.setEnabled(state)
-		#Disable current and velocity objects
-		self.axis0Backward_pushButton.setDisabled(state)
-		self.axis0Stop_pushButton.setDisabled(state)
-		self.axis0Forward_pushButton.setDisabled(state)
-		self.axis0Velocity_doubleSpinBox.setDisabled(state)
-		self.axis0Current_doubleSpinBox.setDisabled(state)
+	def axis_controller_fields_position_enabled(self, state, axis):
+		if axis == 0:
+			#Enabled Position objects
+			self.axis0Position_doubleSpinBox.setEnabled(state)
+			self.axis0PositionGo_pushButton.setEnabled(state)
+			#Disable current and velocity objects
+			self.axis0Backward_pushButton.setDisabled(state)
+			self.axis0Stop_pushButton.setDisabled(state)
+			self.axis0Forward_pushButton.setDisabled(state)
+			self.axis0Velocity_doubleSpinBox.setDisabled(state)
+			self.axis0Current_doubleSpinBox.setDisabled(state)
+		elif axis == 1:
+			#Enabled Position objects
+			self.axis1Position_doubleSpinBox.setEnabled(state)
+			self.axis1PositionGo_pushButton.setEnabled(state)
+			#Disable current and velocity objects
+			self.axis1Backward_pushButton.setDisabled(state)
+			self.axis1Stop_pushButton.setDisabled(state)
+			self.axis1Forward_pushButton.setDisabled(state)
+			self.axis1Velocity_doubleSpinBox.setDisabled(state)
+			self.axis1Current_doubleSpinBox.setDisabled(state)
 
 	def close_application(self):
 		print("whooaaaa so custom!!!")
@@ -229,7 +334,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		# self.statusBar.showMessage("Serial number: {}".format(self.my_drive.serial_number))
 		#if my drive is found
 		self.timer = pg.QtCore.QTimer()
-		self.timer.timeout.connect(self.update)
+		self.timer.timeout.connect(self.update_statuses)
 		self.timer.start(500)
 
 		self.ad["start_time"] = pg.ptime.time()
@@ -262,9 +367,14 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 				self.update_velocity_graph("axis0", self.my_drive.axis0)
 				self.update_position_graph("axis0", self.my_drive.axis0)
 				self.update_current_graph("axis0", self.my_drive.axis0)
+				self.update_X_range("axis0")
 			if self.showAxis1_checkBox.isChecked():
-				print("Update Axis1")
-			self.update_X_range()
+				self.ad["axis1"]["time_array"].append(delta)
+				self.update_velocity_graph("axis1", self.my_drive.axis1)
+				self.update_position_graph("axis1", self.my_drive.axis1)
+				self.update_current_graph("axis1", self.my_drive.axis1)
+				self.update_X_range("axis1")
+
 		except Exception as e:
 			print(e)
 			self.odrive_disconnected_exception()
@@ -278,11 +388,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.setDisabled_odrive_ui(True)
 
 		self.clear_axis_graph_lists("axis0")
-		# self.clear_axis_graph_lists("axis1")
+		self.clear_axis_graph_lists("axis1")
 
 	def clearGraph_clicked(self):
 		self.clear_axis_graph_lists("axis0")
-		# self.clear_axis_graph_lists("axis1")
+		self.clear_axis_graph_lists("axis1")
 		self.ad["start_time"] = pg.ptime.time()
 
 
@@ -319,67 +429,110 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.ad[axis_key]["pos_sp_curve"].setData(self.ad[axis_key]["time_array"], self.ad[axis_key]["position"]["set_point"])
 		self.ad[axis_key]["pos_est_curve"].setData(self.ad[axis_key]["time_array"], self.ad[axis_key]["position"]["estimate"])
 
-	def update_X_range(self):
-		upper_limit = self.ad["axis0"]["time_array"][-1]
-		lower_limit = self.ad["axis0"]["time_array"][0]
+	def update_X_range(self, axis):
+		upper_limit = self.ad[axis]["time_array"][-1]
+		lower_limit = self.ad[axis]["time_array"][0]
 		delta = self.spinBox_graphTime.value()
 		if (upper_limit - lower_limit) > delta:
 			while((upper_limit - lower_limit) > delta):
-				self.ad["axis0"]["time_array"].pop(0)
-				self.ad["axis0"]["velocity"]["estimate"].pop(0)
-				self.ad["axis0"]["velocity"]["set_point"].pop(0)
-				self.ad["axis0"]["current"]["estimate"].pop(0)
-				self.ad["axis0"]["current"]["set_point"].pop(0)
-				self.ad["axis0"]["position"]["estimate"].pop(0)
-				self.ad["axis0"]["position"]["set_point"].pop(0)
-				upper_limit = self.ad["axis0"]["time_array"][-1]
-				lower_limit = self.ad["axis0"]["time_array"][0]
-
-		# if upper_limit >= delta:
-		# 	lower_l = upper_limit - delta
-		# 	self.plotWidget_velocity.setXRange(lower_l, upper_limit)
-		# 	self.plotWidget_position.setXRange(lower_l, upper_limit)
-		# 	self.plotWidget_current.setXRange(lower_l, upper_limit)
+				self.ad[axis]["time_array"].pop(0)
+				self.ad[axis]["velocity"]["estimate"].pop(0)
+				self.ad[axis]["velocity"]["set_point"].pop(0)
+				self.ad[axis]["current"]["estimate"].pop(0)
+				self.ad[axis]["current"]["set_point"].pop(0)
+				self.ad[axis]["position"]["estimate"].pop(0)
+				self.ad[axis]["position"]["set_point"].pop(0)
+				upper_limit = self.ad[axis]["time_array"][-1]
+				lower_limit = self.ad[axis]["time_array"][0]
 
 
-	def update(self):
+
+	def update_statuses(self):
 		# self.update_voltage()
 		try:
 			self.update_machine_state()
 			self.update_controller_mode()
+			# self.error_checks()
 		except Exception as e:
 			print(e)
 			self.odrive_disconnected_exception()
 
 
+	def error_checks(self):
+		axis0_error = hex(self.my_drive.axis0.error)
+		print(axis0_error)
+		axis1_error = hex(self.my_drive.axis1.error)
+		print(axis1_error)
+		# error_code = self.check_axis_errors(axis0_error)
+		# if error_code != "":
+		# 	print(error_code)
+		# axis1_error = hex(self.my_drive.axis1.error)
+		# self.check_axis_errors(axis1_error)
+
+
+	def check_axis_errors(self, axis_error):
+		error_string = ""
+		if axis_error == "0x00": #ERROR_NONE = 0x00,
+			# error_string = "No errors"
+			pass
+		elif axis_error == "0x01": #ERROR_INVALID_STATE = 0x01, //<! an invalid state was requested
+			error_string = "ERROR_INVALID_STATE"
+		elif axis_error == "0x02": #ERROR_DC_BUS_UNDER_VOLTAGE = 0x02,
+			error_string = "ERROR_DC_BUS_UNDER_VOLTAGE"
+		elif axis_error == "0x04": #ERROR_DC_BUS_OVER_VOLTAGE = 0x04,
+			error_string = "ERROR_DC_BUS_OVER_VOLTAGE"
+		elif axis_error == "0x08": #ERROR_CURRENT_MEASUREMENT_TIMEOUT = 0x08,
+			error_string = "ERROR_CURRENT_MEASUREMENT_TIMEOUT"
+		elif axis_error == "0x10": #ERROR_BRAKE_RESISTOR_DISARMED = 0x10, //<! the brake resistor was unexpectedly disarmed
+			error_string = "ERROR_BRAKE_RESISTOR_DISARMED"
+		elif axis_error == "0x20": #ERROR_MOTOR_DISARMED = 0x20, //<! the motor was unexpectedly disarmed
+			error_string = "ERROR_MOTOR_DISARMED"
+		elif axis_error == "0x40": #ERROR_MOTOR_FAILED = 0x40, // Go to motor.hpp for information, check odrvX.axisX.motor.error for error value
+			error_string = "ERROR_MOTOR_FAILED"
+		elif axis_error == "0x80": #ERROR_SENSORLESS_ESTIMATOR_FAILED = 0x80,
+			error_string = "RROR_SENSORLESS_ESTIMATOR_FAILED"
+		elif axis_error == "0x100": #ERROR_ENCODER_FAILED = 0x100, // Go to encoder.hpp for information, check odrvX.axisX.encoder.error for error value
+			error_string = "ERROR_ENCODER_FAILED"
+		elif axis_error == "0x200": #ERROR_CONTROLLER_FAILED = 0x200,
+			error_string = "ERROR_CONTROLLER_FAILED"
+		elif axis_error == "0x400": #ERROR_POS_CTRL_DURING_SENSORLESS = 0x400,
+			error_string = "ERROR_POS_CTRL_DURING_SENSORLESS"
+		return error_string
+
 	def update_voltage(self):
 		self.label_vbusVoltageValue.setText(str(round(self.my_drive.vbus_voltage, 2)))
 
 	def update_machine_state(self):
-		#print(self.my_drive.axis0.current_state)
 		current_state = self.my_drive.axis0.current_state
 		if self.axis0_state != current_state:
 			self.axis0_state = current_state
 			print("New state axis0: {}".format(self.axis0_state))
+			self.update_machine_state_color(current_state, 0)
 
-			self.clear_state_buttons()
+		current_state = self.my_drive.axis1.current_state
+		if self.axis1_state != current_state:
+			self.axis1_state = current_state
+			print("New state axis1: {}".format(self.axis1_state))
+			self.update_machine_state_color(current_state, 1)
 
+	def update_machine_state_color(self, current_state, axis):
+			self.clear_state_buttons(axis)
 			if current_state == AXIS_STATE_IDLE:
-				self.idle_state()
+				self.idle_state(axis)
 			elif current_state == AXIS_STATE_STARTUP_SEQUENCE:
-				self.startup_seq_state()
+				self.startup_seq_state(axis)
 			elif current_state == AXIS_STATE_FULL_CALIBRATION_SEQUENCE:
-				self.full_calibration_seq_state()
+				self.full_calibration_seq_state(axis)
 			elif current_state == AXIS_STATE_MOTOR_CALIBRATION:
-				self.motor_calibration_state()
+				self.motor_calibration_state(axis)
 			elif current_state == AXIS_STATE_SENSORLESS_CONTROL:
-				self.sensorless_control_state()
+				self.sensorless_control_state(axis)
 			elif current_state == AXIS_STATE_ENCODER_INDEX_SEARCH:
-				self.encoder_index_search_state()
+				self.encoder_index_search_state(axis)
 			elif current_state == AXIS_STATE_ENCODER_OFFSET_CALIBRATION:
-				self.encoder_offset_calibration_state()
+				self.encoder_offset_calibration_state(axis)
 			elif current_state == AXIS_STATE_CLOSED_LOOP_CONTROL:
-				self.closed_loop_control_state()
+				self.closed_loop_control_state(axis)
 
 	def save_odrive_configuration(self):
 		self.my_drive.save_configuration()
@@ -408,7 +561,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis0.controller.config.vel_integrator_gain = float(self.doubleSpinBox_velIntegratorGainValue.value())
 		self.my_drive.axis0.controller.config.pos_gain = float(self.doubleSpinBox_posGainValue.value())
 		self.my_drive.axis0.controller.config.vel_limit = float(self.doubleSpinBox_velLimitValue.value())
-		self.my_drive.axis0.controller.config.control_mode = int(self.spinBox_controlModeValue.value())
+		self.my_drive.axis0.controller.config.control_mode = int(self.spinBox_controlModeValue_axis0.value())
 
 		self.my_drive.axis0.config.startup_encoder_index_search = self.radioButton_startupEncoderIndexSearchTrue.isChecked()
 		self.my_drive.axis0.config.startup_motor_calibration = self.radioButton_startupMotorCalibrationAxisTrue.isChecked()
@@ -540,7 +693,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.label_TxMailboxCompleteCallbackCntValue.setText(str(self.my_drive.can.TxMailboxCompleteCallbackCnt))
 		self.label_unhandledMessagesValue.setText(str(self.my_drive.can.unhandled_messages))
 		self.label_receivedAckValue.setText(str(self.my_drive.can.received_ack))
-		self.label_unexpectedErrorsValue.setText(str(self.my_drive.can.unexpected_errors))
+		self.label_unexpectedErrorsValue.setText(hex(self.my_drive.can.unexpected_errors))
 
 	def scan_system_stats_config(self):
 		self.label_minStackSpaceAxis1Value.setText(str(self.my_drive.system_stats.min_stack_space_axis1))
@@ -559,7 +712,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.label_rxCntI2cValue.setText(str(self.my_drive.system_stats.i2c.rx_cnt))
 		self.label_addrValue.setText(str(self.my_drive.system_stats.i2c.addr))
 		self.label_addrMatchCnt_2.setText(str(self.my_drive.system_stats.i2c.addr_match_cnt))
-		self.label_errorCntValue.setText(str(self.my_drive.system_stats.i2c.error_cnt))
+		self.label_errorCntValue.setText(hex(self.my_drive.system_stats.i2c.error_cnt))
 
 	def load_config_template(self):
 		config_template = {}
@@ -572,46 +725,46 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.scan_axis0_config()
 
 	def scan_axis0_config(self):
-		self.label_errorAxisValue.setText(str(self.my_drive.axis0.error))
-		self.label_loopCounterValue.setText(str(self.my_drive.axis0.loop_counter))
+		self.label_generalErrorValue_axis0.setText(hex(self.my_drive.axis0.error))
+		self.label_loopCounterValue_axis0.setText(str(self.my_drive.axis0.loop_counter))
 		# Config
 		#self.radioButton_startupMotorCalibrationAxisTrue.setChecked(True) if self.my_drive.axis0.config.startup_motor_calibration else self.radioButton_startupMotorCalibrationAxisFalse.setChecked(True)
 		if self.my_drive.axis0.config.startup_motor_calibration:
-			self.radioButton_startupMotorCalibrationAxisTrue.setChecked(True)
+			self.radioButton_startupMotorCalibrationTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_startupMotorCalibrationAxisFalse.setChecked(True)
+			self.radioButton_startupMotorCalibrationFalse_axis0.setChecked(True)
 
 		if self.my_drive.axis0.config.startup_encoder_index_search:
-			self.radioButton_startupEncoderIndexSearchTrue.setChecked(True)
+			self.radioButton_startupEncoderIndexSearchTrue_axis0.setChecked(True)
 		else:
 			self.radioButton_startupEncoderIndexSearchFalse.setChecked(True)
 
 		if self.my_drive.axis0.config.startup_encoder_offset_calibration:
-			self.radioButton_startupEncoderOffsetCalibrationTrue.setChecked(True)
+			self.radioButton_startupEncoderOffsetCalibrationTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_startupEncoderOffsetCalibrationFalse.setChecked(True)
+			self.radioButton_startupEncoderOffsetCalibrationFalse_axis0.setChecked(True)
 
 		if self.my_drive.axis0.config.startup_closed_loop_control:
-			self.radioButton_startupEncoderLoopControlTrue.setChecked(True)
+			self.radioButton_startupLoopControlTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_startupEncoderLoopControlFalse.setChecked(True)
+			self.radioButton_startupLoopControlFalse_axis0.setChecked(True)
 
 		if self.my_drive.axis0.config.startup_sensorless_control:
-			self.radioButton_startupSensorlessControlTrue.setChecked(True)
+			self.radioButton_startupSensorlessControlTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_startupSensorlessControlFalse.setChecked(True)
+			self.radioButton_startupSensorlessControlFalse_axis0.setChecked(True)
 
 		if self.my_drive.axis0.config.enable_step_dir:
-			self.radioButton_enableStepDirTrue.setChecked(True)
+			self.radioButton_enableStepDirTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_enableStepDirFalse.setChecked(True)
+			self.radioButton_enableStepDirFalse_axis0.setChecked(True)
 
-		self.doubleSpinBox_countPerStepValue.setValue(self.my_drive.axis0.config.counts_per_step)
-		self.doubleSpinBox_rampUpTimeValue.setValue(self.my_drive.axis0.config.ramp_up_time)
-		self.doubleSpinBox_rampUpDistanceValue.setValue(self.my_drive.axis0.config.ramp_up_distance)
-		self.doubleSpinBox_spinUpCurrentValue.setValue(self.my_drive.axis0.config.spin_up_current)
-		self.doubleSpinBox_spinUpAccelerationValue.setValue(self.my_drive.axis0.config.spin_up_acceleration)
-		self.doubleSpinBox_spinUpTargetVelValue.setValue(self.my_drive.axis0.config.spin_up_target_vel)
+		self.doubleSpinBox_countPerStepValue_axis0.setValue(self.my_drive.axis0.config.counts_per_step)
+		self.doubleSpinBox_rampUpTimeValue_axis0.setValue(self.my_drive.axis0.config.ramp_up_time)
+		self.doubleSpinBox_rampUpDistanceValue_axis0.setValue(self.my_drive.axis0.config.ramp_up_distance)
+		self.doubleSpinBox_spinUpCurrentValue_axis0.setValue(self.my_drive.axis0.config.spin_up_current)
+		self.doubleSpinBox_spinUpAccelerationValue_axis0.setValue(self.my_drive.axis0.config.spin_up_acceleration)
+		self.doubleSpinBox_spinUpTargetVelValue_axis0.setValue(self.my_drive.axis0.config.spin_up_target_vel)
 
 		self.scan_axis0_encoder_config()
 		self.scan_axis0_controller_config()
@@ -619,61 +772,61 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	def scan_axis0_encoder_config(self):
 		if self.my_drive.axis0.encoder.index_found:
-			self.icon_indexFoundValue.setPixmap(QtGui.QPixmap(ICON_TRUE))
+			self.icon_indexFoundValue_axis0.setPixmap(QtGui.QPixmap(ICON_TRUE))
 		else:
-			self.icon_indexFoundValue.setPixmap(QtGui.QPixmap(ICON_FALSE))
+			self.icon_indexFoundValue_axis0.setPixmap(QtGui.QPixmap(ICON_FALSE))
 
 		if self.my_drive.axis0.encoder.is_ready:
-			self.icon_isReadyEncoderValue.setPixmap(QtGui.QPixmap(ICON_TRUE))
+			self.icon_isReadyEncoderValue_axis0.setPixmap(QtGui.QPixmap(ICON_TRUE))
 		else:
-			self.icon_isReadyEncoderValue.setPixmap(QtGui.QPixmap(ICON_FALSE))
+			self.icon_isReadyEncoderValue_axis0.setPixmap(QtGui.QPixmap(ICON_FALSE))
 
-		self.label_posCprValue.setText(str(self.my_drive.axis0.encoder.pos_cpr))
-		self.label_posEstimateValue.setText(str(self.my_drive.axis0.encoder.pos_estimate))
-		self.label_shadowCountValue.setText(str(self.my_drive.axis0.encoder.shadow_count))
-		self.label_interpolationValue.setText(str(self.my_drive.axis0.encoder.interpolation))
-		self.label_countInCprValue.setText(str(self.my_drive.axis0.encoder.count_in_cpr))
-		self.label_hallStateValue.setText(str(self.my_drive.axis0.encoder.hall_state))
-		self.label_errorEncoderValue.setText(str(self.my_drive.axis0.encoder.error))
-		self.label_phaseValue.setText(str(self.my_drive.axis0.encoder.phase))
+		self.label_posCprValue_axis0.setText(str(self.my_drive.axis0.encoder.pos_cpr))
+		self.label_posEstimateValue_axis0.setText(str(self.my_drive.axis0.encoder.pos_estimate))
+		self.label_shadowCountValue_axis0.setText(str(self.my_drive.axis0.encoder.shadow_count))
+		self.label_interpolationValue_axis0.setText(str(self.my_drive.axis0.encoder.interpolation))
+		self.label_countInCprValue_axis0.setText(str(self.my_drive.axis0.encoder.count_in_cpr))
+		self.label_hallStateValue_axis0.setText(str(self.my_drive.axis0.encoder.hall_state))
+		self.label_encoderErrorValue_axis0.setText(hex(self.my_drive.axis0.encoder.error))
+		self.label_phaseValue_axis0.setText(str(self.my_drive.axis0.encoder.phase))
 
 		self.scan_axis0_encoder_config_config()
 
 	def scan_axis0_encoder_config_config(self):
 		if self.my_drive.axis0.encoder.config.pre_calibrated:
-			self.radioButton_preCalibratedEncoderTrue.setChecked(True)
+			self.radioButton_encoderPreCalibratedTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_preCalibratedEncoderFalse.setChecked(True)
+			self.radioButton_encoderPreCalibratedFalse_axis0.setChecked(True)
 
 		if self.my_drive.axis0.encoder.config.use_index:
-			self.radioButton_useIndexTrue.setChecked(True)
+			self.radioButton_useIndexTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_useIndexFalse.setChecked(True)
+			self.radioButton_useIndexFalse_axis0.setChecked(True)
 
 
-		self.doubleSpinBox_idxSearchSpeedValue.setValue(self.my_drive.axis0.encoder.config.idx_search_speed)
-		self.spinBox_cprValue.setValue(self.my_drive.axis0.encoder.config.cpr)
-		self.spinBox_modeEncoderValue.setValue(self.my_drive.axis0.encoder.config.mode)
-		self.spinBox_offsetValue.setValue(self.my_drive.axis0.encoder.config.offset)
-		self.doubleSpinBox_offsetFloatValue.setValue(self.my_drive.axis0.encoder.config.offset_float)
-		self.doubleSpinBox_calibRangeValue.setValue(self.my_drive.axis0.encoder.config.calib_range)
-		self.doubleSpinBox_bandwidthValue.setValue(self.my_drive.axis0.encoder.config.bandwidth)
+		self.doubleSpinBox_idxSearchSpeedValue_axis0.setValue(self.my_drive.axis0.encoder.config.idx_search_speed)
+		self.spinBox_cprValue_axis0.setValue(self.my_drive.axis0.encoder.config.cpr)
+		self.spinBox_modeEncoderValue_axis0.setValue(self.my_drive.axis0.encoder.config.mode)
+		self.spinBox_offsetValue_axis0.setValue(self.my_drive.axis0.encoder.config.offset)
+		self.doubleSpinBox_offsetFloatValue_axis0.setValue(self.my_drive.axis0.encoder.config.offset_float)
+		self.doubleSpinBox_calibRangeValue_axis0.setValue(self.my_drive.axis0.encoder.config.calib_range)
+		self.doubleSpinBox_bandwidthValue_axis0.setValue(self.my_drive.axis0.encoder.config.bandwidth)
 
 
 
 	def scan_axis0_controller_config(self):
-		self.label_velSetpointValue.setText(str(self.my_drive.axis0.controller.vel_setpoint))
-		self.label_setPosSetpoint_2.setText(str(self.my_drive.axis0.controller.vel_integrator_current))
-		self.label_posSetpointValue.setText(str(self.my_drive.axis0.controller.pos_setpoint))
-		self.label_currentSetpointValue.setText(str(self.my_drive.axis0.controller.current_setpoint))
+		self.label_velSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.vel_setpoint))
+		self.label_velIntegratorCurrent_axis0.setText(str(self.my_drive.axis0.controller.vel_integrator_current))
+		self.label_posSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.pos_setpoint))
+		self.label_currentSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.current_setpoint))
 		self.scan_axis0_controller_config_config()
 
 	def scan_axis0_controller_config_config(self):
-		self.doubleSpinBox_posGainValue.setValue(self.my_drive.axis0.controller.config.pos_gain)
-		self.doubleSpinBox_velGainValue.setValue(self.my_drive.axis0.controller.config.vel_gain)
-		self.doubleSpinBox_velIntegratorGainValue.setValue(self.my_drive.axis0.controller.config.vel_integrator_gain)
-		self.doubleSpinBox_velLimitValue.setValue(self.my_drive.axis0.controller.config.vel_limit)
-		self.spinBox_controlModeValue.setValue(self.my_drive.axis0.controller.config.control_mode)
+		self.doubleSpinBox_posGainValue_axis0.setValue(self.my_drive.axis0.controller.config.pos_gain)
+		self.doubleSpinBox_velGainValue_axis0.setValue(self.my_drive.axis0.controller.config.vel_gain)
+		self.doubleSpinBox_velIntegratorGainValue_axis0.setValue(self.my_drive.axis0.controller.config.vel_integrator_gain)
+		self.doubleSpinBox_velLimitValue_axis0.setValue(self.my_drive.axis0.controller.config.vel_limit)
+		self.spinBox_controlModeValue_axis0.setValue(self.my_drive.axis0.controller.config.control_mode)
 
 
 
@@ -683,56 +836,50 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.scan_axis0_motor_currentControl_config()
 
 	def scan_axis0_motor_currentControl_config(self):
-		self.label_maxAllowedCurrentValue.setText(str(self.my_drive.axis0.motor.current_control.max_allowed_current))
-		self.label_ibusValue.setText(str(self.my_drive.axis0.motor.current_control.Ibus))
-		self.label_vCurrentControlIntegralDValue.setText(str(self.my_drive.axis0.motor.current_control.v_current_control_integral_d))
-		self.label_vCurrentControlIntegralQValue.setText(str(self.my_drive.axis0.motor.current_control.v_current_control_integral_q))
-		self.label_finalVAlphaValue.setText(str(self.my_drive.axis0.motor.current_control.final_v_alpha))
-		self.label_finalVBetaValue.setText(str(self.my_drive.axis0.motor.current_control.final_v_beta))
-		self.label_pGainValue.setText(str(self.my_drive.axis0.motor.current_control.p_gain))
-		self.label_iGainValue.setText(str(self.my_drive.axis0.motor.current_control.i_gain))
-		self.label_iqSetpointValue.setText(str(self.my_drive.axis0.motor.current_control.Iq_setpoint))
-		self.label_iqMeasuredValue.setText(str(self.my_drive.axis0.motor.current_control.Iq_measured))
+		self.label_maxAllowedCurrentValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.max_allowed_current))
+		self.label_ibusValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.Ibus))
+		self.label_vCurrentControlIntegralDValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.v_current_control_integral_d))
+		self.label_vCurrentControlIntegralQValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.v_current_control_integral_q))
+		self.label_finalVAlphaValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.final_v_alpha))
+		self.label_finalVBetaValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.final_v_beta))
+		self.label_pGainValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.p_gain))
+		self.label_iGainValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.i_gain))
+		self.label_iqSetpointValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.Iq_setpoint))
+		self.label_iqMeasuredValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.Iq_measured))
 
 
 	def scan_axis0_motor_general_config(self):
-		self.label_drvFaultValue.setText(str(self.my_drive.axis0.motor.gate_driver.drv_fault))
-		self.label_dcCalibPhBValue.setText(str(self.my_drive.axis0.motor.DC_calib_phB))
-		self.label_dcCalibPhCValue.setText(str(self.my_drive.axis0.motor.DC_calib_phC))
-		self.label_errorAxisValue_2.setText(str(self.my_drive.axis0.motor.error))
-		self.label_currentMeasPhCValue.setText(str(self.my_drive.axis0.motor.current_meas_phC))
+		self.label_drvFaultValue_axis0.setText(str(self.my_drive.axis0.motor.gate_driver.drv_fault))
+		self.label_dcCalibPhBValue_axis0.setText(str(self.my_drive.axis0.motor.DC_calib_phB))
+		self.label_dcCalibPhCValue_axis0.setText(str(self.my_drive.axis0.motor.DC_calib_phC))
+		self.label_motorErrorValue_axis0.setText(hex(self.my_drive.axis0.motor.error))
+		self.label_currentMeasPhCValue_axis0.setText(str(self.my_drive.axis0.motor.current_meas_phC))
 
 		if self.my_drive.axis0.motor.is_calibrated:
-			self.icon_isCalibratedValue.setPixmap(QtGui.QPixmap(ICON_TRUE))
+			self.icon_isCalibratedValue_axis0.setPixmap(QtGui.QPixmap(ICON_TRUE))
 		else:
-			self.icon_isCalibratedValue.setPixmap(QtGui.QPixmap(ICON_FALSE))
+			self.icon_isCalibratedValue_axis0.setPixmap(QtGui.QPixmap(ICON_FALSE))
 
-		self.label_phaseCurrentRevGainValue.setText(str(self.my_drive.axis0.motor.phase_current_rev_gain))
-		self.label_currentMeasPhBValue.setText(str(self.my_drive.axis0.motor.current_meas_phB))
-		self.label_armedStateValue.setText(str(self.my_drive.axis0.motor.armed_state))
-
-
-
+		self.label_phaseCurrentRevGainValue_axis0.setText(str(self.my_drive.axis0.motor.phase_current_rev_gain))
+		self.label_currentMeasPhBValue_axis0.setText(str(self.my_drive.axis0.motor.current_meas_phB))
+		self.label_armedStateValue_axis0.setText(str(self.my_drive.axis0.motor.armed_state))
 
 	def scan_axis0_motor_config_config(self):
 		if self.my_drive.axis0.motor.config.pre_calibrated:
-			self.radioButton_preCalibratedTrue.setChecked(True)
+			self.radioButton_motorPreCalibratedTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_preCalibratedFalse.setChecked(True)
+			self.radioButton_motorPreCalibratedFalse_axis0.setChecked(True)
 
-		self.doubleSpinBox_phaseInductanceValue.setValue(self.my_drive.axis0.motor.config.phase_inductance)
-		self.doubleSpinBox_phaseResistanceValue.setValue(self.my_drive.axis0.motor.config.phase_resistance)
-		self.spinBox_motorTypeValue.setValue(self.my_drive.axis0.motor.config.motor_type)
-		self.doubleSpinBox_currentControlBandwidthValue.setValue(self.my_drive.axis0.motor.config.current_control_bandwidth)
-		self.doubleSpinBox_requestedCurrentRangeValue.setValue(self.my_drive.axis0.motor.config.requested_current_range)
-		self.spinBox_directionValue.setValue(self.my_drive.axis0.motor.config.direction)
-		self.doubleSpinBox_resistanceCalibMaxVoltageValue.setValue(self.my_drive.axis0.motor.config.resistance_calib_max_voltage)
-		self.doubleSpinBox_currentLimValue.setValue(self.my_drive.axis0.motor.config.current_lim)
-		self.spinBox_poleParisValue.setValue(self.my_drive.axis0.motor.config.pole_pairs)
-		self.doubleSpinBox_calibrationCurrentValue.setValue(self.my_drive.axis0.motor.config.calibration_current)
-
-
-
+		self.doubleSpinBox_phaseInductanceValue_axis0.setValue(self.my_drive.axis0.motor.config.phase_inductance)
+		self.doubleSpinBox_phaseResistanceValue_axis0.setValue(self.my_drive.axis0.motor.config.phase_resistance)
+		self.spinBox_motorTypeValue_axis0.setValue(self.my_drive.axis0.motor.config.motor_type)
+		self.doubleSpinBox_currentControlBandwidthValue_axis0.setValue(self.my_drive.axis0.motor.config.current_control_bandwidth)
+		self.doubleSpinBox_requestedCurrentRangeValue_axis0.setValue(self.my_drive.axis0.motor.config.requested_current_range)
+		self.spinBox_directionValue_axis0.setValue(self.my_drive.axis0.motor.config.direction)
+		self.doubleSpinBox_resistanceCalibMaxVoltageValue_axis0.setValue(self.my_drive.axis0.motor.config.resistance_calib_max_voltage)
+		self.doubleSpinBox_currentLimValue_axis0.setValue(self.my_drive.axis0.motor.config.current_lim)
+		self.spinBox_poleParisValue_axis0.setValue(self.my_drive.axis0.motor.config.pole_pairs)
+		self.doubleSpinBox_calibrationCurrentValue_axis0.setValue(self.my_drive.axis0.motor.config.calibration_current)
 
 	def scan_axis1_config(self):
 		pass
@@ -740,8 +887,14 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 	def send_axis0_position_go(self):
 		self.my_drive.axis0.controller.pos_setpoint = self.axis0Position_doubleSpinBox.value()
 
+	def send_axis1_position_go(self):
+		self.my_drive.axis1.controller.pos_setpoint = self.axis1Position_doubleSpinBox.value()
+
 	def send_axis0_velocity_current_stop(self):
-		self.send_axis0_velocity_current_command(self.my_drive.axis0.controller.config.control_mode, 0.0)
+		self.send_axis_velocity_current_command(0, self.my_drive.axis0.controller.config.control_mode, 0.0)
+
+	def send_axis1_velocity_current_stop(self):
+		self.send_axis_velocity_current_command(1, self.my_drive.axis1.controller.config.control_mode, 0.0)
 
 	def send_axis0_velocity_current_forward(self):
 		mode = self.my_drive.axis0.controller.config.control_mode
@@ -750,7 +903,16 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			value = self.axis0Current_doubleSpinBox.value()
 		elif mode == CTRL_MODE_VELOCITY_CONTROL:
 			value = self.axis0Velocity_doubleSpinBox.value()
-		self.send_axis0_velocity_current_command(self.my_drive.axis0.controller.config.control_mode, value)
+		self.send_axis_velocity_current_command(0, mode, value)
+
+	def send_axis1_velocity_current_forward(self):
+		mode = self.my_drive.axis1.controller.config.control_mode
+		value = 0
+		if mode == CTRL_MODE_CURRENT_CONTROL:
+			value = self.axis1Current_doubleSpinBox.value()
+		elif mode == CTRL_MODE_VELOCITY_CONTROL:
+			value = self.axis1Velocity_doubleSpinBox.value()
+		self.send_axis_velocity_current_command(1, mode, value)
 
 	def send_axis0_velocity_current_backward(self):
 		mode = self.my_drive.axis0.controller.config.control_mode
@@ -759,51 +921,97 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			value = self.axis0Current_doubleSpinBox.value() * -1
 		elif mode == CTRL_MODE_VELOCITY_CONTROL:
 			value = self.axis0Velocity_doubleSpinBox.value() * -1
-		self.send_axis0_velocity_current_command(self.my_drive.axis0.controller.config.control_mode, value)
+		self.send_axis_velocity_current_command(0, mode, value)
 
-
-	def send_axis0_velocity_current_command(self, mode, value):
+	def send_axis1_velocity_current_backward(self):
+		mode = self.my_drive.axis1.controller.config.control_mode
+		value = 0
 		if mode == CTRL_MODE_CURRENT_CONTROL:
-			self.my_drive.axis0.controller.current_setpoint = value
+			value = self.axis1Current_doubleSpinBox.value() * -1
 		elif mode == CTRL_MODE_VELOCITY_CONTROL:
-			self.my_drive.axis0.controller.vel_setpoint = value
+			value = self.axis1Velocity_doubleSpinBox.value() * -1
+		self.send_axis_velocity_current_command(1, mode, value)
 
 
-	def clear_state_buttons(self):
-		self.axis0_pushButton_idle.setStyleSheet("")
-		self.axis0_pushButton_startupSequence.setStyleSheet("")
-		self.axis0_pushButton_fullCalibrationSequence.setStyleSheet("")
-		self.axis0_pushButton_motorCalibration.setStyleSheet("")
-		self.axis0_pushButton_sensorlessControl.setStyleSheet("")
-		self.axis0_pushButton_econderIndexSearch.setStyleSheet("")
-		self.axis0_pushButton_encoderOffsetCalibration.setStyleSheet("")
-		self.axis0_pushButton_closedLoopControl.setStyleSheet("")
+	def send_axis_velocity_current_command(self, axis, mode, value):
+		if axis == 0:
+			if mode == CTRL_MODE_CURRENT_CONTROL:
+				self.my_drive.axis0.controller.current_setpoint = value
+			elif mode == CTRL_MODE_VELOCITY_CONTROL:
+				self.my_drive.axis0.controller.vel_setpoint = value
+		elif axis == 1:
+			if mode == CTRL_MODE_CURRENT_CONTROL:
+				self.my_drive.axis1.controller.current_setpoint = value
+			elif mode == CTRL_MODE_VELOCITY_CONTROL:
+				self.my_drive.axis1.controller.vel_setpoint = value
 
-	def idle_state(self):
-		print("State: Idle")
-		# self.axis0_pushButton_idle.setStyleSheet("background-color: rgb(135, 187, 249);")
-		self.axis0_pushButton_idle.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def clear_state_buttons(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_idle.setStyleSheet("")
+			self.axis0_pushButton_startupSequence.setStyleSheet("")
+			self.axis0_pushButton_fullCalibrationSequence.setStyleSheet("")
+			self.axis0_pushButton_motorCalibration.setStyleSheet("")
+			self.axis0_pushButton_sensorlessControl.setStyleSheet("")
+			self.axis0_pushButton_encoderIndexSearch.setStyleSheet("")
+			self.axis0_pushButton_encoderOffsetCalibration.setStyleSheet("")
+			self.axis0_pushButton_closedLoopControl.setStyleSheet("")
+		elif axis == 1:
+			self.axis1_pushButton_idle.setStyleSheet("")
+			self.axis1_pushButton_startupSequence.setStyleSheet("")
+			self.axis1_pushButton_fullCalibrationSequence.setStyleSheet("")
+			self.axis1_pushButton_motorCalibration.setStyleSheet("")
+			self.axis1_pushButton_sensorlessControl.setStyleSheet("")
+			self.axis1_pushButton_encoderIndexSearch.setStyleSheet("")
+			self.axis1_pushButton_encoderOffsetCalibration.setStyleSheet("")
+			self.axis1_pushButton_closedLoopControl.setStyleSheet("")
 
-	def startup_seq_state(self):
-		self.axis0_pushButton_startupSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def idle_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_idle.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_idle.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def full_calibration_seq_state(self):
-		self.axis0_pushButton_fullCalibrationSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def startup_seq_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_startupSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_startupSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def motor_calibration_state(self):
-		self.axis0_pushButton_motorCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def full_calibration_seq_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_fullCalibrationSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_fullCalibrationSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def sensorless_control_state(self):
-		self.axis0_pushButton_sensorlessControl.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def motor_calibration_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_motorCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_motorCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def encoder_index_search_state(self):
-		self.axis0_pushButton_econderIndexSearch.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def sensorless_control_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_sensorlessControl.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_sensorlessControl.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def encoder_offset_calibration_state(self):
-		self.axis0_pushButton_encoderOffsetCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def encoder_index_search_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_encoderIndexSearch.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_encoderIndexSearch.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def closed_loop_control_state(self):
-		self.axis0_pushButton_closedLoopControl.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def encoder_offset_calibration_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_encoderOffsetCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_encoderOffsetCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
+
+	def closed_loop_control_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_closedLoopControl.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_closedLoopControl.setStyleSheet("background-color: rgb(246, 224, 143);")
 
 	def save_config(self):
 		self.my_drive.save_configuration()
@@ -815,38 +1023,34 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			print(e)
 			self.odrive_disconnected_exception()
 
-	def idle_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_IDLE
-		# self.idle_state()
+	def machine_state_clicked(self):
+		button_name = self.sender().objectName()
+		axis_name = button_name[:5]
+		m_state_name = button_name[17:]
+		print(axis_name)
+		print(m_state_name)
 
-	def startupSequence_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_STARTUP_SEQUENCE
-		# self.startup_seq_state()
+		if axis_name == "axis0":
+			axis = self.my_drive.axis0
+		elif axis_name == "axis1":
+			axis = self.my_drive.axis1
 
-	def fullCalibrationSequence_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
-		# self.full_calibration_seq_state()
-
-	def motorCalibration_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_MOTOR_CALIBRATION
-		# self.motor_calibration_state()
-
-	def sensorlessControl_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_SENSORLESS_CONTROL
-		# self.sensorless_control_state()
-
-	def econderIndexSearch_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_ENCODER_INDEX_SEARCH
-		# self.encoder_index_search_state()
-
-	def encoderOffsetCalibration_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_ENCODER_OFFSET_CALIBRATION
-		# self.encoder_offset_calibration_state()
-
-	def closedLoopControl_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
-		# self.closed_loop_control_state()
-
+		if m_state_name == "idle":
+			axis.requested_state = AXIS_STATE_IDLE
+		elif m_state_name == "startupSequence":
+			axis.requested_state = AXIS_STATE_STARTUP_SEQUENCE
+		elif m_state_name == "fullCalibrationSequence":
+			axis.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
+		elif m_state_name == "motorCalibration":
+			axis.requested_state = AXIS_STATE_MOTOR_CALIBRATION
+		elif m_state_name == "sensorlessControl":
+			axis.requested_state = AXIS_STATE_SENSORLESS_CONTROL
+		elif m_state_name == "encoderIndexSearch":
+			axis.requested_state = AXIS_STATE_ENCODER_INDEX_SEARCH
+		elif m_state_name == "encoderOffsetCalibration":
+			axis.requested_state = AXIS_STATE_ENCODER_OFFSET_CALIBRATION
+		elif m_state_name == "closedLoopControl":
+			axis.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
 
 def main():
 	app = QtWidgets.QApplication(sys.argv)  # A new instance of QApplication

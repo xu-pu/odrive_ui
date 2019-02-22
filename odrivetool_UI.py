@@ -69,20 +69,18 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.axis1_pushButton_closedLoopControl.clicked.connect(self.machine_state_clicked)
 
 		# Axis Controlls
-		self.buttonGroup_13.buttonClicked.connect(self.axis0_controller_mode_changed)
+		self.buttonGroup_13.buttonClicked.connect(self.axis_controller_mode_changed)
+		self.buttonGroup_14.buttonClicked.connect(self.axis_controller_mode_changed)
 
 		self.axis0PositionGo_pushButton.clicked.connect(self.send_axis0_position_go)
 		self.axis0Backward_pushButton.clicked.connect(self.send_axis0_velocity_current_backward)
 		self.axis0Stop_pushButton.clicked.connect(self.send_axis0_velocity_current_stop)
 		self.axis0Forward_pushButton.clicked.connect(self.send_axis0_velocity_current_forward)
 
-		# self.buttonGroup_14.buttonClicked.connect(self.axis1_controller_mode_changed)
-		# self.axis1PositionGo_pushButton.clicked.connect(self.send_axis1_position_go)
-		# self.axis1Backward_pushButton.clicked.connect(self.send_axis1_velocity_current_backward)
-		# self.axis1Stop_pushButton.clicked.connect(self.send_axis1_velocity_current_stop)
-		# self.axis1Forward_pushButton.clicked.connect(self.send_axis1_velocity_current_forward)
-		# self.axis0_pushButton_sendController.clicked.connect(self.send_axis_control)
-
+		self.axis1PositionGo_pushButton.clicked.connect(self.send_axis1_position_go)
+		self.axis1Backward_pushButton.clicked.connect(self.send_axis1_velocity_current_backward)
+		self.axis1Stop_pushButton.clicked.connect(self.send_axis1_velocity_current_stop)
+		self.axis1Forward_pushButton.clicked.connect(self.send_axis1_velocity_current_forward)
 
 		self.showAxis0_checkBox.stateChanged.connect(self.axis0_graph_state_changed)
 		self.showAxis1_checkBox.stateChanged.connect(self.axis1_graph_state_changed)
@@ -102,11 +100,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 		self.ad = {} #axis_dcit
 
-		pen_sp_axis0 = pg.mkPen(color=(0, 128, 255), width=2) # Blue: 0 128 255
-		pen_est_axis0 = pg.mkPen(color=(135, 0, 191), width=2) # Purple: 135 0 191
+		pen_sp_axis0 = pg.mkPen(color=(0, 128, 255), width=1) # Blue: 0 128 255
+		pen_est_axis0 = pg.mkPen(color=(135, 0, 191), width=1) # Purple: 135 0 191
 
-		pen_sp_axis1 = pg.mkPen(color=(255, 78, 0), width=2) # Red: 255 78 0
-		pen_est_axis1 = pg.mkPen(color=(155, 170, 0), width=2) # Orange: 155 170 0
+		pen_sp_axis1 = pg.mkPen(color=(255, 78, 0), width=1) # Red: 255 78 0
+		pen_est_axis1 = pg.mkPen(color=(155, 170, 0), width=1) # Orange: 155 170 0
 		# old orange (color=(255, 192, 0)
 
 		self.ad["axis0"] = {}
@@ -138,6 +136,12 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.ad["axis1"]["current"] = {}
 		self.ad["axis1"]["current"]["estimate"] = []
 		self.ad["axis1"]["current"]["set_point"] = []
+		self.ad["axis1"]["vel_sp_curve"] = self.plotWidget_velocity.plot(name="Setpoint", pen=pen_sp_axis1)
+		self.ad["axis1"]["vel_est_curve"] = self.plotWidget_velocity.plot(name="Estimate", pen=pen_est_axis1)
+		self.ad["axis1"]["pos_sp_curve"] = self.plotWidget_position.plot(name="Setpoint", pen=pen_sp_axis1)
+		self.ad["axis1"]["pos_est_curve"] = self.plotWidget_position.plot(name="Estimate", pen=pen_est_axis1)
+		self.ad["axis1"]["current_sp_curve"] = self.plotWidget_current.plot(name="Setpoint", pen=pen_sp_axis1)
+		self.ad["axis1"]["current_est_curve"] = self.plotWidget_current.plot(name="Estimate", pen=pen_est_axis1)
 
 		self.axis0_state = None
 		self.axis1_state = None
@@ -230,50 +234,84 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 	def update_controller_mode(self):
 		# print("Controller mode {}".format(self.my_drive.axis0.controller.config.control_mode))
 		axis0_control_mode = self.my_drive.axis0.controller.config.control_mode
-		axis1_control_mode = self.my_drive.axis1.controller.config.control_mode
-
 		if axis0_control_mode == CTRL_MODE_POSITION_CONTROL:
 			self.axis0Position_radioButton.setChecked(True)
-			self.axis0_controller_fields_position_enabled(True)
+			self.axis_controller_fields_position_enabled(True, 0)
 		elif axis0_control_mode == CTRL_MODE_CURRENT_CONTROL:
 			self.axis0Current_radioButton.setChecked(True)
-			self.axis0_controller_fields_position_enabled(False)
+			self.axis_controller_fields_position_enabled(False, 0)
 		elif axis0_control_mode == CTRL_MODE_VELOCITY_CONTROL:
 			self.axis0Velocity_radioButton.setChecked(True)
-			self.axis0_controller_fields_position_enabled(False)
+			self.axis_controller_fields_position_enabled(False, 0)
 
-	def axis0_controller_mode_changed(self, id):
+		axis1_control_mode = self.my_drive.axis1.controller.config.control_mode
+		if axis1_control_mode == CTRL_MODE_POSITION_CONTROL:
+			self.axis1Position_radioButton.setChecked(True)
+			self.axis_controller_fields_position_enabled(True, 1)
+		elif axis1_control_mode == CTRL_MODE_CURRENT_CONTROL:
+			self.axis1Current_radioButton.setChecked(True)
+			self.axis_controller_fields_position_enabled(False, 1)
+		elif axis1_control_mode == CTRL_MODE_VELOCITY_CONTROL:
+			self.axis1Velocity_radioButton.setChecked(True)
+			self.axis_controller_fields_position_enabled(False, 1)
+
+
+
+	def axis_controller_mode_changed(self, id):
 		button_name = id.text()
 		group_name = id.sender().objectName()
-		# print()
-		if button_name == "Position":
-			self.axis_control_mode_changed(CTRL_MODE_POSITION_CONTROL)
-		elif button_name == "Current":
-			self.axis_control_mode_changed(CTRL_MODE_CURRENT_CONTROL)
-		elif button_name == "Velocity":
-			self.axis_control_mode_changed(CTRL_MODE_VELOCITY_CONTROL)
+		if group_name == "buttonGroup_13":
+			if button_name == "Position":
+				self.axis_control_mode_changed(CTRL_MODE_POSITION_CONTROL, 0)
+			elif button_name == "Current":
+				self.axis_control_mode_changed(CTRL_MODE_CURRENT_CONTROL, 0)
+			elif button_name == "Velocity":
+				self.axis_control_mode_changed(CTRL_MODE_VELOCITY_CONTROL, 0)
+		elif group_name == "buttonGroup_14":
+			if button_name == "Position":
+				self.axis_control_mode_changed(CTRL_MODE_POSITION_CONTROL, 1)
+			elif button_name == "Current":
+				self.axis_control_mode_changed(CTRL_MODE_CURRENT_CONTROL, 1)
+			elif button_name == "Velocity":
+				self.axis_control_mode_changed(CTRL_MODE_VELOCITY_CONTROL, 1)
 
-	def axis_control_mode_changed(self, control_mode):
+
+	def axis_control_mode_changed(self, control_mode, axis):
 		if control_mode == CTRL_MODE_POSITION_CONTROL:
-			self.axis0_controller_fields_position_enabled(True)
+			self.axis_controller_fields_position_enabled(True, axis)
 		elif control_mode == CTRL_MODE_CURRENT_CONTROL:
-			self.axis0_controller_fields_position_enabled(False)
+			self.axis_controller_fields_position_enabled(False, axis)
 		elif control_mode == CTRL_MODE_VELOCITY_CONTROL:
-			self.axis0_controller_fields_position_enabled(False)
+			self.axis_controller_fields_position_enabled(False, axis)
 		# Updated mode inside odrive board
-		self.my_drive.axis0.controller.config.control_mode = control_mode
-		self.spinBox_controlModeValue.setValue(control_mode)
+		if axis == 0:
+			self.my_drive.axis0.controller.config.control_mode = control_mode
+			self.spinBox_controlModeValue_axis0.setValue(control_mode)
+		elif axis == 1:
+			self.my_drive.axis1.controller.config.control_mode = control_mode
+			self.spinBox_controlModeValue_axis1.setValue(control_mode)
 
-	def axis0_controller_fields_position_enabled(self, state):
-		#Enabled Position objects
-		self.axis0Position_doubleSpinBox.setEnabled(state)
-		self.axis0PositionGo_pushButton.setEnabled(state)
-		#Disable current and velocity objects
-		self.axis0Backward_pushButton.setDisabled(state)
-		self.axis0Stop_pushButton.setDisabled(state)
-		self.axis0Forward_pushButton.setDisabled(state)
-		self.axis0Velocity_doubleSpinBox.setDisabled(state)
-		self.axis0Current_doubleSpinBox.setDisabled(state)
+	def axis_controller_fields_position_enabled(self, state, axis):
+		if axis == 0:
+			#Enabled Position objects
+			self.axis0Position_doubleSpinBox.setEnabled(state)
+			self.axis0PositionGo_pushButton.setEnabled(state)
+			#Disable current and velocity objects
+			self.axis0Backward_pushButton.setDisabled(state)
+			self.axis0Stop_pushButton.setDisabled(state)
+			self.axis0Forward_pushButton.setDisabled(state)
+			self.axis0Velocity_doubleSpinBox.setDisabled(state)
+			self.axis0Current_doubleSpinBox.setDisabled(state)
+		elif axis == 1:
+			#Enabled Position objects
+			self.axis1Position_doubleSpinBox.setEnabled(state)
+			self.axis1PositionGo_pushButton.setEnabled(state)
+			#Disable current and velocity objects
+			self.axis1Backward_pushButton.setDisabled(state)
+			self.axis1Stop_pushButton.setDisabled(state)
+			self.axis1Forward_pushButton.setDisabled(state)
+			self.axis1Velocity_doubleSpinBox.setDisabled(state)
+			self.axis1Current_doubleSpinBox.setDisabled(state)
 
 	def close_application(self):
 		print("whooaaaa so custom!!!")
@@ -329,9 +367,14 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 				self.update_velocity_graph("axis0", self.my_drive.axis0)
 				self.update_position_graph("axis0", self.my_drive.axis0)
 				self.update_current_graph("axis0", self.my_drive.axis0)
+				self.update_X_range("axis0")
 			if self.showAxis1_checkBox.isChecked():
-				print("Update Axis1")
-			self.update_X_range()
+				self.ad["axis1"]["time_array"].append(delta)
+				self.update_velocity_graph("axis1", self.my_drive.axis1)
+				self.update_position_graph("axis1", self.my_drive.axis1)
+				self.update_current_graph("axis1", self.my_drive.axis1)
+				self.update_X_range("axis1")
+
 		except Exception as e:
 			print(e)
 			self.odrive_disconnected_exception()
@@ -345,11 +388,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.setDisabled_odrive_ui(True)
 
 		self.clear_axis_graph_lists("axis0")
-		# self.clear_axis_graph_lists("axis1")
+		self.clear_axis_graph_lists("axis1")
 
 	def clearGraph_clicked(self):
 		self.clear_axis_graph_lists("axis0")
-		# self.clear_axis_graph_lists("axis1")
+		self.clear_axis_graph_lists("axis1")
 		self.ad["start_time"] = pg.ptime.time()
 
 
@@ -386,27 +429,22 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.ad[axis_key]["pos_sp_curve"].setData(self.ad[axis_key]["time_array"], self.ad[axis_key]["position"]["set_point"])
 		self.ad[axis_key]["pos_est_curve"].setData(self.ad[axis_key]["time_array"], self.ad[axis_key]["position"]["estimate"])
 
-	def update_X_range(self):
-		upper_limit = self.ad["axis0"]["time_array"][-1]
-		lower_limit = self.ad["axis0"]["time_array"][0]
+	def update_X_range(self, axis):
+		upper_limit = self.ad[axis]["time_array"][-1]
+		lower_limit = self.ad[axis]["time_array"][0]
 		delta = self.spinBox_graphTime.value()
 		if (upper_limit - lower_limit) > delta:
 			while((upper_limit - lower_limit) > delta):
-				self.ad["axis0"]["time_array"].pop(0)
-				self.ad["axis0"]["velocity"]["estimate"].pop(0)
-				self.ad["axis0"]["velocity"]["set_point"].pop(0)
-				self.ad["axis0"]["current"]["estimate"].pop(0)
-				self.ad["axis0"]["current"]["set_point"].pop(0)
-				self.ad["axis0"]["position"]["estimate"].pop(0)
-				self.ad["axis0"]["position"]["set_point"].pop(0)
-				upper_limit = self.ad["axis0"]["time_array"][-1]
-				lower_limit = self.ad["axis0"]["time_array"][0]
+				self.ad[axis]["time_array"].pop(0)
+				self.ad[axis]["velocity"]["estimate"].pop(0)
+				self.ad[axis]["velocity"]["set_point"].pop(0)
+				self.ad[axis]["current"]["estimate"].pop(0)
+				self.ad[axis]["current"]["set_point"].pop(0)
+				self.ad[axis]["position"]["estimate"].pop(0)
+				self.ad[axis]["position"]["set_point"].pop(0)
+				upper_limit = self.ad[axis]["time_array"][-1]
+				lower_limit = self.ad[axis]["time_array"][0]
 
-		# if upper_limit >= delta:
-		# 	lower_l = upper_limit - delta
-		# 	self.plotWidget_velocity.setXRange(lower_l, upper_limit)
-		# 	self.plotWidget_position.setXRange(lower_l, upper_limit)
-		# 	self.plotWidget_current.setXRange(lower_l, upper_limit)
 
 
 	def update_statuses(self):
@@ -523,7 +561,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis0.controller.config.vel_integrator_gain = float(self.doubleSpinBox_velIntegratorGainValue.value())
 		self.my_drive.axis0.controller.config.pos_gain = float(self.doubleSpinBox_posGainValue.value())
 		self.my_drive.axis0.controller.config.vel_limit = float(self.doubleSpinBox_velLimitValue.value())
-		self.my_drive.axis0.controller.config.control_mode = int(self.spinBox_controlModeValue.value())
+		self.my_drive.axis0.controller.config.control_mode = int(self.spinBox_controlModeValue_axis0.value())
 
 		self.my_drive.axis0.config.startup_encoder_index_search = self.radioButton_startupEncoderIndexSearchTrue.isChecked()
 		self.my_drive.axis0.config.startup_motor_calibration = self.radioButton_startupMotorCalibrationAxisTrue.isChecked()
@@ -788,7 +826,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.doubleSpinBox_velGainValue.setValue(self.my_drive.axis0.controller.config.vel_gain)
 		self.doubleSpinBox_velIntegratorGainValue.setValue(self.my_drive.axis0.controller.config.vel_integrator_gain)
 		self.doubleSpinBox_velLimitValue.setValue(self.my_drive.axis0.controller.config.vel_limit)
-		self.spinBox_controlModeValue.setValue(self.my_drive.axis0.controller.config.control_mode)
+		self.spinBox_controlModeValue_axis0.setValue(self.my_drive.axis0.controller.config.control_mode)
 
 
 
@@ -855,8 +893,14 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 	def send_axis0_position_go(self):
 		self.my_drive.axis0.controller.pos_setpoint = self.axis0Position_doubleSpinBox.value()
 
+	def send_axis1_position_go(self):
+		self.my_drive.axis1.controller.pos_setpoint = self.axis1Position_doubleSpinBox.value()
+
 	def send_axis0_velocity_current_stop(self):
-		self.send_axis0_velocity_current_command(self.my_drive.axis0.controller.config.control_mode, 0.0)
+		self.send_axis_velocity_current_command(0, self.my_drive.axis0.controller.config.control_mode, 0.0)
+
+	def send_axis1_velocity_current_stop(self):
+		self.send_axis_velocity_current_command(1, self.my_drive.axis1.controller.config.control_mode, 0.0)
 
 	def send_axis0_velocity_current_forward(self):
 		mode = self.my_drive.axis0.controller.config.control_mode
@@ -865,7 +909,16 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			value = self.axis0Current_doubleSpinBox.value()
 		elif mode == CTRL_MODE_VELOCITY_CONTROL:
 			value = self.axis0Velocity_doubleSpinBox.value()
-		self.send_axis0_velocity_current_command(self.my_drive.axis0.controller.config.control_mode, value)
+		self.send_axis_velocity_current_command(0, mode, value)
+
+	def send_axis1_velocity_current_forward(self):
+		mode = self.my_drive.axis1.controller.config.control_mode
+		value = 0
+		if mode == CTRL_MODE_CURRENT_CONTROL:
+			value = self.axis1Current_doubleSpinBox.value()
+		elif mode == CTRL_MODE_VELOCITY_CONTROL:
+			value = self.axis1Velocity_doubleSpinBox.value()
+		self.send_axis_velocity_current_command(1, mode, value)
 
 	def send_axis0_velocity_current_backward(self):
 		mode = self.my_drive.axis0.controller.config.control_mode
@@ -874,15 +927,29 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			value = self.axis0Current_doubleSpinBox.value() * -1
 		elif mode == CTRL_MODE_VELOCITY_CONTROL:
 			value = self.axis0Velocity_doubleSpinBox.value() * -1
-		self.send_axis0_velocity_current_command(self.my_drive.axis0.controller.config.control_mode, value)
+		self.send_axis_velocity_current_command(0, mode, value)
 
-
-	def send_axis0_velocity_current_command(self, mode, value):
+	def send_axis1_velocity_current_backward(self):
+		mode = self.my_drive.axis1.controller.config.control_mode
+		value = 0
 		if mode == CTRL_MODE_CURRENT_CONTROL:
-			self.my_drive.axis0.controller.current_setpoint = value
+			value = self.axis1Current_doubleSpinBox.value() * -1
 		elif mode == CTRL_MODE_VELOCITY_CONTROL:
-			self.my_drive.axis0.controller.vel_setpoint = value
+			value = self.axis1Velocity_doubleSpinBox.value() * -1
+		self.send_axis_velocity_current_command(1, mode, value)
 
+
+	def send_axis_velocity_current_command(self, axis, mode, value):
+		if axis == 0:
+			if mode == CTRL_MODE_CURRENT_CONTROL:
+				self.my_drive.axis0.controller.current_setpoint = value
+			elif mode == CTRL_MODE_VELOCITY_CONTROL:
+				self.my_drive.axis0.controller.vel_setpoint = value
+		elif axis == 1:
+			if mode == CTRL_MODE_CURRENT_CONTROL:
+				self.my_drive.axis1.controller.current_setpoint = value
+			elif mode == CTRL_MODE_VELOCITY_CONTROL:
+				self.my_drive.axis1.controller.vel_setpoint = value
 
 	def clear_state_buttons(self, axis):
 		if axis == 0:

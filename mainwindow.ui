@@ -2746,7 +2746,7 @@ Control</string>
                  <item row="0" column="0">
                   <layout class="QGridLayout" name="gridLayout_24">
                    <item row="3" column="1">
-                    <widget class="QSpinBox" name="spinBox_cprValue">
+                    <widget class="QSpinBox" name="spinBox_cprValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -2818,7 +2818,7 @@ Control</string>
                    <item row="0" column="1">
                     <layout class="QGridLayout" name="gridLayout_71">
                      <item row="0" column="0">
-                      <widget class="QRadioButton" name="radioButton_useIndexTrue">
+                      <widget class="QRadioButton" name="radioButton_useIndexTrue_axis0">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -2844,7 +2844,7 @@ Control</string>
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QRadioButton" name="radioButton_useIndexFalse">
+                      <widget class="QRadioButton" name="radioButton_useIndexFalse_axis0">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -2874,7 +2874,7 @@ Control</string>
                    <item row="1" column="1">
                     <layout class="QGridLayout" name="gridLayout_70">
                      <item row="0" column="0">
-                      <widget class="QRadioButton" name="radioButton_preCalibratedEncoderTrue">
+                      <widget class="QRadioButton" name="radioButton_encoderPreCalibratedTrue_axis0">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -2900,7 +2900,7 @@ Control</string>
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QRadioButton" name="radioButton_preCalibratedEncoderFalse">
+                      <widget class="QRadioButton" name="radioButton_encoderPreCalibratedFalse_axis0">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -2928,7 +2928,7 @@ Control</string>
                     </layout>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_idxSearchSpeedValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_idxSearchSpeedValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -2938,7 +2938,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="1">
-                    <widget class="QSpinBox" name="spinBox_modeEncoderValue">
+                    <widget class="QSpinBox" name="spinBox_modeValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -2948,7 +2948,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_offsetFloatValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_offsetFloatValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -2994,7 +2994,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="1">
-                    <widget class="QSpinBox" name="spinBox_offsetValue">
+                    <widget class="QSpinBox" name="spinBox_offsetValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -3004,7 +3004,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="8" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_bandwidthValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_bandwidthValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -3014,7 +3014,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_calibRangeValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_calibRangeValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -3055,7 +3055,7 @@ Control</string>
                  <item row="0" column="0">
                   <layout class="QGridLayout" name="gridLayout_26">
                    <item row="3" column="2">
-                    <widget class="QLabel" name="label_posCprValue">
+                    <widget class="QLabel" name="label_posCprValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3106,7 +3106,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="2">
-                    <widget class="QLabel" name="label_shadowCountValue">
+                    <widget class="QLabel" name="label_shadowCountValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3121,12 +3121,12 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="2">
-                    <widget class="QLabel" name="icon_isReadyEncoderValue">
+                    <widget class="QLabel" name="icon_isReadyValue_axis0">
                      <property name="text">
                       <string/>
                      </property>
                      <property name="pixmap">
-                      <pixmap>../Icons/NoState.jpg</pixmap>
+                      <pixmap>../../../home/Users/pjurgaitis/Downloads/Icons/NoState.jpg</pixmap>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -3146,7 +3146,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="2">
-                    <widget class="QLabel" name="label_posEstimateValue">
+                    <widget class="QLabel" name="label_posEstimateValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3161,12 +3161,12 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="2">
-                    <widget class="QLabel" name="icon_indexFoundValue">
+                    <widget class="QLabel" name="icon_indexFoundValue_axis0">
                      <property name="text">
                       <string/>
                      </property>
                      <property name="pixmap">
-                      <pixmap>../Icons/NoState.jpg</pixmap>
+                      <pixmap>../../../home/Users/pjurgaitis/Downloads/Icons/NoState.jpg</pixmap>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -3186,7 +3186,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="2">
-                    <widget class="QLabel" name="label_interpolationValue">
+                    <widget class="QLabel" name="label_interpolationValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3201,7 +3201,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="2">
-                    <widget class="QLabel" name="label_errorEncoderValue">
+                    <widget class="QLabel" name="label_encoderErrorValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3228,7 +3228,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="8" column="2">
-                    <widget class="QLabel" name="label_hallStateValue">
+                    <widget class="QLabel" name="label_hallStateValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3279,7 +3279,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="2">
-                    <widget class="QLabel" name="label_countInCprValue">
+                    <widget class="QLabel" name="label_countInCprValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3294,7 +3294,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="9" column="2">
-                    <widget class="QLabel" name="label_phaseValue">
+                    <widget class="QLabel" name="label_phaseValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3406,7 +3406,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velGainValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velGainValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -3419,7 +3419,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_posGainValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_posGainValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -3439,7 +3439,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velIntegratorGainValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velIntegratorGainValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -3476,7 +3476,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="3" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velLimitValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velLimitValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -3517,7 +3517,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="2" rowspan="2">
-                    <widget class="QLabel" name="label_velSetpointValue">
+                    <widget class="QLabel" name="label_velSetpointValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3544,7 +3544,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="3" column="2">
-                    <widget class="QLabel" name="label_posSetpointValue">
+                    <widget class="QLabel" name="label_posSetpointValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3559,7 +3559,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="2">
-                    <widget class="QLabel" name="label_setVelSetpointValue">
+                    <widget class="QLabel" name="label_setVelSetpointValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3586,7 +3586,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="2">
-                    <widget class="QLabel" name="label_posSetpointValue_2">
+                    <widget class="QLabel" name="label_startAnticoggingCalibration_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3649,7 +3649,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="2">
-                    <widget class="QLabel" name="label_setPosSetpointValue">
+                    <widget class="QLabel" name="label_setPosSetpointValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3664,7 +3664,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="2">
-                    <widget class="QLabel" name="label_currentSetpointValue">
+                    <widget class="QLabel" name="label_currentSetpointValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3679,7 +3679,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="8" column="2">
-                    <widget class="QLabel" name="label_setPosSetpointValue_2">
+                    <widget class="QLabel" name="label_velIntegratorCurrent_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3706,7 +3706,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="2">
-                    <widget class="QLabel" name="label_setCurrentSetpointValue">
+                    <widget class="QLabel" name="label_setCurrentSetpointValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3800,7 +3800,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="3" column="2" colspan="2">
-                    <widget class="QLabel" name="label_phaseCurrentRevGainValue">
+                    <widget class="QLabel" name="label_phaseCurrentRevGainValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3851,7 +3851,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="2" colspan="2">
-                    <widget class="QLabel" name="label_setCurrentControlBandwidthValue">
+                    <widget class="QLabel" name="label_setCurrentControlBandwidthValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3866,7 +3866,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="2" colspan="2">
-                    <widget class="QLabel" name="label_errorAxisValue_2">
+                    <widget class="QLabel" name="label_motorErrorValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3881,7 +3881,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="2" colspan="2">
-                    <widget class="QLabel" name="label_dcCalibPhCValue">
+                    <widget class="QLabel" name="label_dcCalibPhCValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3896,7 +3896,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="2" colspan="2">
-                    <widget class="QLabel" name="label_armedStateValue">
+                    <widget class="QLabel" name="label_armedStateValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3923,7 +3923,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="2" colspan="2">
-                    <widget class="QLabel" name="label_dcCalibPhBValue">
+                    <widget class="QLabel" name="label_dcCalibPhBValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -3950,12 +3950,12 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="2" colspan="2">
-                    <widget class="QLabel" name="icon_isCalibratedValue">
+                    <widget class="QLabel" name="icon_isCalibratedValue_axis0">
                      <property name="text">
                       <string/>
                      </property>
                      <property name="pixmap">
-                      <pixmap>../Icons/NoState.jpg</pixmap>
+                      <pixmap>../../../home/Users/pjurgaitis/Downloads/Icons/NoState.jpg</pixmap>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -4006,7 +4006,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QLabel" name="label_currentMeasPhCValue">
+                    <widget class="QLabel" name="label_currentMeasPhCValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4021,7 +4021,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QLabel" name="label_currentMeasPhBValue">
+                    <widget class="QLabel" name="label_currentMeasPhBValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4169,7 +4169,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QLabel" name="label_maxAllowedCurrentValue">
+                    <widget class="QLabel" name="label_maxAllowedCurrentValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4184,7 +4184,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QLabel" name="label_ibusValue">
+                    <widget class="QLabel" name="label_ibusValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4199,7 +4199,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QLabel" name="label_vCurrentControlIntegralDValue">
+                    <widget class="QLabel" name="label_vCurrentControlIntegralDValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4214,7 +4214,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="3" column="1">
-                    <widget class="QLabel" name="label_vCurrentControlIntegralQValue">
+                    <widget class="QLabel" name="label_vCurrentControlIntegralQValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4229,7 +4229,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="1">
-                    <widget class="QLabel" name="label_finalVAlphaValue">
+                    <widget class="QLabel" name="label_finalVAlphaValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4244,7 +4244,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="1">
-                    <widget class="QLabel" name="label_finalVBetaValue">
+                    <widget class="QLabel" name="label_finalVBetaValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4259,7 +4259,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="1">
-                    <widget class="QLabel" name="label_pGainValue">
+                    <widget class="QLabel" name="label_pGainValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4274,7 +4274,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="1">
-                    <widget class="QLabel" name="label_iGainValue">
+                    <widget class="QLabel" name="label_iGainValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4289,7 +4289,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="8" column="1">
-                    <widget class="QLabel" name="label_iqSetpointValue">
+                    <widget class="QLabel" name="label_iqSetpointValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4304,7 +4304,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="9" column="1">
-                    <widget class="QLabel" name="label_iqMeasuredValue">
+                    <widget class="QLabel" name="label_iqMeasuredValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4452,7 +4452,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseInductanceValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseInductanceValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -4462,7 +4462,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseResistanceValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseResistanceValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -4472,7 +4472,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentControlBandwidthValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentControlBandwidthValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -4482,7 +4482,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_requestedCurrentRangeValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_requestedCurrentRangeValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -4492,7 +4492,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="1">
-                    <widget class="QSpinBox" name="spinBox_motorTypeValue">
+                    <widget class="QSpinBox" name="spinBox_motorTypeValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -4502,7 +4502,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="8" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_resistanceCalibMaxVoltageValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_resistanceCalibMaxVoltageValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -4512,7 +4512,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="9" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentLimValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentLimValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -4522,7 +4522,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="1">
-                    <widget class="QSpinBox" name="spinBox_directionValue">
+                    <widget class="QSpinBox" name="spinBox_directionValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -4532,7 +4532,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="10" column="1">
-                    <widget class="QSpinBox" name="spinBox_poleParisValue">
+                    <widget class="QSpinBox" name="spinBox_poleParisValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -4542,7 +4542,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="11" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_calibrationCurrentValue">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_calibrationCurrentValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -4566,7 +4566,7 @@ Control</string>
                    <item row="0" column="1">
                     <layout class="QGridLayout" name="gridLayout_72">
                      <item row="0" column="0">
-                      <widget class="QRadioButton" name="radioButton_preCalibratedTrue">
+                      <widget class="QRadioButton" name="radioButton_motorPreCalibratedTrue_axis0">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -4592,7 +4592,7 @@ Control</string>
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QRadioButton" name="radioButton_preCalibratedFalse">
+                      <widget class="QRadioButton" name="radioButton_motorPreCalibratedFalse_axis0">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -4658,7 +4658,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QLabel" name="label_drvFaultValue">
+                    <widget class="QLabel" name="label_drvFaultValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4720,7 +4720,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="0" column="2">
-                   <widget class="QLabel" name="label_errorAxis0Value">
+                   <widget class="QLabel" name="label_generalErrorValue_axis0">
                     <property name="font">
                      <font>
                       <pointsize>10</pointsize>
@@ -4735,7 +4735,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="1" column="2">
-                   <widget class="QLabel" name="label_loopCounterAxis0Value">
+                   <widget class="QLabel" name="label_loopCounterValue_axis0">
                     <property name="font">
                      <font>
                       <pointsize>10</pointsize>
@@ -4777,7 +4777,7 @@ Control</string>
                   <item row="5" column="1">
                    <layout class="QGridLayout" name="gridLayout_64">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_enableStepDirTrue">
+                     <widget class="QRadioButton" name="radioButton_enableStepDirTrue_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -4803,7 +4803,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_enableStepDirFalse">
+                     <widget class="QRadioButton" name="radioButton_enableStepDirFalse_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -4963,7 +4963,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="7" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_rampUpTimeValue">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_rampUpTimeValue_axis0">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -4987,7 +4987,7 @@ Control</string>
                   <item row="2" column="1">
                    <layout class="QGridLayout" name="gridLayout_65">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderOffsetCalibrationTrue">
+                     <widget class="QRadioButton" name="radioButton_startupEncoderOffsetCalibrationTrue_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5013,7 +5013,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderOffsetCalibrationFalse">
+                     <widget class="QRadioButton" name="radioButton_startupEncoderOffsetCalibrationFalse_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5043,7 +5043,7 @@ Control</string>
                   <item row="4" column="1">
                    <layout class="QGridLayout" name="gridLayout_66">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_startupSensorlessControlTrue">
+                     <widget class="QRadioButton" name="radioButton_startupSensorlessControlTrue_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5069,7 +5069,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_startupSensorlessControlFalse">
+                     <widget class="QRadioButton" name="radioButton_startupSensorlessControlFalse_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5099,7 +5099,7 @@ Control</string>
                   <item row="3" column="1">
                    <layout class="QGridLayout" name="gridLayout_67">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderLoopControlTrue">
+                     <widget class="QRadioButton" name="radioButton_startupLoopControlTrue_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5125,7 +5125,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderLoopControlFalse">
+                     <widget class="QRadioButton" name="radioButton_startupLoopControlFalse_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5155,7 +5155,7 @@ Control</string>
                   <item row="0" column="1">
                    <layout class="QGridLayout" name="gridLayout_68">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_startupMotorCalibrationAxisTrue">
+                     <widget class="QRadioButton" name="radioButton_startupMotorCalibrationTrue_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5181,7 +5181,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_startupMotorCalibrationAxisFalse">
+                     <widget class="QRadioButton" name="radioButton_startupMotorCalibrationFalse_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5211,7 +5211,7 @@ Control</string>
                   <item row="1" column="1">
                    <layout class="QGridLayout" name="gridLayout_69">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderIndexSearchTrue">
+                     <widget class="QRadioButton" name="radioButton_startupEncoderIndexSearchTrue_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5237,7 +5237,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderIndexSearchFalse">
+                     <widget class="QRadioButton" name="radioButton_startupEncoderIndexSearchFalse_axis0">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5265,7 +5265,7 @@ Control</string>
                    </layout>
                   </item>
                   <item row="6" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_countPerStepValue">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_countPerStepValue_axis0">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5275,7 +5275,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="9" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpCurrentValue">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpCurrentValue_axis0">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5285,7 +5285,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="10" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpAccelerationValue">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpAccelerationValue_axis0">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5295,7 +5295,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="8" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_rampUpDistanceValue">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_rampUpDistanceValue_axis0">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5305,7 +5305,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="11" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpTargetVelValue">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpTargetVelValue_axis0">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5371,7 +5371,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="0" column="2">
-                   <widget class="QLabel" name="label_errorAxisValue_3">
+                   <widget class="QLabel" name="label_generalErrorValue_axis1">
                     <property name="font">
                      <font>
                       <pointsize>10</pointsize>
@@ -5386,7 +5386,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="1" column="2">
-                   <widget class="QLabel" name="label_loopCounterValue_2">
+                   <widget class="QLabel" name="label_loopCounterValue_axis1">
                     <property name="font">
                      <font>
                       <pointsize>10</pointsize>
@@ -5428,7 +5428,7 @@ Control</string>
                   <item row="5" column="1">
                    <layout class="QGridLayout" name="gridLayout_79">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_enableStepDirTrue_2">
+                     <widget class="QRadioButton" name="radioButton_enableStepDirTrue_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5451,7 +5451,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_enableStepDirFalse_2">
+                     <widget class="QRadioButton" name="radioButton_enableStepDirFalse_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5608,7 +5608,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="7" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_rampUpTimeValue_2">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_rampUpTimeValue_axis1">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5632,7 +5632,7 @@ Control</string>
                   <item row="2" column="1">
                    <layout class="QGridLayout" name="gridLayout_80">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderOffsetCalibrationTrue_2">
+                     <widget class="QRadioButton" name="radioButton_startupEncoderOffsetCalibrationTrue_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5655,7 +5655,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderOffsetCalibrationFalse_2">
+                     <widget class="QRadioButton" name="radioButton_startupEncoderOffsetCalibrationFalse_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5682,7 +5682,7 @@ Control</string>
                   <item row="4" column="1">
                    <layout class="QGridLayout" name="gridLayout_81">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_startupSensorlessControlTrue_2">
+                     <widget class="QRadioButton" name="radioButton_startupSensorlessControlTrue_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5705,7 +5705,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_startupSensorlessControlFalse_2">
+                     <widget class="QRadioButton" name="radioButton_startupSensorlessControlFalse_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5732,7 +5732,7 @@ Control</string>
                   <item row="3" column="1">
                    <layout class="QGridLayout" name="gridLayout_82">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderLoopControlTrue_2">
+                     <widget class="QRadioButton" name="radioButton_startupLoopControlTrue_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5755,7 +5755,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderLoopControlFalse_2">
+                     <widget class="QRadioButton" name="radioButton_startupLoopControlFalse_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5782,7 +5782,7 @@ Control</string>
                   <item row="0" column="1">
                    <layout class="QGridLayout" name="gridLayout_83">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_startupMotorCalibrationAxisTrue_2">
+                     <widget class="QRadioButton" name="radioButton_startupMotorCalibrationTrue_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5805,7 +5805,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_startupMotorCalibrationAxisFalse_2">
+                     <widget class="QRadioButton" name="radioButton_startupMotorCalibrationFalse_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5832,7 +5832,7 @@ Control</string>
                   <item row="1" column="1">
                    <layout class="QGridLayout" name="gridLayout_84">
                     <item row="0" column="0">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderIndexSearchTrue_2">
+                     <widget class="QRadioButton" name="radioButton_startupEncoderIndexSearchTrue_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5855,7 +5855,7 @@ Control</string>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QRadioButton" name="radioButton_startupEncoderIndexSearchFalse_2">
+                     <widget class="QRadioButton" name="radioButton_startupEncoderIndexSearchFalse_axis1">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -5880,7 +5880,7 @@ Control</string>
                    </layout>
                   </item>
                   <item row="6" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_countPerStepValue_2">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_countPerStepValue_axis1">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5890,7 +5890,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="9" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpCurrentValue_2">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpCurrentValue_axis1">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5900,7 +5900,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="10" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpAccelerationValue_2">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpAccelerationValue_axis1">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5910,7 +5910,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="8" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_rampUpDistanceValue_2">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_rampUpDistanceValue_axis1">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5920,7 +5920,7 @@ Control</string>
                    </widget>
                   </item>
                   <item row="11" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpTargetVelValue_2">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBox_spinUpTargetVelValue_axis1">
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -5952,7 +5952,7 @@ Control</string>
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="tab_8">
              <attribute name="title">
@@ -5968,7 +5968,7 @@ Control</string>
                  <item row="0" column="0">
                   <layout class="QGridLayout" name="gridLayout_87">
                    <item row="3" column="1">
-                    <widget class="QSpinBox" name="spinBox_cprValue_2">
+                    <widget class="QSpinBox" name="spinBox_cprValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6040,7 +6040,7 @@ Control</string>
                    <item row="0" column="1">
                     <layout class="QGridLayout" name="gridLayout_88">
                      <item row="0" column="0">
-                      <widget class="QRadioButton" name="radioButton_useIndexTrue_2">
+                      <widget class="QRadioButton" name="radioButton_useIndexTrue_axis1">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -6063,7 +6063,7 @@ Control</string>
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QRadioButton" name="radioButton_useIndexFalse_2">
+                      <widget class="QRadioButton" name="radioButton_useIndexFalse_axis1">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -6090,7 +6090,7 @@ Control</string>
                    <item row="1" column="1">
                     <layout class="QGridLayout" name="gridLayout_89">
                      <item row="0" column="0">
-                      <widget class="QRadioButton" name="radioButton_preCalibratedEncoderTrue_2">
+                      <widget class="QRadioButton" name="radioButton_encoderPreCalibratedTrue_axis1">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -6113,7 +6113,7 @@ Control</string>
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QRadioButton" name="radioButton_preCalibratedEncoderFalse_2">
+                      <widget class="QRadioButton" name="radioButton_encoderPreCalibratedFalse_axis1">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -6138,7 +6138,7 @@ Control</string>
                     </layout>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_idxSearchSpeedValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_idxSearchSpeedValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6148,7 +6148,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="1">
-                    <widget class="QSpinBox" name="spinBox_modeEncoderValue_2">
+                    <widget class="QSpinBox" name="spinBox_modeValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6158,7 +6158,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_offsetFloatValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_offsetFloatValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6204,7 +6204,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="1">
-                    <widget class="QSpinBox" name="spinBox_offsetValue_2">
+                    <widget class="QSpinBox" name="spinBox_offsetValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6214,7 +6214,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="8" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_bandwidthValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_bandwidthValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6224,7 +6224,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_calibRangeValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_calibRangeValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6265,7 +6265,7 @@ Control</string>
                  <item row="0" column="0">
                   <layout class="QGridLayout" name="gridLayout_91">
                    <item row="3" column="2">
-                    <widget class="QLabel" name="label_posCprValue_2">
+                    <widget class="QLabel" name="label_posCprValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6316,7 +6316,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="2">
-                    <widget class="QLabel" name="label_shadowCountValue_2">
+                    <widget class="QLabel" name="label_shadowCountValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6331,12 +6331,12 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="2">
-                    <widget class="QLabel" name="icon_isReadyEncoderValue_2">
+                    <widget class="QLabel" name="icon_isReadyValue_axis1">
                      <property name="text">
                       <string/>
                      </property>
                      <property name="pixmap">
-                      <pixmap>../Icons/NoState.jpg</pixmap>
+                      <pixmap>../../../home/Users/pjurgaitis/Downloads/Icons/NoState.jpg</pixmap>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -6356,7 +6356,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="2">
-                    <widget class="QLabel" name="label_posEstimateValue_2">
+                    <widget class="QLabel" name="label_posEstimateValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6371,12 +6371,12 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="2">
-                    <widget class="QLabel" name="icon_indexFoundValue_2">
+                    <widget class="QLabel" name="icon_indexFoundValue_axis1">
                      <property name="text">
                       <string/>
                      </property>
                      <property name="pixmap">
-                      <pixmap>../Icons/NoState.jpg</pixmap>
+                      <pixmap>../../../home/Users/pjurgaitis/Downloads/Icons/NoState.jpg</pixmap>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -6396,7 +6396,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="2">
-                    <widget class="QLabel" name="label_interpolationValue_2">
+                    <widget class="QLabel" name="label_interpolationValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6411,7 +6411,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="2">
-                    <widget class="QLabel" name="label_errorEncoderValue_2">
+                    <widget class="QLabel" name="label_encoderErrorValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6438,7 +6438,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="8" column="2">
-                    <widget class="QLabel" name="label_hallStateValue_2">
+                    <widget class="QLabel" name="label_hallStateValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6489,7 +6489,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="2">
-                    <widget class="QLabel" name="label_countInCprValue_2">
+                    <widget class="QLabel" name="label_countInCprValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6504,7 +6504,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="9" column="2">
-                    <widget class="QLabel" name="label_phaseValue_2">
+                    <widget class="QLabel" name="label_phaseValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6616,7 +6616,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velGainValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velGainValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6629,7 +6629,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_posGainValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_posGainValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6649,7 +6649,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velIntegratorGainValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velIntegratorGainValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6686,7 +6686,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="3" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velLimitValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_velLimitValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -6727,7 +6727,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="2" rowspan="2">
-                    <widget class="QLabel" name="label_velSetpointValue_2">
+                    <widget class="QLabel" name="label_velSetpointValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6754,7 +6754,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="3" column="2">
-                    <widget class="QLabel" name="label_posSetpointValue_3">
+                    <widget class="QLabel" name="label_posSetpointValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6769,7 +6769,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="2">
-                    <widget class="QLabel" name="label_setVelSetpointValue_2">
+                    <widget class="QLabel" name="label_setVelSetpointValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6796,7 +6796,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="2">
-                    <widget class="QLabel" name="label_posSetpointValue_4">
+                    <widget class="QLabel" name="label_startAnticoggingCalibration_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6859,7 +6859,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="2">
-                    <widget class="QLabel" name="label_setPosSetpointValue_3">
+                    <widget class="QLabel" name="label_setPosSetpointValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6874,7 +6874,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="2">
-                    <widget class="QLabel" name="label_currentSetpointValue_2">
+                    <widget class="QLabel" name="label_currentSetpointValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6889,7 +6889,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="8" column="2">
-                    <widget class="QLabel" name="label_setPosSetpointValue_4">
+                    <widget class="QLabel" name="label_velIntegratorCurrent_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -6916,7 +6916,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="2">
-                    <widget class="QLabel" name="label_setCurrentSetpointValue_2">
+                    <widget class="QLabel" name="label_setCurrentSetpointValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7010,7 +7010,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="3" column="2" colspan="2">
-                    <widget class="QLabel" name="label_phaseCurrentRevGainValue_2">
+                    <widget class="QLabel" name="label_phaseCurrentRevGainValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7061,7 +7061,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="2" colspan="2">
-                    <widget class="QLabel" name="label_setCurrentControlBandwidthValue_2">
+                    <widget class="QLabel" name="label_setCurrentControlBandwidthValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7076,7 +7076,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="2" colspan="2">
-                    <widget class="QLabel" name="label_errorAxisValue_4">
+                    <widget class="QLabel" name="label_motorErrorValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7091,7 +7091,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="2" colspan="2">
-                    <widget class="QLabel" name="label_dcCalibPhCValue_2">
+                    <widget class="QLabel" name="label_dcCalibPhCValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7106,7 +7106,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="2" colspan="2">
-                    <widget class="QLabel" name="label_armedStateValue_2">
+                    <widget class="QLabel" name="label_armedStateValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7133,7 +7133,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="2" colspan="2">
-                    <widget class="QLabel" name="label_dcCalibPhBValue_2">
+                    <widget class="QLabel" name="label_dcCalibPhBValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7160,12 +7160,12 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="2" colspan="2">
-                    <widget class="QLabel" name="icon_isCalibratedValue_2">
+                    <widget class="QLabel" name="icon_isCalibratedValue_axis1">
                      <property name="text">
                       <string/>
                      </property>
                      <property name="pixmap">
-                      <pixmap>../Icons/NoState.jpg</pixmap>
+                      <pixmap>../../../home/Users/pjurgaitis/Downloads/Icons/NoState.jpg</pixmap>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -7216,7 +7216,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QLabel" name="label_currentMeasPhCValue_2">
+                    <widget class="QLabel" name="label_currentMeasPhCValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7231,7 +7231,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QLabel" name="label_currentMeasPhBValue_2">
+                    <widget class="QLabel" name="label_currentMeasPhBValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7379,7 +7379,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QLabel" name="label_maxAllowedCurrentValue_2">
+                    <widget class="QLabel" name="label_maxAllowedCurrentValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7394,7 +7394,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QLabel" name="label_ibusValue_2">
+                    <widget class="QLabel" name="label_ibusValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7409,7 +7409,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QLabel" name="label_vCurrentControlIntegralDValue_2">
+                    <widget class="QLabel" name="label_vCurrentControlIntegralDValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7424,7 +7424,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="3" column="1">
-                    <widget class="QLabel" name="label_vCurrentControlIntegralQValue_2">
+                    <widget class="QLabel" name="label_vCurrentControlIntegralQValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7439,7 +7439,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="1">
-                    <widget class="QLabel" name="label_finalVAlphaValue_2">
+                    <widget class="QLabel" name="label_finalVAlphaValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7454,7 +7454,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="1">
-                    <widget class="QLabel" name="label_finalVBetaValue_2">
+                    <widget class="QLabel" name="label_finalVBetaValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7469,7 +7469,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="1">
-                    <widget class="QLabel" name="label_pGainValue_2">
+                    <widget class="QLabel" name="label_pGainValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7484,7 +7484,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="1">
-                    <widget class="QLabel" name="label_iGainValue_2">
+                    <widget class="QLabel" name="label_iGainValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7499,7 +7499,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="8" column="1">
-                    <widget class="QLabel" name="label_iqSetpointValue_2">
+                    <widget class="QLabel" name="label_iqSetpointValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7514,7 +7514,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="9" column="1">
-                    <widget class="QLabel" name="label_iqMeasuredValue_2">
+                    <widget class="QLabel" name="label_iqMeasuredValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7662,7 +7662,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseInductanceValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseInductanceValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -7672,7 +7672,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseResistanceValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseResistanceValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -7682,7 +7682,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="5" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentControlBandwidthValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentControlBandwidthValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -7692,7 +7692,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="6" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_requestedCurrentRangeValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_requestedCurrentRangeValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -7702,7 +7702,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="1">
-                    <widget class="QSpinBox" name="spinBox_motorTypeValue_2">
+                    <widget class="QSpinBox" name="spinBox_motorTypeValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -7712,7 +7712,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="8" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_resistanceCalibMaxVoltageValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_resistanceCalibMaxVoltageValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -7722,7 +7722,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="9" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentLimValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentLimValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -7732,7 +7732,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="7" column="1">
-                    <widget class="QSpinBox" name="spinBox_directionValue_2">
+                    <widget class="QSpinBox" name="spinBox_directionValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -7742,7 +7742,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="10" column="1">
-                    <widget class="QSpinBox" name="spinBox_poleParisValue_2">
+                    <widget class="QSpinBox" name="spinBox_poleParisValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -7752,7 +7752,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="11" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_calibrationCurrentValue_2">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_calibrationCurrentValue_axis1">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -7776,7 +7776,7 @@ Control</string>
                    <item row="0" column="1">
                     <layout class="QGridLayout" name="gridLayout_106">
                      <item row="0" column="0">
-                      <widget class="QRadioButton" name="radioButton_preCalibratedTrue_2">
+                      <widget class="QRadioButton" name="radioButton_motorPreCalibratedTrue_axis1">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -7799,7 +7799,7 @@ Control</string>
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QRadioButton" name="radioButton_preCalibratedFalse_2">
+                      <widget class="QRadioButton" name="radioButton_motorPreCalibratedFalse_axis1">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -7862,7 +7862,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QLabel" name="label_drvFaultValue_2">
+                    <widget class="QLabel" name="label_drvFaultValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7948,19 +7948,19 @@ Control</string>
  <resources/>
  <connections/>
  <buttongroups>
+  <buttongroup name="buttonGroup_4"/>
+  <buttongroup name="buttonGroup_6"/>
+  <buttongroup name="buttonGroup_12"/>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_7"/>
+  <buttongroup name="buttonGroup_13"/>
+  <buttongroup name="buttonGroup_10"/>
+  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_5"/>
   <buttongroup name="buttonGroup_8"/>
-  <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_10"/>
-  <buttongroup name="buttonGroup_6"/>
-  <buttongroup name="buttonGroup_11"/>
   <buttongroup name="buttonGroup_14"/>
-  <buttongroup name="buttonGroup_12"/>
-  <buttongroup name="buttonGroup_13"/>
   <buttongroup name="buttonGroup_9"/>
-  <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup_4"/>
-  <buttongroup name="buttonGroup_7"/>
+  <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup_11"/>
  </buttongroups>
 </ui>

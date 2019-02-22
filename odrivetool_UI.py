@@ -1071,7 +1071,6 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		else:
 			self.radioButton_useIndexFalse_axis1.setChecked(True)
 
-
 		self.doubleSpinBox_idxSearchSpeedValue_axis1.setValue(self.my_drive.axis1.encoder.config.idx_search_speed)
 		self.spinBox_cprValue_axis1.setValue(self.my_drive.axis1.encoder.config.cpr)
 		self.spinBox_modeEncoderValue_axis1.setValue(self.my_drive.axis1.encoder.config.mode)
@@ -1079,8 +1078,6 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.doubleSpinBox_offsetFloatValue_axis1.setValue(self.my_drive.axis1.encoder.config.offset_float)
 		self.doubleSpinBox_calibRangeValue_axis1.setValue(self.my_drive.axis1.encoder.config.calib_range)
 		self.doubleSpinBox_bandwidthValue_axis1.setValue(self.my_drive.axis1.encoder.config.bandwidth)
-
-
 
 	def send_axis0_position_go(self):
 		self.my_drive.axis0.controller.pos_setpoint = self.axis0Position_doubleSpinBox.value()

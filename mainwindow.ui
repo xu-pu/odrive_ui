@@ -105,7 +105,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="controlTab">
          <attribute name="title">
@@ -5448,6 +5448,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_20</string>
+                      </attribute>
                      </widget>
                     </item>
                     <item row="0" column="1">
@@ -5471,6 +5474,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_20</string>
+                      </attribute>
                      </widget>
                     </item>
                    </layout>
@@ -5652,6 +5658,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_17</string>
+                      </attribute>
                      </widget>
                     </item>
                     <item row="0" column="1">
@@ -5675,6 +5684,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_17</string>
+                      </attribute>
                      </widget>
                     </item>
                    </layout>
@@ -5702,6 +5714,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_19</string>
+                      </attribute>
                      </widget>
                     </item>
                     <item row="0" column="1">
@@ -5725,6 +5740,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_19</string>
+                      </attribute>
                      </widget>
                     </item>
                    </layout>
@@ -5752,6 +5770,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_18</string>
+                      </attribute>
                      </widget>
                     </item>
                     <item row="0" column="1">
@@ -5775,6 +5796,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_18</string>
+                      </attribute>
                      </widget>
                     </item>
                    </layout>
@@ -5802,6 +5826,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_15</string>
+                      </attribute>
                      </widget>
                     </item>
                     <item row="0" column="1">
@@ -5825,6 +5852,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_15</string>
+                      </attribute>
                      </widget>
                     </item>
                    </layout>
@@ -5852,6 +5882,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_16</string>
+                      </attribute>
                      </widget>
                     </item>
                     <item row="0" column="1">
@@ -5875,6 +5908,9 @@ Control</string>
                         <height>26</height>
                        </size>
                       </property>
+                      <attribute name="buttonGroup">
+                       <string notr="true">buttonGroup_16</string>
+                      </attribute>
                      </widget>
                     </item>
                    </layout>
@@ -5952,7 +5988,7 @@ Control</string>
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_8">
              <attribute name="title">
@@ -6060,6 +6096,9 @@ Control</string>
                          <height>26</height>
                         </size>
                        </property>
+                       <attribute name="buttonGroup">
+                        <string notr="true">buttonGroup_21</string>
+                       </attribute>
                       </widget>
                      </item>
                      <item row="0" column="1">
@@ -6083,6 +6122,9 @@ Control</string>
                          <height>26</height>
                         </size>
                        </property>
+                       <attribute name="buttonGroup">
+                        <string notr="true">buttonGroup_21</string>
+                       </attribute>
                       </widget>
                      </item>
                     </layout>
@@ -6110,6 +6152,9 @@ Control</string>
                          <height>26</height>
                         </size>
                        </property>
+                       <attribute name="buttonGroup">
+                        <string notr="true">buttonGroup_22</string>
+                       </attribute>
                       </widget>
                      </item>
                      <item row="0" column="1">
@@ -6133,6 +6178,9 @@ Control</string>
                          <height>26</height>
                         </size>
                        </property>
+                       <attribute name="buttonGroup">
+                        <string notr="true">buttonGroup_22</string>
+                       </attribute>
                       </widget>
                      </item>
                     </layout>
@@ -7796,6 +7844,9 @@ Control</string>
                          <height>26</height>
                         </size>
                        </property>
+                       <attribute name="buttonGroup">
+                        <string notr="true">buttonGroup_23</string>
+                       </attribute>
                       </widget>
                      </item>
                      <item row="0" column="1">
@@ -7819,6 +7870,9 @@ Control</string>
                          <height>26</height>
                         </size>
                        </property>
+                       <attribute name="buttonGroup">
+                        <string notr="true">buttonGroup_23</string>
+                       </attribute>
                       </widget>
                      </item>
                     </layout>
@@ -7948,19 +8002,28 @@ Control</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_7"/>
-  <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup_5"/>
-  <buttongroup name="buttonGroup_14"/>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_4"/>
-  <buttongroup name="buttonGroup_12"/>
-  <buttongroup name="buttonGroup_10"/>
-  <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup_8"/>
   <buttongroup name="buttonGroup_9"/>
+  <buttongroup name="buttonGroup_14"/>
+  <buttongroup name="buttonGroup_10"/>
+  <buttongroup name="buttonGroup_12"/>
+  <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup_8"/>
+  <buttongroup name="buttonGroup_4"/>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_7"/>
   <buttongroup name="buttonGroup_6"/>
-  <buttongroup name="buttonGroup_11"/>
   <buttongroup name="buttonGroup_13"/>
+  <buttongroup name="buttonGroup_11"/>
+  <buttongroup name="buttonGroup_15"/>
+  <buttongroup name="buttonGroup_16"/>
+  <buttongroup name="buttonGroup_17"/>
+  <buttongroup name="buttonGroup_18"/>
+  <buttongroup name="buttonGroup_19"/>
+  <buttongroup name="buttonGroup_20"/>
+  <buttongroup name="buttonGroup_21"/>
+  <buttongroup name="buttonGroup_22"/>
+  <buttongroup name="buttonGroup_23"/>
  </buttongroups>
 </ui>

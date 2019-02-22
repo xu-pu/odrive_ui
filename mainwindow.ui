@@ -105,7 +105,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="controlTab">
          <attribute name="title">
@@ -5988,7 +5988,7 @@ Control</string>
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_8">
              <attribute name="title">
@@ -8002,28 +8002,28 @@ Control</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_9"/>
-  <buttongroup name="buttonGroup_14"/>
-  <buttongroup name="buttonGroup_10"/>
-  <buttongroup name="buttonGroup_12"/>
-  <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup_5"/>
-  <buttongroup name="buttonGroup_8"/>
-  <buttongroup name="buttonGroup_4"/>
-  <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup_7"/>
-  <buttongroup name="buttonGroup_6"/>
-  <buttongroup name="buttonGroup_13"/>
-  <buttongroup name="buttonGroup_11"/>
   <buttongroup name="buttonGroup_15"/>
+  <buttongroup name="buttonGroup_8"/>
+  <buttongroup name="buttonGroup_12"/>
+  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_21"/>
+  <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup_11"/>
   <buttongroup name="buttonGroup_16"/>
   <buttongroup name="buttonGroup_17"/>
-  <buttongroup name="buttonGroup_18"/>
-  <buttongroup name="buttonGroup_19"/>
-  <buttongroup name="buttonGroup_20"/>
-  <buttongroup name="buttonGroup_21"/>
   <buttongroup name="buttonGroup_22"/>
+  <buttongroup name="buttonGroup_13"/>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_10"/>
+  <buttongroup name="buttonGroup_7"/>
+  <buttongroup name="buttonGroup_19"/>
+  <buttongroup name="buttonGroup_4"/>
+  <buttongroup name="buttonGroup_6"/>
+  <buttongroup name="buttonGroup_20"/>
+  <buttongroup name="buttonGroup_18"/>
+  <buttongroup name="buttonGroup_9"/>
   <buttongroup name="buttonGroup_23"/>
+  <buttongroup name="buttonGroup_14"/>
+  <buttongroup name="buttonGroup_3"/>
  </buttongroups>
 </ui>

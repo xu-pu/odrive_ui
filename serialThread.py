@@ -18,6 +18,6 @@ class odriveWorker(QtCore.QThread):
 		self.my_drive = odrive.find_any()
 		self.odrive_found_sig.emit(self.my_drive)
 
-		while self._isRunning is True:
-			time.sleep(.01)
-			QtWidgets.QApplication.processEvents()
+		# while self._isRunning is True:
+			# time.sleep(.01)
+			# QtWidgets.QApplication.processEvents()

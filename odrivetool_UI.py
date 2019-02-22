@@ -104,7 +104,8 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		pen_est_axis0 = pg.mkPen(color=(135, 0, 191), width=1) # Purple: 135 0 191
 
 		pen_sp_axis1 = pg.mkPen(color=(255, 78, 0), width=1) # Red: 255 78 0
-		pen_est_axis1 = pg.mkPen(color=(155, 170, 0), width=1) # Orange: 155 170 0
+		pen_est_axis1 = pg.mkPen(color=(255, 212, 0), width=1) #Yellow 255 212 0
+		 # Poop yellow)Orange: 155 170 0
 		# old orange (color=(255, 192, 0)
 
 		self.ad["axis0"] = {}

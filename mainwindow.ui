@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1501</width>
-    <height>1027</height>
+    <height>1008</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,85 +21,9 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="1" column="1">
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="QGroupBox" name="groupBox_10">
-        <property name="title">
-         <string>Commands</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_59">
-         <item row="0" column="1">
-          <widget class="QPushButton" name="pushButton_reboot">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Reboot</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="4">
-          <widget class="QPushButton" name="pushButton_saveConfiguration">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Save Configuration</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="5">
-          <widget class="QPushButton" name="pushButton_eraseConfiguration">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Erase Configuration</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QPushButton" name="pushButton_scanConfiguration">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Scan Configuration</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="QPushButton" name="pushButton_writeConfiguration">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Write Configuration</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="pushButton_connect">
-           <property name="text">
-            <string>Connect</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="6">
-          <widget class="QPushButton" name="pushButton_getTemp">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Get Temp</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="1" column="0">
        <widget class="QTabWidget" name="tabWidget">
         <property name="enabled">
          <bool>true</bool>
@@ -762,66 +686,11 @@ Control</string>
                    <enum>QFrame::Raised</enum>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_23">
-                   <item row="1" column="3">
-                    <widget class="QLabel" name="label_4">
-                     <property name="text">
-                      <string>counts/s</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QPushButton" name="axis0Backward_pushButton">
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="icon">
-                      <iconset>
-                       <normaloff>Icons/Left.png</normaloff>Icons/Left.png</iconset>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
+                   <item row="3" column="1">
                     <widget class="QPushButton" name="axis0Stop_pushButton">
                      <property name="text">
                       <string>Stop</string>
                      </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="3">
-                    <widget class="QPushButton" name="axis0Forward_pushButton">
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="icon">
-                      <iconset>
-                       <normaloff>Icons/Right.png</normaloff>Icons/Right.png</iconset>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QDoubleSpinBox" name="axis0Velocity_doubleSpinBox">
-                     <property name="decimals">
-                      <number>1</number>
-                     </property>
-                     <property name="minimum">
-                      <double>-1000000.000000000000000</double>
-                     </property>
-                     <property name="maximum">
-                      <double>1000000.000000000000000</double>
-                     </property>
-                     <property name="singleStep">
-                      <double>1024.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QRadioButton" name="axis0Velocity_radioButton">
-                     <property name="text">
-                      <string>Velocity</string>
-                     </property>
-                     <attribute name="buttonGroup">
-                      <string notr="true">buttonGroup_13</string>
-                     </attribute>
                     </widget>
                    </item>
                    <item row="0" column="0">
@@ -841,10 +710,72 @@ Control</string>
                      </property>
                     </widget>
                    </item>
+                   <item row="1" column="1">
+                    <widget class="QDoubleSpinBox" name="axis0Velocity_doubleSpinBox">
+                     <property name="decimals">
+                      <number>1</number>
+                     </property>
+                     <property name="minimum">
+                      <double>-1000000.000000000000000</double>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                     <property name="singleStep">
+                      <double>1024.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="3">
+                    <widget class="QPushButton" name="axis0Forward_pushButton">
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="icon">
+                      <iconset>
+                       <normaloff>Icons/Right.png</normaloff>Icons/Right.png</iconset>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QRadioButton" name="axis0Velocity_radioButton">
+                     <property name="text">
+                      <string>Velocity</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">buttonGroup_13</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QPushButton" name="axis0Backward_pushButton">
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="icon">
+                      <iconset>
+                       <normaloff>Icons/Left.png</normaloff>Icons/Left.png</iconset>
+                     </property>
+                    </widget>
+                   </item>
                    <item row="0" column="3">
                     <widget class="QLabel" name="label_3">
                      <property name="text">
                       <string>Amps</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="3">
+                    <widget class="QLabel" name="label_4">
+                     <property name="text">
+                      <string>counts/s</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QLabel" name="label_16">
+                     <property name="text">
+                      <string>TextLabel</string>
                      </property>
                     </widget>
                    </item>
@@ -4059,6 +3990,52 @@ Control</string>
                 </layout>
                </widget>
               </item>
+              <item row="1" column="1">
+               <widget class="QGroupBox" name="groupBox_axis_config_6">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>Gate driver</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_73">
+                 <item row="0" column="0">
+                  <layout class="QGridLayout" name="gridLayout_74">
+                   <item row="0" column="1">
+                    <widget class="QLabel" name="label_drvFaultValue_axis0">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_drvFault">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Drv fault</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
               <item row="1" column="0">
                <widget class="QGroupBox" name="groupBox_axis_config_3">
                 <property name="maximumSize">
@@ -4114,289 +4091,6 @@ Control</string>
                    </item>
                    <item row="1" column="1">
                     <widget class="QLabel" name="label_currentMeasPhBValue_axis0">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QGroupBox" name="groupBox_axis_config_4">
-                <property name="title">
-                 <string>CurrentControl</string>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_7">
-                 <item row="0" column="0">
-                  <layout class="QGridLayout" name="gridLayout_40">
-                   <item row="7" column="0">
-                    <widget class="QLabel" name="label_iGain">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>I gain</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="8" column="0">
-                    <widget class="QLabel" name="label_iqSetpoint">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Iq setpoint</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="6" column="0">
-                    <widget class="QLabel" name="label_pGain">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>P gain</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_ibus">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Ibus</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="label_vCurrentControlIntegralD">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>V current control integral d</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_maxAllowedCurrent">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Max allowed current</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="0">
-                    <widget class="QLabel" name="label_vCurrentControlIntegralQ">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>V current control integral q</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="4" column="0">
-                    <widget class="QLabel" name="label_finalVAlpha">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Final v alpha</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="0">
-                    <widget class="QLabel" name="label_finalVBeta">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Final v beta</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="9" column="0">
-                    <widget class="QLabel" name="label_iqMeasured">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Iq measured</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QLabel" name="label_maxAllowedCurrentValue_axis0">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QLabel" name="label_ibusValue_axis0">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <widget class="QLabel" name="label_vCurrentControlIntegralDValue_axis0">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="1">
-                    <widget class="QLabel" name="label_vCurrentControlIntegralQValue_axis0">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="4" column="1">
-                    <widget class="QLabel" name="label_finalVAlphaValue_axis0">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="1">
-                    <widget class="QLabel" name="label_finalVBetaValue_axis0">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="6" column="1">
-                    <widget class="QLabel" name="label_pGainValue_axis0">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="7" column="1">
-                    <widget class="QLabel" name="label_iGainValue_axis0">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="8" column="1">
-                    <widget class="QLabel" name="label_iqSetpointValue_axis0">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="9" column="1">
-                    <widget class="QLabel" name="label_iqMeasuredValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4723,22 +4417,136 @@ Control</string>
                 </layout>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QGroupBox" name="groupBox_axis_config_6">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
+              <item row="0" column="1">
+               <widget class="QGroupBox" name="groupBox_axis_config_4">
                 <property name="title">
-                 <string>Gate driver</string>
+                 <string>CurrentControl</string>
                 </property>
-                <layout class="QGridLayout" name="gridLayout_73">
+                <layout class="QGridLayout" name="gridLayout_7">
                  <item row="0" column="0">
-                  <layout class="QGridLayout" name="gridLayout_74">
+                  <layout class="QGridLayout" name="gridLayout_40">
+                   <item row="7" column="0">
+                    <widget class="QLabel" name="label_iGain">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>I gain</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="8" column="0">
+                    <widget class="QLabel" name="label_iqSetpoint">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Iq setpoint</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="0">
+                    <widget class="QLabel" name="label_pGain">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>P gain</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="label_ibus">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Ibus</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QLabel" name="label_vCurrentControlIntegralD">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>V current control integral d</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_maxAllowedCurrent">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Max allowed current</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QLabel" name="label_vCurrentControlIntegralQ">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>V current control integral q</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="4" column="0">
+                    <widget class="QLabel" name="label_finalVAlpha">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Final v alpha</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="0">
+                    <widget class="QLabel" name="label_finalVBeta">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Final v beta</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="9" column="0">
+                    <widget class="QLabel" name="label_iqMeasured">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Iq measured</string>
+                     </property>
+                    </widget>
+                   </item>
                    <item row="0" column="1">
-                    <widget class="QLabel" name="label_drvFaultValue_axis0">
+                    <widget class="QLabel" name="label_maxAllowedCurrentValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -4752,15 +4560,138 @@ Control</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_drvFault">
+                   <item row="1" column="1">
+                    <widget class="QLabel" name="label_ibusValue_axis0">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
                       </font>
                      </property>
                      <property name="text">
-                      <string>Drv fault</string>
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="1">
+                    <widget class="QLabel" name="label_vCurrentControlIntegralDValue_axis0">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="1">
+                    <widget class="QLabel" name="label_vCurrentControlIntegralQValue_axis0">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="4" column="1">
+                    <widget class="QLabel" name="label_finalVAlphaValue_axis0">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="1">
+                    <widget class="QLabel" name="label_finalVBetaValue_axis0">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="1">
+                    <widget class="QLabel" name="label_pGainValue_axis0">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="7" column="1">
+                    <widget class="QLabel" name="label_iGainValue_axis0">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="8" column="1">
+                    <widget class="QLabel" name="label_iqSetpointValue_axis0">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="9" column="1">
+                    <widget class="QLabel" name="label_iqMeasuredValue_axis0">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
                     </widget>
                    </item>
@@ -4768,6 +4699,19 @@ Control</string>
                  </item>
                 </layout>
                </widget>
+              </item>
+              <item row="2" column="0">
+               <spacer name="verticalSpacer_10">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </widget>
@@ -7111,46 +7055,34 @@ Control</string>
               <string>Motor</string>
              </attribute>
              <layout class="QGridLayout" name="gridLayout_97">
-              <item row="0" column="0">
-               <widget class="QGroupBox" name="groupBox_18">
-                <property name="minimumSize">
+              <item row="1" column="1">
+               <widget class="QGroupBox" name="groupBox_axis_config_11">
+                <property name="maximumSize">
                  <size>
-                  <width>200</width>
-                  <height>0</height>
+                  <width>16777215</width>
+                  <height>16777215</height>
                  </size>
                 </property>
                 <property name="title">
-                 <string>General</string>
+                 <string>Gate driver</string>
                 </property>
-                <layout class="QGridLayout" name="gridLayout_98">
+                <layout class="QGridLayout" name="gridLayout_107">
                  <item row="0" column="0">
-                  <layout class="QGridLayout" name="gridLayout_99">
-                   <item row="7" column="0" colspan="2">
-                    <widget class="QLabel" name="label_armedState_2">
+                  <layout class="QGridLayout" name="gridLayout_108">
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_drvFault_2">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
                       </font>
                      </property>
                      <property name="text">
-                      <string>Armed state</string>
+                      <string>Drv fault</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="5" column="0" colspan="2">
-                    <widget class="QLabel" name="label_dcCalibPhC_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>DC calib phC</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="2" colspan="2">
-                    <widget class="QLabel" name="label_phaseCurrentRevGainValue_axis1">
+                   <item row="0" column="1">
+                    <widget class="QLabel" name="label_drvFaultValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -7158,154 +7090,6 @@ Control</string>
                      </property>
                      <property name="text">
                       <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="0" colspan="2">
-                    <widget class="QLabel" name="label_phaseCurrentRevGain_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Phase current rev gain</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="0" colspan="2">
-                    <widget class="QLabel" name="label_setCurrentControlBandwidth_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Set current control bandwidth</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0" colspan="2">
-                    <widget class="QLabel" name="label_errorAxis_4">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Error</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="2" colspan="2">
-                    <widget class="QLabel" name="label_setCurrentControlBandwidthValue_axis1">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="2" colspan="2">
-                    <widget class="QLabel" name="label_motorErrorValue_axis1">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="2" colspan="2">
-                    <widget class="QLabel" name="label_dcCalibPhCValue_axis1">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="7" column="2" colspan="2">
-                    <widget class="QLabel" name="label_armedStateValue_axis1">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="6" column="0" colspan="2">
-                    <widget class="QLabel" name="label_dcCalibPhB_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>DC calib phB</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="6" column="2" colspan="2">
-                    <widget class="QLabel" name="label_dcCalibPhBValue_axis1">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>-</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0" colspan="2">
-                    <widget class="QLabel" name="label_isCalibrated_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Is calibrated</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="2" colspan="2">
-                    <widget class="QLabel" name="icon_isCalibratedValue_axis1">
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="pixmap">
-                      <pixmap>../../../home/Users/pjurgaitis/Downloads/Icons/NoState.jpg</pixmap>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -7313,6 +7097,314 @@ Control</string>
                     </widget>
                    </item>
                   </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QGroupBox" name="groupBox_axis_config_10">
+                <property name="title">
+                 <string>Config</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_104">
+                 <item row="0" column="0">
+                  <layout class="QGridLayout" name="gridLayout_105">
+                   <item row="7" column="0">
+                    <widget class="QLabel" name="label_direction_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Direction</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="9" column="0">
+                    <widget class="QLabel" name="label_currentLim_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Current lim</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="8" column="0">
+                    <widget class="QLabel" name="label_resistanceCalibMaxVoltage_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Resistance calib max voltage</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QLabel" name="label_phaseResistance_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Phase resistance</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="label_phaseInductance_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Phase inductance</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="4" column="0">
+                    <widget class="QLabel" name="label_motorType_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Motor type</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="0">
+                    <widget class="QLabel" name="label_currentControlBandwidth_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Current control bandwidth</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="0">
+                    <widget class="QLabel" name="label_requestedCurrentRange_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Requested current range</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="10" column="0">
+                    <widget class="QLabel" name="label_polePairs_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Pole pairs</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="11" column="0">
+                    <widget class="QLabel" name="label_calibrationCurrent_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Calibration current</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseInductanceValue_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseResistanceValue_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentControlBandwidthValue_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_requestedCurrentRangeValue_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="4" column="1">
+                    <widget class="QSpinBox" name="spinBox_motorTypeValue_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <number>1000000</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="8" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_resistanceCalibMaxVoltageValue_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="9" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentLimValue_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="7" column="1">
+                    <widget class="QSpinBox" name="spinBox_directionValue_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <number>1000000</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="10" column="1">
+                    <widget class="QSpinBox" name="spinBox_poleParisValue_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <number>1000000</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="11" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_calibrationCurrentValue_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_preCalibratedMotor_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Pre calibrated</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <layout class="QGridLayout" name="gridLayout_106">
+                     <item row="0" column="0">
+                      <widget class="QRadioButton" name="radioButton_motorPreCalibratedTrue_axis1">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>28</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset>
+                         <normaloff>Icons/True.jpg</normaloff>Icons/True.jpg</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>26</width>
+                         <height>26</height>
+                        </size>
+                       </property>
+                       <attribute name="buttonGroup">
+                        <string notr="true">buttonGroup_23</string>
+                       </attribute>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QRadioButton" name="radioButton_motorPreCalibratedFalse_axis1">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>28</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset>
+                         <normaloff>Icons/False.jpg</normaloff>Icons/False.jpg</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>26</width>
+                         <height>26</height>
+                        </size>
+                       </property>
+                       <attribute name="buttonGroup">
+                        <string notr="true">buttonGroup_23</string>
+                       </attribute>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="Line" name="line_6">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </widget>
@@ -7673,342 +7765,46 @@ Control</string>
                 </layout>
                </widget>
               </item>
-              <item row="0" column="2">
-               <widget class="QGroupBox" name="groupBox_axis_config_10">
-                <property name="title">
-                 <string>Config</string>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_104">
-                 <item row="0" column="0">
-                  <layout class="QGridLayout" name="gridLayout_105">
-                   <item row="7" column="0">
-                    <widget class="QLabel" name="label_direction_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Direction</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="9" column="0">
-                    <widget class="QLabel" name="label_currentLim_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Current lim</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="8" column="0">
-                    <widget class="QLabel" name="label_resistanceCalibMaxVoltage_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Resistance calib max voltage</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="label_phaseResistance_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Phase resistance</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_phaseInductance_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Phase inductance</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="4" column="0">
-                    <widget class="QLabel" name="label_motorType_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Motor type</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="0">
-                    <widget class="QLabel" name="label_currentControlBandwidth_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Current control bandwidth</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="6" column="0">
-                    <widget class="QLabel" name="label_requestedCurrentRange_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Requested current range</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="10" column="0">
-                    <widget class="QLabel" name="label_polePairs_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Pole pairs</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="11" column="0">
-                    <widget class="QLabel" name="label_calibrationCurrent_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Calibration current</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseInductanceValue_axis1">
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="maximum">
-                      <double>1000000.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_phaseResistanceValue_axis1">
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="maximum">
-                      <double>1000000.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentControlBandwidthValue_axis1">
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="maximum">
-                      <double>1000000.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="6" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_requestedCurrentRangeValue_axis1">
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="maximum">
-                      <double>1000000.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="4" column="1">
-                    <widget class="QSpinBox" name="spinBox_motorTypeValue_axis1">
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="maximum">
-                      <number>1000000</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="8" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_resistanceCalibMaxVoltageValue_axis1">
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="maximum">
-                      <double>1000000.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="9" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_currentLimValue_axis1">
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="maximum">
-                      <double>1000000.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="7" column="1">
-                    <widget class="QSpinBox" name="spinBox_directionValue_axis1">
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="maximum">
-                      <number>1000000</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="10" column="1">
-                    <widget class="QSpinBox" name="spinBox_poleParisValue_axis1">
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="maximum">
-                      <number>1000000</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="11" column="1">
-                    <widget class="QDoubleSpinBox" name="doubleSpinBox_calibrationCurrentValue_axis1">
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="maximum">
-                      <double>1000000.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_preCalibratedMotor_2">
-                     <property name="font">
-                      <font>
-                       <pointsize>10</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Pre calibrated</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <layout class="QGridLayout" name="gridLayout_106">
-                     <item row="0" column="0">
-                      <widget class="QRadioButton" name="radioButton_motorPreCalibratedTrue_axis1">
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>28</height>
-                        </size>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="icon">
-                        <iconset>
-                         <normaloff>Icons/True.jpg</normaloff>Icons/True.jpg</iconset>
-                       </property>
-                       <property name="iconSize">
-                        <size>
-                         <width>26</width>
-                         <height>26</height>
-                        </size>
-                       </property>
-                       <attribute name="buttonGroup">
-                        <string notr="true">buttonGroup_23</string>
-                       </attribute>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QRadioButton" name="radioButton_motorPreCalibratedFalse_axis1">
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>28</height>
-                        </size>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="icon">
-                        <iconset>
-                         <normaloff>Icons/False.jpg</normaloff>Icons/False.jpg</iconset>
-                       </property>
-                       <property name="iconSize">
-                        <size>
-                         <width>26</width>
-                         <height>26</height>
-                        </size>
-                       </property>
-                       <attribute name="buttonGroup">
-                        <string notr="true">buttonGroup_23</string>
-                       </attribute>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="Line" name="line_6">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QGroupBox" name="groupBox_axis_config_11">
-                <property name="maximumSize">
+              <item row="0" column="0">
+               <widget class="QGroupBox" name="groupBox_18">
+                <property name="minimumSize">
                  <size>
-                  <width>16777215</width>
-                  <height>16777215</height>
+                  <width>200</width>
+                  <height>0</height>
                  </size>
                 </property>
                 <property name="title">
-                 <string>Gate driver</string>
+                 <string>General</string>
                 </property>
-                <layout class="QGridLayout" name="gridLayout_107">
+                <layout class="QGridLayout" name="gridLayout_98">
                  <item row="0" column="0">
-                  <layout class="QGridLayout" name="gridLayout_108">
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_drvFault_2">
+                  <layout class="QGridLayout" name="gridLayout_99">
+                   <item row="7" column="0" colspan="2">
+                    <widget class="QLabel" name="label_armedState_2">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
                       </font>
                      </property>
                      <property name="text">
-                      <string>Drv fault</string>
+                      <string>Armed state</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="1">
-                    <widget class="QLabel" name="label_drvFaultValue_axis1">
+                   <item row="5" column="0" colspan="2">
+                    <widget class="QLabel" name="label_dcCalibPhC_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>DC calib phC</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="2" colspan="2">
+                    <widget class="QLabel" name="label_phaseCurrentRevGainValue_axis1">
                      <property name="font">
                       <font>
                        <pointsize>10</pointsize>
@@ -8022,10 +7818,171 @@ Control</string>
                      </property>
                     </widget>
                    </item>
+                   <item row="3" column="0" colspan="2">
+                    <widget class="QLabel" name="label_phaseCurrentRevGain_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Phase current rev gain</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="0" colspan="2">
+                    <widget class="QLabel" name="label_setCurrentControlBandwidth_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Set current control bandwidth</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0" colspan="2">
+                    <widget class="QLabel" name="label_errorAxis_4">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Error</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="2" colspan="2">
+                    <widget class="QLabel" name="label_setCurrentControlBandwidthValue_axis1">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="2" colspan="2">
+                    <widget class="QLabel" name="label_motorErrorValue_axis1">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="2" colspan="2">
+                    <widget class="QLabel" name="label_dcCalibPhCValue_axis1">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="7" column="2" colspan="2">
+                    <widget class="QLabel" name="label_armedStateValue_axis1">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="0" colspan="2">
+                    <widget class="QLabel" name="label_dcCalibPhB_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>DC calib phB</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="2" colspan="2">
+                    <widget class="QLabel" name="label_dcCalibPhBValue_axis1">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>-</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0" colspan="2">
+                    <widget class="QLabel" name="label_isCalibrated_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Is calibrated</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="2" colspan="2">
+                    <widget class="QLabel" name="icon_isCalibratedValue_axis1">
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="pixmap">
+                      <pixmap>../../../home/Users/pjurgaitis/Downloads/Icons/NoState.jpg</pixmap>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
                   </layout>
                  </item>
                 </layout>
                </widget>
+              </item>
+              <item row="2" column="0">
+               <spacer name="verticalSpacer_12">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </widget>
@@ -8033,6 +7990,77 @@ Control</string>
           </item>
          </layout>
         </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QPushButton" name="pushButton_connect">
+        <property name="text">
+         <string>Connect</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_reboot">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Reboot</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_scanConfiguration">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Scan Configuration</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_writeConfiguration">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Write Configuration</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_saveConfiguration">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Save Configuration</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_eraseConfiguration">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Erase Configuration</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_getTemp">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Get Temp</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -8048,7 +8076,7 @@ Control</string>
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuSave_config">
+   <widget class="QMenu" name="menuCommands">
     <property name="title">
      <string>Odrive</string>
     </property>
@@ -8056,7 +8084,14 @@ Control</string>
     <addaction name="actionReboot"/>
     <addaction name="actionScan_config"/>
    </widget>
-   <addaction name="menuSave_config"/>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionTroubleshoot"/>
+   </widget>
+   <addaction name="menuCommands"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -8082,6 +8117,11 @@ Control</string>
     <string>Scan config</string>
    </property>
   </action>
+  <action name="actionTroubleshoot">
+   <property name="text">
+    <string>Troubleshoot</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -8094,28 +8134,28 @@ Control</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_15"/>
-  <buttongroup name="buttonGroup_8"/>
+  <buttongroup name="buttonGroup_4"/>
+  <buttongroup name="buttonGroup_20"/>
+  <buttongroup name="buttonGroup_14"/>
+  <buttongroup name="buttonGroup_23"/>
   <buttongroup name="buttonGroup_12"/>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_21"/>
-  <buttongroup name="buttonGroup_5"/>
-  <buttongroup name="buttonGroup_11"/>
-  <buttongroup name="buttonGroup_16"/>
-  <buttongroup name="buttonGroup_17"/>
-  <buttongroup name="buttonGroup_22"/>
-  <buttongroup name="buttonGroup_13"/>
-  <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup_10"/>
-  <buttongroup name="buttonGroup_7"/>
-  <buttongroup name="buttonGroup_19"/>
-  <buttongroup name="buttonGroup_4"/>
-  <buttongroup name="buttonGroup_6"/>
-  <buttongroup name="buttonGroup_20"/>
   <buttongroup name="buttonGroup_18"/>
   <buttongroup name="buttonGroup_9"/>
-  <buttongroup name="buttonGroup_23"/>
-  <buttongroup name="buttonGroup_14"/>
+  <buttongroup name="buttonGroup_16"/>
+  <buttongroup name="buttonGroup_13"/>
+  <buttongroup name="buttonGroup_6"/>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_22"/>
+  <buttongroup name="buttonGroup_15"/>
+  <buttongroup name="buttonGroup_19"/>
+  <buttongroup name="buttonGroup_10"/>
   <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup_7"/>
+  <buttongroup name="buttonGroup_17"/>
+  <buttongroup name="buttonGroup_11"/>
+  <buttongroup name="buttonGroup_8"/>
+  <buttongroup name="buttonGroup_21"/>
+  <buttongroup name="buttonGroup_5"/>
  </buttongroups>
 </ui>

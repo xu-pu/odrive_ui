@@ -727,8 +727,6 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 	def scan_axis0_config(self):
 		self.label_generalErrorValue_axis0.setText(hex(self.my_drive.axis0.error))
 		self.label_loopCounterValue_axis0.setText(str(self.my_drive.axis0.loop_counter))
-		# Config
-		#self.radioButton_startupMotorCalibrationAxisTrue.setChecked(True) if self.my_drive.axis0.config.startup_motor_calibration else self.radioButton_startupMotorCalibrationAxisFalse.setChecked(True)
 		if self.my_drive.axis0.config.startup_motor_calibration:
 			self.radioButton_startupMotorCalibrationTrue_axis0.setChecked(True)
 		else:
@@ -737,7 +735,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		if self.my_drive.axis0.config.startup_encoder_index_search:
 			self.radioButton_startupEncoderIndexSearchTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_startupEncoderIndexSearchFalse.setChecked(True)
+			self.radioButton_startupEncoderIndexSearchFalse_axis0.setChecked(True)
 
 		if self.my_drive.axis0.config.startup_encoder_offset_calibration:
 			self.radioButton_startupEncoderOffsetCalibrationTrue_axis0.setChecked(True)

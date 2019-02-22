@@ -725,7 +725,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.scan_axis0_config()
 
 	def scan_axis0_config(self):
-		self.label_errorValue_axis0.setText(hex(self.my_drive.axis0.error))
+		self.label_generalErrorValue_axis0.setText(hex(self.my_drive.axis0.error))
 		self.label_loopCounterValue_axis0.setText(str(self.my_drive.axis0.loop_counter))
 		# Config
 		#self.radioButton_startupMotorCalibrationAxisTrue.setChecked(True) if self.my_drive.axis0.config.startup_motor_calibration else self.radioButton_startupMotorCalibrationAxisFalse.setChecked(True)
@@ -745,9 +745,9 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			self.radioButton_startupEncoderOffsetCalibrationFalse_axis0.setChecked(True)
 
 		if self.my_drive.axis0.config.startup_closed_loop_control:
-			self.radioButton_startupEncoderLoopControlTrue_axis0.setChecked(True)
+			self.radioButton_startupLoopControlTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_startupEncoderLoopControlFalse_axis0.setChecked(True)
+			self.radioButton_startupLoopControlFalse_axis0.setChecked(True)
 
 		if self.my_drive.axis0.config.startup_sensorless_control:
 			self.radioButton_startupSensorlessControlTrue_axis0.setChecked(True)
@@ -787,16 +787,16 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.label_interpolationValue_axis0.setText(str(self.my_drive.axis0.encoder.interpolation))
 		self.label_countInCprValue_axis0.setText(str(self.my_drive.axis0.encoder.count_in_cpr))
 		self.label_hallStateValue_axis0.setText(str(self.my_drive.axis0.encoder.hall_state))
-		self.label_errorEncoderValue_axis0.setText(hex(self.my_drive.axis0.encoder.error))
+		self.label_encoderErrorValue_axis0.setText(hex(self.my_drive.axis0.encoder.error))
 		self.label_phaseValue_axis0.setText(str(self.my_drive.axis0.encoder.phase))
 
 		self.scan_axis0_encoder_config_config()
 
 	def scan_axis0_encoder_config_config(self):
 		if self.my_drive.axis0.encoder.config.pre_calibrated:
-			self.radioButton_preCalibratedEncoderTrue_axis0.setChecked(True)
+			self.radioButton_encoderPreCalibratedTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_preCalibratedEncoderFalse_axis0.setChecked(True)
+			self.radioButton_encoderPreCalibratedFalse_axis0.setChecked(True)
 
 		if self.my_drive.axis0.encoder.config.use_index:
 			self.radioButton_useIndexTrue_axis0.setChecked(True)
@@ -816,7 +816,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	def scan_axis0_controller_config(self):
 		self.label_velSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.vel_setpoint))
-		self.label_setPosSetpointValue_2_axis0.setText(str(self.my_drive.axis0.controller.vel_integrator_current))
+		self.label_velIntegratorCurrent_axis0.setText(str(self.my_drive.axis0.controller.vel_integrator_current))
 		self.label_posSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.pos_setpoint))
 		self.label_currentSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.current_setpoint))
 		self.scan_axis0_controller_config_config()
@@ -826,7 +826,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.doubleSpinBox_velGainValue_axis0.setValue(self.my_drive.axis0.controller.config.vel_gain)
 		self.doubleSpinBox_velIntegratorGainValue_axis0.setValue(self.my_drive.axis0.controller.config.vel_integrator_gain)
 		self.doubleSpinBox_velLimitValue_axis0.setValue(self.my_drive.axis0.controller.config.vel_limit)
-		self.spinBox_controlModeValue_axis0_axis0.setValue(self.my_drive.axis0.controller.config.control_mode)
+		self.spinBox_controlModeValue_axis0.setValue(self.my_drive.axis0.controller.config.control_mode)
 
 
 
@@ -852,7 +852,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.label_drvFaultValue_axis0.setText(str(self.my_drive.axis0.motor.gate_driver.drv_fault))
 		self.label_dcCalibPhBValue_axis0.setText(str(self.my_drive.axis0.motor.DC_calib_phB))
 		self.label_dcCalibPhCValue_axis0.setText(str(self.my_drive.axis0.motor.DC_calib_phC))
-		self.label_errorAxisValue_2_axis0.setText(hex(self.my_drive.axis0.motor.error))
+		self.label_motorErrorValue_axis0.setText(hex(self.my_drive.axis0.motor.error))
 		self.label_currentMeasPhCValue_axis0.setText(str(self.my_drive.axis0.motor.current_meas_phC))
 
 		if self.my_drive.axis0.motor.is_calibrated:
@@ -866,9 +866,9 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	def scan_axis0_motor_config_config(self):
 		if self.my_drive.axis0.motor.config.pre_calibrated:
-			self.radioButton_preCalibratedTrue_axis0.setChecked(True)
+			self.radioButton_motorPreCalibratedTrue_axis0.setChecked(True)
 		else:
-			self.radioButton_preCalibratedFalse_axis0.setChecked(True)
+			self.radioButton_motorPreCalibratedFalse_axis0.setChecked(True)
 
 		self.doubleSpinBox_phaseInductanceValue_axis0.setValue(self.my_drive.axis0.motor.config.phase_inductance)
 		self.doubleSpinBox_phaseResistanceValue_axis0.setValue(self.my_drive.axis0.motor.config.phase_resistance)

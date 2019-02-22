@@ -105,7 +105,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="controlTab">
          <attribute name="title">
@@ -2938,7 +2938,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="4" column="1">
-                    <widget class="QSpinBox" name="spinBox_modeValue_axis0">
+                    <widget class="QSpinBox" name="spinBox_modeEncoderValue_axis0">
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
@@ -3121,7 +3121,7 @@ Control</string>
                     </widget>
                    </item>
                    <item row="1" column="2">
-                    <widget class="QLabel" name="icon_isReadyValue_axis0">
+                    <widget class="QLabel" name="icon_isReadyEncoderValue_axis0">
                      <property name="text">
                       <string/>
                      </property>

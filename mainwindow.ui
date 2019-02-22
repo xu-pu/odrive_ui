@@ -185,7 +185,7 @@ Sequence</string>
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="QPushButton" name="axis1_pushButton_econderIndexSearch">
+                   <widget class="QPushButton" name="axis1_pushButton_encoderIndexSearch">
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
@@ -589,7 +589,7 @@ Sequence</string>
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="QPushButton" name="axis0_pushButton_econderIndexSearch">
+                   <widget class="QPushButton" name="axis0_pushButton_encoderIndexSearch">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -2727,7 +2727,7 @@ Control</string>
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -7945,18 +7945,18 @@ Control</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_12"/>
-  <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup_10"/>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup_8"/>
+  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_13"/>
+  <buttongroup name="buttonGroup_10"/>
   <buttongroup name="buttonGroup_6"/>
   <buttongroup name="buttonGroup_11"/>
-  <buttongroup name="buttonGroup_8"/>
-  <buttongroup name="buttonGroup_9"/>
   <buttongroup name="buttonGroup_14"/>
+  <buttongroup name="buttonGroup_12"/>
+  <buttongroup name="buttonGroup_13"/>
+  <buttongroup name="buttonGroup_9"/>
+  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_4"/>
   <buttongroup name="buttonGroup_7"/>
  </buttongroups>

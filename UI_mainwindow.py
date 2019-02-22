@@ -103,14 +103,14 @@ class Ui_MainWindow(object):
         self.axis1_pushButton_startupSequence.setFont(font)
         self.axis1_pushButton_startupSequence.setObjectName("axis1_pushButton_startupSequence")
         self.gridLayout_78.addWidget(self.axis1_pushButton_startupSequence, 0, 1, 1, 1)
-        self.axis1_pushButton_econderIndexSearch = QtWidgets.QPushButton(self.axis1_groupBox_statesMachine)
-        self.axis1_pushButton_econderIndexSearch.setMinimumSize(QtCore.QSize(80, 50))
-        self.axis1_pushButton_econderIndexSearch.setMaximumSize(QtCore.QSize(80, 50))
+        self.axis1_pushButton_encoderIndexSearch = QtWidgets.QPushButton(self.axis1_groupBox_statesMachine)
+        self.axis1_pushButton_encoderIndexSearch.setMinimumSize(QtCore.QSize(80, 50))
+        self.axis1_pushButton_encoderIndexSearch.setMaximumSize(QtCore.QSize(80, 50))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.axis1_pushButton_econderIndexSearch.setFont(font)
-        self.axis1_pushButton_econderIndexSearch.setObjectName("axis1_pushButton_econderIndexSearch")
-        self.gridLayout_78.addWidget(self.axis1_pushButton_econderIndexSearch, 1, 1, 1, 1)
+        self.axis1_pushButton_encoderIndexSearch.setFont(font)
+        self.axis1_pushButton_encoderIndexSearch.setObjectName("axis1_pushButton_encoderIndexSearch")
+        self.gridLayout_78.addWidget(self.axis1_pushButton_encoderIndexSearch, 1, 1, 1, 1)
         self.axis1_pushButton_fullCalibrationSequence = QtWidgets.QPushButton(self.axis1_groupBox_statesMachine)
         self.axis1_pushButton_fullCalibrationSequence.setMinimumSize(QtCore.QSize(80, 50))
         self.axis1_pushButton_fullCalibrationSequence.setMaximumSize(QtCore.QSize(80, 50))
@@ -279,14 +279,14 @@ class Ui_MainWindow(object):
         self.axis0_pushButton_startupSequence.setFont(font)
         self.axis0_pushButton_startupSequence.setObjectName("axis0_pushButton_startupSequence")
         self.gridLayout_3.addWidget(self.axis0_pushButton_startupSequence, 0, 1, 1, 1)
-        self.axis0_pushButton_econderIndexSearch = QtWidgets.QPushButton(self.groupBox_statesMachine)
-        self.axis0_pushButton_econderIndexSearch.setMinimumSize(QtCore.QSize(0, 0))
-        self.axis0_pushButton_econderIndexSearch.setMaximumSize(QtCore.QSize(80, 50))
+        self.axis0_pushButton_encoderIndexSearch = QtWidgets.QPushButton(self.groupBox_statesMachine)
+        self.axis0_pushButton_encoderIndexSearch.setMinimumSize(QtCore.QSize(0, 0))
+        self.axis0_pushButton_encoderIndexSearch.setMaximumSize(QtCore.QSize(80, 50))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.axis0_pushButton_econderIndexSearch.setFont(font)
-        self.axis0_pushButton_econderIndexSearch.setObjectName("axis0_pushButton_econderIndexSearch")
-        self.gridLayout_3.addWidget(self.axis0_pushButton_econderIndexSearch, 1, 1, 1, 1)
+        self.axis0_pushButton_encoderIndexSearch.setFont(font)
+        self.axis0_pushButton_encoderIndexSearch.setObjectName("axis0_pushButton_encoderIndexSearch")
+        self.gridLayout_3.addWidget(self.axis0_pushButton_encoderIndexSearch, 1, 1, 1, 1)
         self.axis0_pushButton_fullCalibrationSequence = QtWidgets.QPushButton(self.groupBox_statesMachine)
         self.axis0_pushButton_fullCalibrationSequence.setMinimumSize(QtCore.QSize(0, 0))
         self.axis0_pushButton_fullCalibrationSequence.setMaximumSize(QtCore.QSize(80, 50))
@@ -3790,7 +3790,7 @@ class Ui_MainWindow(object):
         self.axis1_pushButton_idle.setText(_translate("MainWindow", "Idle"))
         self.axis1_pushButton_startupSequence.setText(_translate("MainWindow", "Startup\n"
 "Sequence"))
-        self.axis1_pushButton_econderIndexSearch.setText(_translate("MainWindow", "Encoder\n"
+        self.axis1_pushButton_encoderIndexSearch.setText(_translate("MainWindow", "Encoder\n"
 "Index\n"
 "Search"))
         self.axis1_pushButton_fullCalibrationSequence.setText(_translate("MainWindow", "Full\n"
@@ -3820,7 +3820,7 @@ class Ui_MainWindow(object):
         self.axis0_pushButton_idle.setText(_translate("MainWindow", "Idle"))
         self.axis0_pushButton_startupSequence.setText(_translate("MainWindow", "Startup\n"
 "Sequence"))
-        self.axis0_pushButton_econderIndexSearch.setText(_translate("MainWindow", "Encoder\n"
+        self.axis0_pushButton_encoderIndexSearch.setText(_translate("MainWindow", "Encoder\n"
 "Index\n"
 "Search"))
         self.axis0_pushButton_fullCalibrationSequence.setText(_translate("MainWindow", "Full\n"

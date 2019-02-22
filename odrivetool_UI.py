@@ -47,17 +47,26 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.pushButton_scanConfiguration.clicked.connect(self.scan_all_config)
 		self.pushButton_writeConfiguration.clicked.connect(self.write_config)
 		self.pushButton_connect.clicked.connect(self.odrive_connect)
-		# self.pushButton_save_config.clicked.connect(self.save_config)
 		self.pushButton_reboot.clicked.connect(self.odrive_reboot)
 
-		self.axis0_pushButton_idle.clicked.connect(self.idle_state_clicked)
-		self.axis0_pushButton_startupSequence.clicked.connect(self.startupSequence_state_clicked)
-		self.axis0_pushButton_fullCalibrationSequence.clicked.connect(self.fullCalibrationSequence_state_clicked)
-		self.axis0_pushButton_motorCalibration.clicked.connect(self.motorCalibration_state_clicked)
-		self.axis0_pushButton_sensorlessControl.clicked.connect(self.sensorlessControl_state_clicked)
-		self.axis0_pushButton_econderIndexSearch.clicked.connect(self.econderIndexSearch_state_clicked)
-		self.axis0_pushButton_encoderOffsetCalibration.clicked.connect(self.encoderOffsetCalibration_state_clicked)
-		self.axis0_pushButton_closedLoopControl.clicked.connect(self.closedLoopControl_state_clicked)
+		# maybe add all buttons to the group and do only one connector for the whole group
+		self.axis0_pushButton_idle.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_startupSequence.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_fullCalibrationSequence.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_motorCalibration.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_sensorlessControl.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_encoderIndexSearch.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_encoderOffsetCalibration.clicked.connect(self.machine_state_clicked)
+		self.axis0_pushButton_closedLoopControl.clicked.connect(self.machine_state_clicked)
+
+		self.axis1_pushButton_idle.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_startupSequence.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_fullCalibrationSequence.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_motorCalibration.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_sensorlessControl.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_encoderIndexSearch.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_encoderOffsetCalibration.clicked.connect(self.machine_state_clicked)
+		self.axis1_pushButton_closedLoopControl.clicked.connect(self.machine_state_clicked)
 
 		# Axis Controlls
 		self.buttonGroup_13.buttonClicked.connect(self.axis0_controller_mode_changed)
@@ -93,8 +102,12 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 		self.ad = {} #axis_dcit
 
-		pen_sp_axis0 = pg.mkPen(color=(0, 128, 255), width=2)
-		pen_est_axis0 = pg.mkPen(color=(255, 192, 0), width=2)
+		pen_sp_axis0 = pg.mkPen(color=(0, 128, 255), width=2) # Blue: 0 128 255
+		pen_est_axis0 = pg.mkPen(color=(135, 0, 191), width=2) # Purple: 135 0 191
+
+		pen_sp_axis1 = pg.mkPen(color=(255, 78, 0), width=2) # Red: 255 78 0
+		pen_est_axis1 = pg.mkPen(color=(155, 170, 0), width=2) # Orange: 155 170 0
+		# old orange (color=(255, 192, 0)
 
 		self.ad["axis0"] = {}
 		self.ad["axis0"]["time_array"] = []
@@ -127,99 +140,70 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.ad["axis1"]["current"]["set_point"] = []
 
 		self.axis0_state = None
+		self.axis1_state = None
 		self.setDisabled_odrive_ui(True)
 		self.odrive_connect()
-		self.error_checks()
 
-	def error_checks(self):
-		axis0_error = hex(self.my_drive.axis0.error)
-		self.check_axis_errors(axis_error0)
-		axis1_error = hex(self.my_drive.axis1.error)
-		self.check_axis_errors(axis_error1)
 
-	def check_axis_errors(self, axis_error):
-		error_string = ""
-
-		if axis_error == "0x00": #ERROR_NONE = 0x00,
-			# error_string = "No errors"
-			return None
-		elif axis_error == "0x01": #ERROR_INVALID_STATE = 0x01, //<! an invalid state was requested
-			error_string = "ERROR_INVALID_STATE"
-		elif axis_error == "0x02": #ERROR_DC_BUS_UNDER_VOLTAGE = 0x02,
-			error_string = "ERROR_DC_BUS_UNDER_VOLTAGE"
-		elif axis_error == "0x04": #ERROR_DC_BUS_OVER_VOLTAGE = 0x04,
-			error_string = "ERROR_DC_BUS_OVER_VOLTAGE"
-		elif axis_error == "0x08": #ERROR_CURRENT_MEASUREMENT_TIMEOUT = 0x08,
-			error_string = "ERROR_CURRENT_MEASUREMENT_TIMEOUT"
-		elif axis_error == "0x10": #ERROR_BRAKE_RESISTOR_DISARMED = 0x10, //<! the brake resistor was unexpectedly disarmed
-			error_string = "ERROR_BRAKE_RESISTOR_DISARMED"
-		elif axis_error == "0x20": #ERROR_MOTOR_DISARMED = 0x20, //<! the motor was unexpectedly disarmed
-			error_string = "ERROR_MOTOR_DISARMED"
-		elif axis_error == "0x40": #ERROR_MOTOR_FAILED = 0x40, // Go to motor.hpp for information, check odrvX.axisX.motor.error for error value
-			error_string = "ERROR_MOTOR_FAILED"
-		elif axis_error == "0x80": #ERROR_SENSORLESS_ESTIMATOR_FAILED = 0x80,
-			error_string = "RROR_SENSORLESS_ESTIMATOR_FAILED"
-		elif axis_error == "0x100": #ERROR_ENCODER_FAILED = 0x100, // Go to encoder.hpp for information, check odrvX.axisX.encoder.error for error value
-			error_string = "ERROR_ENCODER_FAILED"
-		elif axis_error == "0x200": #ERROR_CONTROLLER_FAILED = 0x200,
-			error_string = "ERROR_CONTROLLER_FAILED"
-		elif axis_error == "0x400": #ERROR_POS_CTRL_DURING_SENSORLESS = 0x400,
-			error_string = "ERROR_POS_CTRL_DURING_SENSORLESS"
-
-		return error_string
-
-	def check_motor_errors(self, axis_error):
-		pass
-		# Axis errors
-#         ERROR_NONE = 0x00,
-#         ERROR_INVALID_STATE = 0x01, //<! an invalid state was requested
-#         ERROR_DC_BUS_UNDER_VOLTAGE = 0x02,
-#         ERROR_DC_BUS_OVER_VOLTAGE = 0x04,
-#         ERROR_CURRENT_MEASUREMENT_TIMEOUT = 0x08,
-#         ERROR_BRAKE_RESISTOR_DISARMED = 0x10, //<! the brake resistor was unexpectedly disarmed
-#         ERROR_MOTOR_DISARMED = 0x20, //<! the motor was unexpectedly disarmed
-#         ERROR_MOTOR_FAILED = 0x40, // Go to motor.hpp for information, check odrvX.axisX.motor.error for error value
-#         ERROR_SENSORLESS_ESTIMATOR_FAILED = 0x80,
-#         ERROR_ENCODER_FAILED = 0x100, // Go to encoder.hpp for information, check odrvX.axisX.encoder.error for error value
-#         ERROR_CONTROLLER_FAILED = 0x200,
-#         ERROR_POS_CTRL_DURING_SENSORLESS = 0x400,
-		#Motor Errors
-#         ERROR_NONE = 0,
-#         ERROR_PHASE_RESISTANCE_OUT_OF_RANGE = 0x0001,
-#         ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE = 0x0002,
-#         ERROR_ADC_FAILED = 0x0004,
-#         ERROR_DRV_FAULT = 0x0008,
-#         ERROR_CONTROL_DEADLINE_MISSED = 0x0010,
-#         ERROR_NOT_IMPLEMENTED_MOTOR_TYPE = 0x0020,
-#         ERROR_BRAKE_CURRENT_OUT_OF_RANGE = 0x0040,
-#         ERROR_MODULATION_MAGNITUDE = 0x0080,
-#         ERROR_BRAKE_DEADTIME_VIOLATION = 0x0100,
-#         ERROR_UNEXPECTED_TIMER_CALLBACK = 0x0200,
-#         ERROR_CURRENT_SENSE_SATURATION = 0x0400
-		#Encoder error
-# 		        ERROR_NONE = 0,
-#         ERROR_UNSTABLE_GAIN = 0x01,
-#         ERROR_CPR_OUT_OF_RANGE = 0x02,
-#         ERROR_NO_RESPONSE = 0x04,
-#         ERROR_UNSUPPORTED_ENCODER_MODE = 0x08,
-#         ERROR_ILLEGAL_HALL_STATE = 0x10,
-# ERROR_INDEX_NOT_FOUND_YET = 0x20,
-		#Controller error
-# ERROR_NONE = 0,
-# ERROR_OVERSPEED = 0x01,
-		#sensorless error
-        # ERROR_NONE = 0,
-		# ERROR_OVERSPEED = 0x01,
-	# self.my_drive.can.unexpected_errors
-	# self.my_drive.system_stats.i2c.error_cnt
-	# self.my_drive.axis0.error
-	# self.my_drive.axis0.encoder.error
-	# self.my_drive.axis0.motor.error
-	# controller and sensorless
-		error_message_text = "more args"
-		message_box_error = QtWidgets.QMessageBox.warning(self, "Error occured", error_message_text,  QtWidgets.QMessageBox.Help | QtWidgets.QMessageBox.Ignore)
-		if message_box_error == QtWidgets.QMessageBox.Help:
-			QtGui.QDesktopServices.openUrl(QtCore.QUrl("https://docs.odriverobotics.com/troubleshooting"))
+#
+# 	def check_motor_errors(self, axis_error):
+# 		if axis_error == "0x00": #ERROR_NONE = 0x00,
+# 			# error_string = "No errors"
+# 			return None
+# 		elif axis_error == "0x0001": #ERROR_PHASE_RESISTANCE_OUT_OF_RANGE = 0x0001,
+# 			error_string = "ERROR_PHASE_RESISTANCE_OUT_OF_RANGE"
+# 		elif axis_error == "0x0002": #ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE = 0x0002,
+# 			error_string = "ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE"
+# 		# Axis errors
+# #         ERROR_NONE = 0x00,
+# #         ERROR_INVALID_STATE = 0x01, //<! an invalid state was requested
+# #         ERROR_DC_BUS_UNDER_VOLTAGE = 0x02,
+# #         ERROR_DC_BUS_OVER_VOLTAGE = 0x04,
+# #         ERROR_CURRENT_MEASUREMENT_TIMEOUT = 0x08,
+# #         ERROR_BRAKE_RESISTOR_DISARMED = 0x10, //<! the brake resistor was unexpectedly disarmed
+# #         ERROR_MOTOR_DISARMED = 0x20, //<! the motor was unexpectedly disarmed
+# #         ERROR_MOTOR_FAILED = 0x40, // Go to motor.hpp for information, check odrvX.axisX.motor.error for error value
+# #         ERROR_SENSORLESS_ESTIMATOR_FAILED = 0x80,
+# #         ERROR_ENCODER_FAILED = 0x100, // Go to encoder.hpp for information, check odrvX.axisX.encoder.error for error value
+# #         ERROR_CONTROLLER_FAILED = 0x200,
+# #         ERROR_POS_CTRL_DURING_SENSORLESS = 0x400,
+# 		#Motor Errors
+# #         ERROR_NONE = 0,
+# #         ERROR_PHASE_RESISTANCE_OUT_OF_RANGE = 0x0001,
+# #         ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE = 0x0002,
+# #         ERROR_ADC_FAILED = 0x0004,
+# #         ERROR_DRV_FAULT = 0x0008,
+# #         ERROR_CONTROL_DEADLINE_MISSED = 0x0010,
+# #         ERROR_NOT_IMPLEMENTED_MOTOR_TYPE = 0x0020,
+# #         ERROR_BRAKE_CURRENT_OUT_OF_RANGE = 0x0040,
+# #         ERROR_MODULATION_MAGNITUDE = 0x0080,
+# #         ERROR_BRAKE_DEADTIME_VIOLATION = 0x0100,
+# #         ERROR_UNEXPECTED_TIMER_CALLBACK = 0x0200,
+# #         ERROR_CURRENT_SENSE_SATURATION = 0x0400
+# 		#Encoder error
+# # 		        ERROR_NONE = 0,
+# #         ERROR_UNSTABLE_GAIN = 0x01,
+# #         ERROR_CPR_OUT_OF_RANGE = 0x02,
+# #         ERROR_NO_RESPONSE = 0x04,
+# #         ERROR_UNSUPPORTED_ENCODER_MODE = 0x08,
+# #         ERROR_ILLEGAL_HALL_STATE = 0x10,
+# # ERROR_INDEX_NOT_FOUND_YET = 0x20,
+# 		#Controller error
+# # ERROR_NONE = 0,
+# # ERROR_OVERSPEED = 0x01,
+# 		#sensorless error
+#         # ERROR_NONE = 0,
+# 		# ERROR_OVERSPEED = 0x01,
+# 	# self.my_drive.can.unexpected_errors
+# 	# self.my_drive.system_stats.i2c.error_cnt
+# 	# self.my_drive.axis0.error
+# 	# self.my_drive.axis0.encoder.error
+# 	# self.my_drive.axis0.motor.error
+# 	# controller and sensorless
+# 		error_message_text = "more args"
+# 		message_box_error = QtWidgets.QMessageBox.warning(self, "Error occured", error_message_text,  QtWidgets.QMessageBox.Help | QtWidgets.QMessageBox.Ignore)
+# 		if message_box_error == QtWidgets.QMessageBox.Help:
+# 			QtGui.QDesktopServices.openUrl(QtCore.QUrl("https://docs.odriverobotics.com/troubleshooting"))
 
 
 	def axis0_graph_state_changed(self, state):
@@ -312,7 +296,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		# self.statusBar.showMessage("Serial number: {}".format(self.my_drive.serial_number))
 		#if my drive is found
 		self.timer = pg.QtCore.QTimer()
-		self.timer.timeout.connect(self.update)
+		self.timer.timeout.connect(self.update_statuses)
 		self.timer.start(500)
 
 		self.ad["start_time"] = pg.ptime.time()
@@ -425,44 +409,92 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		# 	self.plotWidget_current.setXRange(lower_l, upper_limit)
 
 
-	def update(self):
+	def update_statuses(self):
 		# self.update_voltage()
 		try:
 			self.update_machine_state()
 			self.update_controller_mode()
+			# self.error_checks()
 		except Exception as e:
 			print(e)
 			self.odrive_disconnected_exception()
 
 
+	def error_checks(self):
+		axis0_error = hex(self.my_drive.axis0.error)
+		print(axis0_error)
+		axis1_error = hex(self.my_drive.axis1.error)
+		print(axis1_error)
+		# error_code = self.check_axis_errors(axis0_error)
+		# if error_code != "":
+		# 	print(error_code)
+		# axis1_error = hex(self.my_drive.axis1.error)
+		# self.check_axis_errors(axis1_error)
+
+
+	def check_axis_errors(self, axis_error):
+		error_string = ""
+		if axis_error == "0x00": #ERROR_NONE = 0x00,
+			# error_string = "No errors"
+			pass
+		elif axis_error == "0x01": #ERROR_INVALID_STATE = 0x01, //<! an invalid state was requested
+			error_string = "ERROR_INVALID_STATE"
+		elif axis_error == "0x02": #ERROR_DC_BUS_UNDER_VOLTAGE = 0x02,
+			error_string = "ERROR_DC_BUS_UNDER_VOLTAGE"
+		elif axis_error == "0x04": #ERROR_DC_BUS_OVER_VOLTAGE = 0x04,
+			error_string = "ERROR_DC_BUS_OVER_VOLTAGE"
+		elif axis_error == "0x08": #ERROR_CURRENT_MEASUREMENT_TIMEOUT = 0x08,
+			error_string = "ERROR_CURRENT_MEASUREMENT_TIMEOUT"
+		elif axis_error == "0x10": #ERROR_BRAKE_RESISTOR_DISARMED = 0x10, //<! the brake resistor was unexpectedly disarmed
+			error_string = "ERROR_BRAKE_RESISTOR_DISARMED"
+		elif axis_error == "0x20": #ERROR_MOTOR_DISARMED = 0x20, //<! the motor was unexpectedly disarmed
+			error_string = "ERROR_MOTOR_DISARMED"
+		elif axis_error == "0x40": #ERROR_MOTOR_FAILED = 0x40, // Go to motor.hpp for information, check odrvX.axisX.motor.error for error value
+			error_string = "ERROR_MOTOR_FAILED"
+		elif axis_error == "0x80": #ERROR_SENSORLESS_ESTIMATOR_FAILED = 0x80,
+			error_string = "RROR_SENSORLESS_ESTIMATOR_FAILED"
+		elif axis_error == "0x100": #ERROR_ENCODER_FAILED = 0x100, // Go to encoder.hpp for information, check odrvX.axisX.encoder.error for error value
+			error_string = "ERROR_ENCODER_FAILED"
+		elif axis_error == "0x200": #ERROR_CONTROLLER_FAILED = 0x200,
+			error_string = "ERROR_CONTROLLER_FAILED"
+		elif axis_error == "0x400": #ERROR_POS_CTRL_DURING_SENSORLESS = 0x400,
+			error_string = "ERROR_POS_CTRL_DURING_SENSORLESS"
+		return error_string
+
 	def update_voltage(self):
 		self.label_vbusVoltageValue.setText(str(round(self.my_drive.vbus_voltage, 2)))
 
 	def update_machine_state(self):
-		#print(self.my_drive.axis0.current_state)
 		current_state = self.my_drive.axis0.current_state
 		if self.axis0_state != current_state:
 			self.axis0_state = current_state
 			print("New state axis0: {}".format(self.axis0_state))
+			self.update_machine_state_color(current_state, 0)
 
-			self.clear_state_buttons()
+		current_state = self.my_drive.axis1.current_state
+		if self.axis1_state != current_state:
+			self.axis1_state = current_state
+			print("New state axis1: {}".format(self.axis1_state))
+			self.update_machine_state_color(current_state, 1)
 
+	def update_machine_state_color(self, current_state, axis):
+			self.clear_state_buttons(axis)
 			if current_state == AXIS_STATE_IDLE:
-				self.idle_state()
+				self.idle_state(axis)
 			elif current_state == AXIS_STATE_STARTUP_SEQUENCE:
-				self.startup_seq_state()
+				self.startup_seq_state(axis)
 			elif current_state == AXIS_STATE_FULL_CALIBRATION_SEQUENCE:
-				self.full_calibration_seq_state()
+				self.full_calibration_seq_state(axis)
 			elif current_state == AXIS_STATE_MOTOR_CALIBRATION:
-				self.motor_calibration_state()
+				self.motor_calibration_state(axis)
 			elif current_state == AXIS_STATE_SENSORLESS_CONTROL:
-				self.sensorless_control_state()
+				self.sensorless_control_state(axis)
 			elif current_state == AXIS_STATE_ENCODER_INDEX_SEARCH:
-				self.encoder_index_search_state()
+				self.encoder_index_search_state(axis)
 			elif current_state == AXIS_STATE_ENCODER_OFFSET_CALIBRATION:
-				self.encoder_offset_calibration_state()
+				self.encoder_offset_calibration_state(axis)
 			elif current_state == AXIS_STATE_CLOSED_LOOP_CONTROL:
-				self.closed_loop_control_state()
+				self.closed_loop_control_state(axis)
 
 	def save_odrive_configuration(self):
 		self.my_drive.save_configuration()
@@ -623,7 +655,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.label_TxMailboxCompleteCallbackCntValue.setText(str(self.my_drive.can.TxMailboxCompleteCallbackCnt))
 		self.label_unhandledMessagesValue.setText(str(self.my_drive.can.unhandled_messages))
 		self.label_receivedAckValue.setText(str(self.my_drive.can.received_ack))
-		self.label_unexpectedErrorsValue.setText(str(self.my_drive.can.unexpected_errors))
+		self.label_unexpectedErrorsValue.setText(hex(self.my_drive.can.unexpected_errors))
 
 	def scan_system_stats_config(self):
 		self.label_minStackSpaceAxis1Value.setText(str(self.my_drive.system_stats.min_stack_space_axis1))
@@ -642,7 +674,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.label_rxCntI2cValue.setText(str(self.my_drive.system_stats.i2c.rx_cnt))
 		self.label_addrValue.setText(str(self.my_drive.system_stats.i2c.addr))
 		self.label_addrMatchCnt_2.setText(str(self.my_drive.system_stats.i2c.addr_match_cnt))
-		self.label_errorCntValue.setText(str(self.my_drive.system_stats.i2c.error_cnt))
+		self.label_errorCntValue.setText(hex(self.my_drive.system_stats.i2c.error_cnt))
 
 	def load_config_template(self):
 		config_template = {}
@@ -655,7 +687,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.scan_axis0_config()
 
 	def scan_axis0_config(self):
-		self.label_errorAxisValue.setText(str(self.my_drive.axis0.error))
+		self.label_errorAxisValue.setText(hex(self.my_drive.axis0.error))
 		self.label_loopCounterValue.setText(str(self.my_drive.axis0.loop_counter))
 		# Config
 		#self.radioButton_startupMotorCalibrationAxisTrue.setChecked(True) if self.my_drive.axis0.config.startup_motor_calibration else self.radioButton_startupMotorCalibrationAxisFalse.setChecked(True)
@@ -717,7 +749,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.label_interpolationValue.setText(str(self.my_drive.axis0.encoder.interpolation))
 		self.label_countInCprValue.setText(str(self.my_drive.axis0.encoder.count_in_cpr))
 		self.label_hallStateValue.setText(str(self.my_drive.axis0.encoder.hall_state))
-		self.label_errorEncoderValue.setText(str(self.my_drive.axis0.encoder.error))
+		self.label_errorEncoderValue.setText(hex(self.my_drive.axis0.encoder.error))
 		self.label_phaseValue.setText(str(self.my_drive.axis0.encoder.phase))
 
 		self.scan_axis0_encoder_config_config()
@@ -746,7 +778,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	def scan_axis0_controller_config(self):
 		self.label_velSetpointValue.setText(str(self.my_drive.axis0.controller.vel_setpoint))
-		self.label_setPosSetpoint_2.setText(str(self.my_drive.axis0.controller.vel_integrator_current))
+		self.label_setPosSetpointValue_2.setText(str(self.my_drive.axis0.controller.vel_integrator_current))
 		self.label_posSetpointValue.setText(str(self.my_drive.axis0.controller.pos_setpoint))
 		self.label_currentSetpointValue.setText(str(self.my_drive.axis0.controller.current_setpoint))
 		self.scan_axis0_controller_config_config()
@@ -782,7 +814,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.label_drvFaultValue.setText(str(self.my_drive.axis0.motor.gate_driver.drv_fault))
 		self.label_dcCalibPhBValue.setText(str(self.my_drive.axis0.motor.DC_calib_phB))
 		self.label_dcCalibPhCValue.setText(str(self.my_drive.axis0.motor.DC_calib_phC))
-		self.label_errorAxisValue_2.setText(str(self.my_drive.axis0.motor.error))
+		self.label_errorAxisValue_2.setText(hex(self.my_drive.axis0.motor.error))
 		self.label_currentMeasPhCValue.setText(str(self.my_drive.axis0.motor.current_meas_phC))
 
 		if self.my_drive.axis0.motor.is_calibrated:
@@ -852,41 +884,73 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			self.my_drive.axis0.controller.vel_setpoint = value
 
 
-	def clear_state_buttons(self):
-		self.axis0_pushButton_idle.setStyleSheet("")
-		self.axis0_pushButton_startupSequence.setStyleSheet("")
-		self.axis0_pushButton_fullCalibrationSequence.setStyleSheet("")
-		self.axis0_pushButton_motorCalibration.setStyleSheet("")
-		self.axis0_pushButton_sensorlessControl.setStyleSheet("")
-		self.axis0_pushButton_econderIndexSearch.setStyleSheet("")
-		self.axis0_pushButton_encoderOffsetCalibration.setStyleSheet("")
-		self.axis0_pushButton_closedLoopControl.setStyleSheet("")
+	def clear_state_buttons(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_idle.setStyleSheet("")
+			self.axis0_pushButton_startupSequence.setStyleSheet("")
+			self.axis0_pushButton_fullCalibrationSequence.setStyleSheet("")
+			self.axis0_pushButton_motorCalibration.setStyleSheet("")
+			self.axis0_pushButton_sensorlessControl.setStyleSheet("")
+			self.axis0_pushButton_encoderIndexSearch.setStyleSheet("")
+			self.axis0_pushButton_encoderOffsetCalibration.setStyleSheet("")
+			self.axis0_pushButton_closedLoopControl.setStyleSheet("")
+		elif axis == 1:
+			self.axis1_pushButton_idle.setStyleSheet("")
+			self.axis1_pushButton_startupSequence.setStyleSheet("")
+			self.axis1_pushButton_fullCalibrationSequence.setStyleSheet("")
+			self.axis1_pushButton_motorCalibration.setStyleSheet("")
+			self.axis1_pushButton_sensorlessControl.setStyleSheet("")
+			self.axis1_pushButton_encoderIndexSearch.setStyleSheet("")
+			self.axis1_pushButton_encoderOffsetCalibration.setStyleSheet("")
+			self.axis1_pushButton_closedLoopControl.setStyleSheet("")
 
-	def idle_state(self):
-		print("State: Idle")
-		# self.axis0_pushButton_idle.setStyleSheet("background-color: rgb(135, 187, 249);")
-		self.axis0_pushButton_idle.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def idle_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_idle.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_idle.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def startup_seq_state(self):
-		self.axis0_pushButton_startupSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def startup_seq_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_startupSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_startupSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def full_calibration_seq_state(self):
-		self.axis0_pushButton_fullCalibrationSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def full_calibration_seq_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_fullCalibrationSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_fullCalibrationSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def motor_calibration_state(self):
-		self.axis0_pushButton_motorCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def motor_calibration_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_motorCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_motorCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def sensorless_control_state(self):
-		self.axis0_pushButton_sensorlessControl.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def sensorless_control_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_sensorlessControl.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_sensorlessControl.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def encoder_index_search_state(self):
-		self.axis0_pushButton_econderIndexSearch.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def encoder_index_search_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_encoderIndexSearch.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_encoderIndexSearch.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def encoder_offset_calibration_state(self):
-		self.axis0_pushButton_encoderOffsetCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def encoder_offset_calibration_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_encoderOffsetCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_encoderOffsetCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
 
-	def closed_loop_control_state(self):
-		self.axis0_pushButton_closedLoopControl.setStyleSheet("background-color: rgb(246, 224, 143);")
+	def closed_loop_control_state(self, axis):
+		if axis == 0:
+			self.axis0_pushButton_closedLoopControl.setStyleSheet("background-color: rgb(246, 224, 143);")
+		elif axis == 1:
+			self.axis1_pushButton_closedLoopControl.setStyleSheet("background-color: rgb(246, 224, 143);")
 
 	def save_config(self):
 		self.my_drive.save_configuration()
@@ -898,38 +962,34 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			print(e)
 			self.odrive_disconnected_exception()
 
-	def idle_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_IDLE
-		# self.idle_state()
+	def machine_state_clicked(self):
+		button_name = self.sender().objectName()
+		axis_name = button_name[:5]
+		m_state_name = button_name[17:]
+		print(axis_name)
+		print(m_state_name)
 
-	def startupSequence_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_STARTUP_SEQUENCE
-		# self.startup_seq_state()
+		if axis_name == "axis0":
+			axis = self.my_drive.axis0
+		elif axis_name == "axis1":
+			axis = self.my_drive.axis1
 
-	def fullCalibrationSequence_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
-		# self.full_calibration_seq_state()
-
-	def motorCalibration_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_MOTOR_CALIBRATION
-		# self.motor_calibration_state()
-
-	def sensorlessControl_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_SENSORLESS_CONTROL
-		# self.sensorless_control_state()
-
-	def econderIndexSearch_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_ENCODER_INDEX_SEARCH
-		# self.encoder_index_search_state()
-
-	def encoderOffsetCalibration_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_ENCODER_OFFSET_CALIBRATION
-		# self.encoder_offset_calibration_state()
-
-	def closedLoopControl_state_clicked(self):
-		self.my_drive.axis0.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
-		# self.closed_loop_control_state()
-
+		if m_state_name == "idle":
+			axis.requested_state = AXIS_STATE_IDLE
+		elif m_state_name == "startupSequence":
+			axis.requested_state = AXIS_STATE_STARTUP_SEQUENCE
+		elif m_state_name == "fullCalibrationSequence":
+			axis.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
+		elif m_state_name == "motorCalibration":
+			axis.requested_state = AXIS_STATE_MOTOR_CALIBRATION
+		elif m_state_name == "sensorlessControl":
+			axis.requested_state = AXIS_STATE_SENSORLESS_CONTROL
+		elif m_state_name == "encoderIndexSearch":
+			axis.requested_state = AXIS_STATE_ENCODER_INDEX_SEARCH
+		elif m_state_name == "encoderOffsetCalibration":
+			axis.requested_state = AXIS_STATE_ENCODER_OFFSET_CALIBRATION
+		elif m_state_name == "closedLoopControl":
+			axis.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
 
 def main():
 	app = QtWidgets.QApplication(sys.argv)  # A new instance of QApplication

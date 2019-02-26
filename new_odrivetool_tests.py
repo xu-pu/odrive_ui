@@ -32,6 +32,66 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		self.setupUi(self)  # This is defined in design.py file automatically
 							# It sets up layout and widgets that are defined
 
+		self.treeView.setModel(self.odr_model())
+		self.treeView.setDragDropMode(QtGui.QAbstractItemView.DragOnly)
+		self.pushButton_123 = QtWidgets.QPushButton()
+		self.pushButton_123.setObjectName("pushButton_123")
+		self.mdiArea.addSubWindow(self.pushButton_123)
+
+
+
+
+	def odr_model(self):
+		model = QtGui.QStandardItemModel(0, 2, self)
+		model.setHeaderData(0, QtCore.Qt.Horizontal, "From")
+		# child = QtGui.QStandardItem("yolo")
+		# child2 = QtGui.QStandardItem("yolo2")
+		# child.appendRow(child2)
+		item = QtGui.QStandardItem("type")
+		child = QtGui.QStandardItem("objects3")  # Apple
+		item.appendRow(child)
+		child = QtGui.QStandardItem("objects4")  # Banana
+		item.appendRow(child)
+		model.setItem(0, 0, item)
+		# child.appendRow(QtGui.QStandardItem("nooooo"))
+		# child2 = QtGui.QStandardItem("yolo2")
+		# child.appendRow(child2)
+		# # model.setHeaderData(1, QtCore.Qt.Horizontal, "Subject")
+		# # model.setHeaderData(2, QtCore.Qt.Horizontal, "Date")
+		# # model = QtGui.QStandardItemModel(self.load_config_template())
+		model.setItem(0,1, child)
+		# model.setItem(1,1, child2)
+		return model
+		#
+		# group = QGroupBox()
+		# box = QBoxLayout(QBoxLayout.TopToBottom)
+		# group.setLayout(box)
+		# group.setTitle("Buttons")
+		# widget_laytout.addWidget(group)
+		#
+		# fruits = ["Buttons in GroupBox", "TextBox in GroupBox", "Label in GroupBox", "TextEdit"]
+		# view = QListView(self)
+		# model = QStandardItemModel()
+		# for f in fruits:
+		#     model.appendRow(QStandardItem(f))
+		# view.setModel(model)
+		# box.addWidget(view)
+		#
+		# self.stk_w.addWidget(Widget_1())
+		# self.stk_w.addWidget(Widget_2())
+		# self.stk_w.addWidget(Widget_3())
+		# self.stk_w.addWidget(QTextEdit())
+		#
+		# widget_laytout.addWidget(self.stk_w)
+		# self.setLayout(widget_laytout)
+
+	def load_config_template(self):
+		config_template = {}
+		with open("config_template.json") as f:
+			config_template = json.load(f)
+		return config_template
+
+
 def main():
 	app = QtWidgets.QApplication(sys.argv)  # A new instance of QApplication
 	form = ExampleApp()                 # We set the form to be our (design)

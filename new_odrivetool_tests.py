@@ -7,6 +7,8 @@ import UI_mainwindow2
 import odrive
 from odrive.enums import *
 
+import fibre
+
 import json
 import glob
 import datetime
@@ -40,34 +42,21 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 
 	def dropEvent(self, event):
 		print("drop event")
-		print(event)
-		event.accept()
-		# print(event.data())
-		# print(event.mimeData().data())
-		print(event.mimeData().formats())
-		print(event.source())
-		print(isinstance(event.source(),QtGui.QAbstractItemView))
-		print(event.source().treePosition())
-		print(event.source().currentIndex())
-		print(event.source().currentIndex().row())
-		# print(event.source().model().model().rowCount())
-		print(event.source().model().itemPrototype())
-		print(event.source().model().item(0).text())
-		print(event.source().selectedIndexes())
-		# print(event.source().selectedIndexes()[0].text())
-		print(event.source().selectedIndexes()[0].row())
-		index = event.source().selectedIndexes()[0]
-		crawler = index.model().itemFromIndex(index)
-		print(crawler.text())
-		# encodedData = event.mimeData("application/x-qstandarditemmodeldatalist")
-		# stream = QDataStream(encodedData, QIODevice.ReadOnly)
-		# row = stream.readInt32()
-		# column = stream.readInt32()
-		# print(encodedData)
-		# print(stream)
-		# print(row)
-		# print(column)
-
+		for index in event.source().selectedIndexes():
+			cr = index.model().itemFromIndex(index)
+			print(cr.text())
+			if index.parent().isValid():
+				i1 = index.parent()
+				print(i1.model().itemFromIndex(i1).text())
+				if i1.parent().isValid():
+					i2 = i1.parent()
+					print(i2.model().itemFromIndex(i2).text())
+					if i2.parent().isValid():
+						i3 = i2.parent()
+						print(i3.model().itemFromIndex(i3).text())
+						if i3.parent().isValid():
+							i4 = i3.parent()
+							print(i4.model().itemFromIndex(i4).text())
 
 
 class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
@@ -79,10 +68,6 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		super(self.__class__, self).__init__()
 		self.setupUi(self)  # This is defined in design.py file automatically
 							# It sets up layout and widgets that are defined
-
-
-
-
 		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
 		self.quit_shortcut.activated.connect(self.close_application)
 
@@ -99,6 +84,8 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 
 		self.testmdi = CustomMDIArea(self)
 		self.gridLayout.addWidget(self.testmdi, 1, 0, 1, 1)
+
+		self.odrive_connect()
 		# self.mdiArea.dragMoveEvent(QtGui.QDragMoveEvent())
 
 	def droping(self):
@@ -108,56 +95,24 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 
 
 	def odr_model(self):
-		model = QtGui.QStandardItemModel(0, 2, self)
+		model = QtGui.QStandardItemModel(0, 1, self)
 		model.setHeaderData(0, QtCore.Qt.Horizontal, "Odrive")
-		model.setHeaderData(1, QtCore.Qt.Horizontal, "Graph enable")
-		# child = QtGui.QStandardItem("yolo")
-		# child2 = QtGui.QStandardItem("yolo2")
-		# child.appendRow(child2)
-		item = QtGui.QStandardItem("type")
-		child = QtGui.QStandardItem("objects3")  # Apple
+		# model.setHeaderData(1, QtCore.Qt.Horizontal, "Graph enable")
+		item = QtGui.QStandardItem("axis0")
+		child = QtGui.QStandardItem("controller")  # Apple
+		childbanana = QtGui.QStandardItem("config")  # Apple
+		childApple = QtGui.QStandardItem("vel_limit")  # Apple
+		child.appendRow(childbanana)
+		child.appendRow(childApple)
+
 		item.appendRow(child)
 		child2 = QtGui.QStandardItem("objects4")  # Banana
 		item.appendRow(child2)
 		model.setItem(0, 0, item)
-
-
 		item2 = QtGui.QStandardItem("type222")
 		model.setItem(1, 0, item2)
-		# self.checkBox2 = QtWidgets.QCheckBox(self.centralWidget)
-		# self.checkBox2.setObjectName("checkBox2")
-		# model.setItem(0, 1, self.checkBox2)
-		# child.appendRow(QtGui.QStandardItem("nooooo"))
-		# child2 = QtGui.QStandardItem("yolo2")
-		# child.appendRow(child2)
-		# # model.setHeaderData(1, QtCore.Qt.Horizontal, "Subject")
-		# # model.setHeaderData(2, QtCore.Qt.Horizontal, "Date")
-		# # model = QtGui.QStandardItemModel(self.load_config_template())
-		# model.setItem(0,1, child)
-		# model.setItem(1,1, child2)
 		return model
-		#
-		# group = QGroupBox()
-		# box = QBoxLayout(QBoxLayout.TopToBottom)
-		# group.setLayout(box)
-		# group.setTitle("Buttons")
-		# widget_laytout.addWidget(group)
-		#
-		# fruits = ["Buttons in GroupBox", "TextBox in GroupBox", "Label in GroupBox", "TextEdit"]
-		# view = QListView(self)
-		# model = QStandardItemModel()
-		# for f in fruits:
-		#     model.appendRow(QStandardItem(f))
-		# view.setModel(model)
-		# box.addWidget(view)
-		#
-		# self.stk_w.addWidget(Widget_1())
-		# self.stk_w.addWidget(Widget_2())
-		# self.stk_w.addWidget(Widget_3())
-		# self.stk_w.addWidget(QTextEdit())
-		#
-		# widget_laytout.addWidget(self.stk_w)
-		# self.setLayout(widget_laytout)
+
 
 	def load_config_template(self):
 		config_template = {}
@@ -172,6 +127,70 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		# except:
 		# 	pass
 		sys.exit()
+
+	def odrive_connect(self):
+		self.odrive_worker = odriveWorker()
+		self.odrive_worker.odrive_found_sig.connect(self.odrive_connected)
+		self.odrive_worker.start()
+
+	def odrive_connected(self, my_drive):
+		# self.my_drive = my_drive
+		self.treeView.setModel(self.setup_odrive_model(my_drive))
+
+	def setup_odrive_model(self, my_drive):
+		print("Odrive found. Setting up model.")
+		# ignore_list = ["test_property", "test_function", "fw_version_revision", "fw_version_major", "fw_version_minor", "enter_dfu_mode",
+		# 				"save_configuration", "erase_configuration", "get_oscilloscope_val", "hw_version_major", "hw_version_minor", "fw_version_unreleased",
+		# 				"hw_version_variant", "reboot", "get_adc_voltage"]
+		ignore_list = ["test_property", "test_function", "fw_version_revision", "fw_version_major", "fw_version_minor", "enter_dfu_mode",
+						"get_oscilloscope_val", "hw_version_major", "hw_version_minor", "fw_version_unreleased",
+						"hw_version_variant", "get_adc_voltage"]
+		# axis_attribute_list = []
+		model = QtGui.QStandardItemModel(0, 1, self)
+		model.setHeaderData(0, QtCore.Qt.Horizontal, "Odrive")
+		# model.setHeaderData(1, QtCore.Qt.Horizontal, "Type")
+		 # isinstance(odrv0._remote_attributes["reboot"], fibre.remote_object.RemoteFunction)
+		item = QtGui.QStandardItem("odrv0")
+		for key in my_drive._remote_attributes.keys():
+			# if key not in ignore_list:
+			if isinstance(my_drive._remote_attributes[key], fibre.remote_object.RemoteObject):
+				child = QtGui.QStandardItem(key)
+				for child_key in my_drive._remote_attributes[key]._remote_attributes.keys():
+					if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key], fibre.remote_object.RemoteObject):
+						sub1_child = QtGui.QStandardItem(child_key)
+						for sub1_child_key in my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes.keys():
+							if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key], fibre.remote_object.RemoteObject):
+								sub2_child = QtGui.QStandardItem(sub1_child_key)
+								for sub2_child_key in my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key]._remote_attributes.keys():
+									if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key]._remote_attributes[sub2_child_key], fibre.remote_object.RemoteObject):
+										sub3_child = QtGui.QStandardItem(sub2_child_key)
+										sub2_child.appendRow(sub3_child)
+									else:
+										sub3_child = QtGui.QStandardItem(sub2_child_key)
+										sub2_child.appendRow(sub3_child)
+								sub1_child.appendRow(sub2_child)
+							else:
+								sub2_child = QtGui.QStandardItem(sub1_child_key)
+								sub1_child.appendRow(sub2_child)
+						child.appendRow(sub1_child)
+					else:
+						sub1_child = QtGui.QStandardItem(child_key)
+						child.appendRow(sub1_child)
+					# elif
+				item.appendRow(child)
+			else:
+				if key not in ignore_list:
+					child = QtGui.QStandardItem(key)
+					item.appendRow(child)
+
+		child = QtGui.QStandardItem("fw_version")
+		item.appendRow(child)
+		child = QtGui.QStandardItem("hw_version")
+		item.appendRow(child)
+
+		model.setItem(0,0,item)
+		return model
+
 
 
 def main():

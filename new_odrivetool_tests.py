@@ -22,6 +22,54 @@ ICON_TRUE = "Icons/True.jpg"
 ICON_FALSE = "Icons/False.jpg"
 ICON_NOSTATE = "Icons/NoState.jpg"
 
+class CustomMDIArea(QtWidgets.QMdiArea):
+	def __init__(self,type, parent=None):
+		super(self.__class__, self).__init__()
+		# self.setDragDropMode(QtGui.QAbstractItemView.DragDrop)
+		self.setAcceptDrops(True)
+
+	def dragEnterEvent(self, event):
+		print("drag enter event")
+		print(event)
+		event.accept()
+
+	def dragMoveEnter(self, event):
+		print("drag move enter")
+		print(event)
+
+
+	def dropEvent(self, event):
+		print("drop event")
+		print(event)
+		event.accept()
+		# print(event.data())
+		# print(event.mimeData().data())
+		print(event.mimeData().formats())
+		print(event.source())
+		print(isinstance(event.source(),QtGui.QAbstractItemView))
+		print(event.source().treePosition())
+		print(event.source().currentIndex())
+		print(event.source().currentIndex().row())
+		# print(event.source().model().model().rowCount())
+		print(event.source().model().itemPrototype())
+		print(event.source().model().item(0).text())
+		print(event.source().selectedIndexes())
+		# print(event.source().selectedIndexes()[0].text())
+		print(event.source().selectedIndexes()[0].row())
+		index = event.source().selectedIndexes()[0]
+		crawler = index.model().itemFromIndex(index)
+		print(crawler.text())
+		# encodedData = event.mimeData("application/x-qstandarditemmodeldatalist")
+		# stream = QDataStream(encodedData, QIODevice.ReadOnly)
+		# row = stream.readInt32()
+		# column = stream.readInt32()
+		# print(encodedData)
+		# print(stream)
+		# print(row)
+		# print(column)
+
+
+
 class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 
 	app_name = "Odrive Tester"
@@ -32,34 +80,60 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		self.setupUi(self)  # This is defined in design.py file automatically
 							# It sets up layout and widgets that are defined
 
+
+
+
+		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
+		self.quit_shortcut.activated.connect(self.close_application)
+
 		self.treeView.setModel(self.odr_model())
-		self.treeView.setDragDropMode(QtGui.QAbstractItemView.DragOnly)
+		self.treeView.setDragEnabled(True)
+		# self.treeView.setAcceptDrops(True)
+		# self.treeView.setDragDropMode(QtGui.QAbstractItemView.DragOnly)
+
 		self.pushButton_123 = QtWidgets.QPushButton()
 		self.pushButton_123.setObjectName("pushButton_123")
 		self.mdiArea.addSubWindow(self.pushButton_123)
+		# self.mdiArea.dropEvent(self.droping)
+		self.mdiArea.setAcceptDrops(True)
+
+		self.testmdi = CustomMDIArea(self)
+		self.gridLayout.addWidget(self.testmdi, 1, 0, 1, 1)
+		# self.mdiArea.dragMoveEvent(QtGui.QDragMoveEvent())
+
+	def droping(self):
+		print("drop")
 
 
 
 
 	def odr_model(self):
 		model = QtGui.QStandardItemModel(0, 2, self)
-		model.setHeaderData(0, QtCore.Qt.Horizontal, "From")
+		model.setHeaderData(0, QtCore.Qt.Horizontal, "Odrive")
+		model.setHeaderData(1, QtCore.Qt.Horizontal, "Graph enable")
 		# child = QtGui.QStandardItem("yolo")
 		# child2 = QtGui.QStandardItem("yolo2")
 		# child.appendRow(child2)
 		item = QtGui.QStandardItem("type")
 		child = QtGui.QStandardItem("objects3")  # Apple
 		item.appendRow(child)
-		child = QtGui.QStandardItem("objects4")  # Banana
-		item.appendRow(child)
+		child2 = QtGui.QStandardItem("objects4")  # Banana
+		item.appendRow(child2)
 		model.setItem(0, 0, item)
+
+
+		item2 = QtGui.QStandardItem("type222")
+		model.setItem(1, 0, item2)
+		# self.checkBox2 = QtWidgets.QCheckBox(self.centralWidget)
+		# self.checkBox2.setObjectName("checkBox2")
+		# model.setItem(0, 1, self.checkBox2)
 		# child.appendRow(QtGui.QStandardItem("nooooo"))
 		# child2 = QtGui.QStandardItem("yolo2")
 		# child.appendRow(child2)
 		# # model.setHeaderData(1, QtCore.Qt.Horizontal, "Subject")
 		# # model.setHeaderData(2, QtCore.Qt.Horizontal, "Date")
 		# # model = QtGui.QStandardItemModel(self.load_config_template())
-		model.setItem(0,1, child)
+		# model.setItem(0,1, child)
 		# model.setItem(1,1, child2)
 		return model
 		#
@@ -90,6 +164,14 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		with open("config_template.json") as f:
 			config_template = json.load(f)
 		return config_template
+
+	def close_application(self):
+		print("whooaaaa so custom!!!")
+		# try:
+		# 	self.odrive_worker.stop()
+		# except:
+		# 	pass
+		sys.exit()
 
 
 def main():

@@ -29,6 +29,9 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 		super(self.__class__, self).__init__()
 		# self.setDragDropMode(QtGui.QAbstractItemView.DragDrop)
 		self.setAcceptDrops(True)
+		self.pushButton_123 = QtWidgets.QPushButton()
+		self.pushButton_123.setObjectName("pushButton_123")
+		self.addSubWindow(self.pushButton_123)
 
 	def dragEnterEvent(self, event):
 		print("drag enter event")
@@ -59,6 +62,7 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 							print(i4.model().itemFromIndex(i4).text())
 
 
+
 class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 
 	app_name = "Odrive Tester"
@@ -76,14 +80,14 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		# self.treeView.setAcceptDrops(True)
 		# self.treeView.setDragDropMode(QtGui.QAbstractItemView.DragOnly)
 
-		self.pushButton_123 = QtWidgets.QPushButton()
-		self.pushButton_123.setObjectName("pushButton_123")
-		self.mdiArea.addSubWindow(self.pushButton_123)
+		# self.pushButton_123 = QtWidgets.QPushButton()
+		# self.pushButton_123.setObjectName("pushButton_123")
+		# self.mdiArea.addSubWindow(self.pushButton_123)
 		# self.mdiArea.dropEvent(self.droping)
-		self.mdiArea.setAcceptDrops(True)
+		# self.mdiArea.setAcceptDrops(True)
 
 		self.testmdi = CustomMDIArea(self)
-		self.gridLayout.addWidget(self.testmdi, 1, 0, 1, 1)
+		self.gridLayout.addWidget(self.testmdi, 0, 2, 1, 1)
 
 		self.odrive_connect()
 		# self.mdiArea.dragMoveEvent(QtGui.QDragMoveEvent())

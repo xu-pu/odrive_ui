@@ -25,13 +25,14 @@ ICON_FALSE = "Icons/False.jpg"
 ICON_NOSTATE = "Icons/NoState.jpg"
 
 class CustomMDIArea(QtWidgets.QMdiArea):
+	odrive_request_sig = QtCore.pyqtSignal()
+
 	def __init__(self,type, parent=None):
 		super(self.__class__, self).__init__()
 		# self.setDragDropMode(QtGui.QAbstractItemView.DragDrop)
 		self.setAcceptDrops(True)
-		self.pushButton_123 = QtWidgets.QPushButton()
-		self.pushButton_123.setObjectName("pushButton_123")
-		self.addSubWindow(self.pushButton_123)
+		print(self)
+		# self.odrive = fibre.remote_object.RemoteObject()
 
 	def dragEnterEvent(self, event):
 		print("drag enter event")
@@ -42,24 +43,97 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 		print("drag move enter")
 		print(event)
 
+	def add_odrive(self, my_drive):
+		self.my_drive = my_drive
+		# print(self.odrive)
 
 	def dropEvent(self, event):
 		print("drop event")
+
+		subwindow_list = []
+		subwindow_dict = {}
+		# self.odrive_request_sig.emit()
+		# result = self.addSubWindow(QtWidgets.QMdiSubWindow()).show()
+		# self.show()
+		# print(event.source().winfo_parent())
+		# print(result)
 		for index in event.source().selectedIndexes():
 			cr = index.model().itemFromIndex(index)
+			subwindow_list.append(cr.text())
+			print(cr.hasChildren())
+			if cr.hasChildren():
+				print(cr.text())
+				print(type(cr))
+				label_list = []
+				spinBox_list = []
+				for row in range(0,cr.rowCount()):
+					print(cr.child(row,0).text())
+					label_list.append(QtWidgets.QLabel())
+					spinBox_list.append(QtWidgets.QDoubleSpinBox())
+					# self.axis1Velocity_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.frame_2)
+					# spinBox_list[row]
+					label_list[row].setObjectName(cr.child(row,0).text())
+					label_list[row].setText(cr.child(row,0).text())
+
+				centralWidget = QtWidgets.QWidget(self)
+				gridLayout = QtWidgets.QGridLayout(centralWidget)
+				for item in range(0, len(label_list)):
+					gridLayout.addWidget(label_list[item], item,0,1,1)
+					gridLayout.addWidget(spinBox_list[item], item,1,1,1)
+				self.addSubWindow(centralWidget).show()
+			# print(cr.rowCount()) #on model to Model() and get TExt
+				# print(cr.model().index(0,0))
+				# first_item = cr.model().itemFromIndex(cr.model().index(0,0)).text()
+				# print(first_item)
+				# # print(cr.index(1))
+				# print(cr.index(2))
+
 			print(cr.text())
 			if index.parent().isValid():
 				i1 = index.parent()
 				print(i1.model().itemFromIndex(i1).text())
+				subwindow_list.append(i1.model().itemFromIndex(i1).text())
 				if i1.parent().isValid():
 					i2 = i1.parent()
 					print(i2.model().itemFromIndex(i2).text())
+					subwindow_list.append(i2.model().itemFromIndex(i2).text())
 					if i2.parent().isValid():
 						i3 = i2.parent()
 						print(i3.model().itemFromIndex(i3).text())
+						subwindow_list.append(i3.model().itemFromIndex(i3).text())
 						if i3.parent().isValid():
 							i4 = i3.parent()
 							print(i4.model().itemFromIndex(i4).text())
+							subwindow_list.append(i4.model().itemFromIndex(i4).text())
+
+		print(subwindow_list)
+		# #TODO figure out and add all children
+		# label_list = []
+		# label_list.append(QtWidgets.QLabel())
+		# label_list.append(QtWidgets.QLabel())
+		# label_list[0].setObjectName("button0")
+		# label_list[1].setObjectName("button1")
+		# label_list[1].setText("KLOL")
+		#
+		# centralWidget = QtWidgets.QWidget(self)
+		# gridLayout = QtWidgets.QGridLayout(centralWidget)
+		# gridLayout.addWidget(label_list[0], 0,0,1,1)
+		# gridLayout.addWidget(label_list[1], 1,0,1,1)
+		# self.addSubWindow(centralWidget).show()
+
+		# self.pushButton_123 = QtWidgets.QPushButton()
+		# self.pushButton_123.setObjectName("pushButton_123")
+		# self.pushButton_1223 = QtWidgets.QPushButton()
+		# self.pushButton_1223.setObjectName("pushButton_1233")
+		# self.pushButton_1233 = QtWidgets.QPushButton()
+		# self.pushButton_1233.setObjectName("pushButton_1223")
+		# self.pushButton_1233.setText("KLOL")
+		# self.centralWidget222 = QtWidgets.QWidget(self)
+		# self.gridLayout555 = QtWidgets.QGridLayout(self.centralWidget222)
+		# self.gridLayout555.addWidget(self.pushButton_123, 0,0,1,1)
+		# self.gridLayout555.addWidget(self.pushButton_1233, 1,0,1,1)
+		# self.gridLayout555.addWidget(self.pushButton_1223, 2,0,1,1)
+		# self.addSubWindow(self.centralWidget222).show()
 
 
 
@@ -87,10 +161,16 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		# self.mdiArea.setAcceptDrops(True)
 
 		self.testmdi = CustomMDIArea(self)
+		self.testmdi.odrive_request_sig.connect(self.odrive_requested)
 		self.gridLayout.addWidget(self.testmdi, 0, 2, 1, 1)
 
 		self.odrive_connect()
 		# self.mdiArea.dragMoveEvent(QtGui.QDragMoveEvent())
+
+	def odrive_requested(self):
+		self.testmdi.add_odrive(self.my_drive)
+
+
 
 	def droping(self):
 		print("drop")
@@ -138,7 +218,8 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		self.odrive_worker.start()
 
 	def odrive_connected(self, my_drive):
-		# self.my_drive = my_drive
+		self.my_drive = my_drive
+		self.testmdi.add_odrive(self.my_drive)
 		self.treeView.setModel(self.setup_odrive_model(my_drive))
 
 	def setup_odrive_model(self, my_drive):
@@ -193,6 +274,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		item.appendRow(child)
 
 		model.setItem(0,0,item)
+		# self.testmdi.show()
 		return model
 
 

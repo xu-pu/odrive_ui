@@ -23,6 +23,13 @@ pip install --upgrade pip
 ```
 
 #### 4. Install requirements
+
+```
+pip install odrive
+pip install pyqtgraph
+pip install pyqt5
+```
+##### Or just from requirements (Possible Errors)
 ```
 pip install -r requirements.txt
 ```

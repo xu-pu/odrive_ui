@@ -23,7 +23,7 @@ from serialThread import odriveWorker
 ICON_TRUE_PATH = "Icons/True.jpg"
 ICON_FALSE_PATH = "Icons/False.jpg"
 ICON_NOSTATE_PATH = "Icons/NoState.jpg"
-
+version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_minor","hw_version_major", "hw_version_minor", "fw_version_unreleased","hw_version_variant"]
 
 def find_parents_list(index):
 	subwindow_list = []
@@ -48,29 +48,29 @@ def find_parents_list(index):
 	return subwindow_list
 
 
-def add_single_layout_line(path_list, my_drive):
+def add_single_layout_line( path_list, my_drive):
 	ra_dict = {}
 
 	if len(path_list) == 2:
 		if isinstance(my_drive._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
-			ra_dict["layout"] = add_pushButton(path_list)
+			ra_dict["layout"] = add_pushButton( path_list)
 		elif isinstance(my_drive._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
-			ra_dict["layout"] = add_label(path_list, my_drive._remote_attributes[path_list[0]])
+			ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[0]])
 	elif len(path_list) == 3:
 		if isinstance(my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
-			ra_dict["layout"] = add_pushButton(path_list)
+			ra_dict["layout"] = add_pushButton( path_list)
 		elif isinstance(my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
-			ra_dict["layout"] = add_label(path_list, my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+			ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
 	elif len(path_list) == 4:
 		if isinstance(my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
-			ra_dict["layout"] = add_pushButton(path_list)
+			ra_dict["layout"] = add_pushButton( path_list)
 		elif isinstance(my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
-			ra_dict["layout"] = add_label(path_list, my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+			ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
 	elif len(path_list) == 5:
 		if isinstance(my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
-			ra_dict["layout"] = add_pushButton(path_list)
+			ra_dict["layout"] = add_pushButton( path_list)
 		elif isinstance(my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
-			ra_dict["layout"] = add_label(path_list, my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+			ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
 
 	return ra_dict
 
@@ -83,7 +83,7 @@ def add_config_int():
 def add_config_bool():
 	pass
 
-def add_pushButton(path_list):
+def add_pushButton( path_list):
 	ra_dict = {}
 	ra_dict["pushbutton"] = QtWidgets.QPushButton()
 	ra_dict["pushbutton"].setObjectName(path_list[0])
@@ -92,7 +92,7 @@ def add_pushButton(path_list):
 	ra_dict["HLayout"].addWidget(ra_dict["pushbutton"])
 	return ra_dict
 
-def add_label(path_list, remote_attribute):
+def add_label( path_list, remote_attribute):
 	ra_dict = {}
 	ra_dict["label"] = QtWidgets.QLabel()
 	ra_dict["label"].setObjectName(path_list[0])
@@ -144,11 +144,9 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 
 	def dropEvent(self, event):
 		print("drop event")
-
 		subwindow_dict = {}
 
 		for index in event.source().selectedIndexes():
-
 			subwindow_list = find_parents_list(index)
 
 			centralWidget = QtWidgets.QWidget(self)
@@ -167,35 +165,76 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 				spinBox_list = []
 				for row in range(0,cr.rowCount()):
 					print("1 - " + cr.child(row,0).text())
+
 					if cr.child(row, 0).hasChildren():
+						subgroupBox =  QtWidgets.QGroupBox(centralWidget)
+						subgroupBox.setObjectName(cr.child(row,0).text())
+						subgroupBox.setTitle(cr.child(row,0).text())
+						subgroupBox_layout = QtWidgets.QGridLayout(subgroupBox)
+						# self.groupBox = QtWidgets.QGroupBox(self.centralWidget)
+				        # self.groupBox.setObjectName("groupBox")
+				        # self.gridLayout_3 = QtWidgets.QGridLayout(self.groupBox)
 						for sub_child in range(0, cr.child(row,0).rowCount()):
 							print("2 - " + cr.child(row,0).child(sub_child,0).text())
+
 							if cr.child(row,0).child(sub_child,0).hasChildren():
 								for sub2_child in range(0, cr.child(row,0).child(sub_child,0).rowCount()):
 									print("3 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
+
 									if cr.child(row,0).child(sub_child,0).child(sub2_child,0).hasChildren():
 										for sub3_child in range(0, cr.child(row,0).child(sub_child,0).child(sub2_child,0).rowCount()):
 											print("4 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).text())
+
 											if cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).hasChildren():
 												for sub4_child in range(0, cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).rowCount()):
 													print("5 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).child(sub4_child,0).text())
+							else:
+								print("2 no children")
+								sub3_window_list = []
+								sub3_window_list.clear()
+								sub3_window_list = subwindow_list.copy()
+								sub3_window_list.insert(0,cr.child(row,0).text())
+								sub3_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
+								subwindow_dict3 = add_single_layout_line(sub3_window_list, self.my_drive)
+								print(sub3_window_list)
+								# subgroupBox_layout.
+								# subgroupBox_layout.addWidget(subwindow_dict3["layout"]["label"], sub_child,0,1,1)
+								# subgroupBox_layout.addWidget(subwindow_dict3["layout"]["value"], sub_child,1,1,1)
+								if "value" in subwindow_dict3["layout"]:
+									subgroupBox_layout.addWidget(subwindow_dict3["layout"]["label"], sub_child,0,1,1)
+									subgroupBox_layout.addWidget(subwindow_dict3["layout"]["value"], sub_child,1,1,1)
+								elif "pushbutton" in subwindow_dict3["layout"]:
+									subgroupBox_layout.addWidget(subwindow_dict3["layout"]["pushbutton"], sub_child,0,1,2)
+						gridLayout.addWidget(subgroupBox,row,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
+								# subwindow_dict3
 					else:
 						print("1 no children")
 						sub2_window_list = []
 						sub2_window_list.clear()
 						sub2_window_list = subwindow_list.copy()
 						sub2_window_list.insert(0,cr.child(row,0).text())
-						print(sub2_window_list)
+						# print(sub2_window_list)
 						subwindow_dict2 = add_single_layout_line(sub2_window_list, self.my_drive)
 						# print(subwindow_dict2)
-						gridLayout.addLayout(subwindow_dict2["layout"]["HLayout"], row,0,1,1)
+						# gridLayout.addRow(subwindow_dict2["layout"]["HLayout"], row,0,1,1)
+						# gridLayout.addLayout(subwindow_dict2["layout"]["HLayout"], row,0,1,-1)
+						if "value" in subwindow_dict2["layout"]:
+							gridLayout.addWidget(subwindow_dict2["layout"]["label"], row,0,1,1)
+							gridLayout.addWidget(subwindow_dict2["layout"]["value"], row,1,1,1)
+						elif "pushbutton" in subwindow_dict2["layout"]:
+							gridLayout.addWidget(subwindow_dict2["layout"]["pushbutton"], row,0,1,2)
 			else:
 				print("0 no children")
-				subwindow_dict = add_single_layout_line(subwindow_list, self.my_drive)
-
+				if subwindow_list[0] not in version_ignore_list:
+					subwindow_dict = add_single_layout_line(subwindow_list, self.my_drive)
+					gridLayout.addLayout(subwindow_dict["layout"]["HLayout"],0,0,1,2)
+				else:
+					print("HW")
+				# gridLayout.addWidget(subwindow_dict["layout"]["label"], 0,0,1,1)
+				# gridLayout.addWidget(subwindow_dict["layout"]["value"], 0,1,1,1)
 
 				# for item in range(0, len(label_list)):
-				gridLayout.addLayout(subwindow_dict["layout"]["HLayout"], 0,0,1,1)
+				# gridLayout.addLayout(subwindow_dict["layout"]["HLayout"], 0,0,1,1)
 				# if "pushbutton" in ra_dict:
 				# 	gridLayout.addLayout(ra_dict["layout"]["HLayout"], 0,0,1,1)
 				# elif "spinbox" in ra_dict:
@@ -367,8 +406,13 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		# self.mdiArea.setAcceptDrops(True)
 
 		self.testmdi = CustomMDIArea(self)
+		# self.s1 = QtWidgets.QScrollBar()
+		self.testmdi.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+		self.testmdi.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+		# self.testmdi.addWidget(self.s1)
+		# self.testmdi.setScrollBarPolicy()
 		self.testmdi.odrive_request_sig.connect(self.odrive_requested)
-		self.gridLayout.addWidget(self.testmdi, 0, 2, 1, 1)
+		self.gridLayout.addWidget(self.testmdi, 0, 2, -1, 1)
 
 		self.odrive_connect()
 		# self.mdiArea.dragMoveEvent(QtGui.QDragMoveEvent())
@@ -428,9 +472,10 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		# ignore_list = ["test_property", "test_function", "fw_version_revision", "fw_version_major", "fw_version_minor", "enter_dfu_mode",
 		# 				"save_configuration", "erase_configuration", "get_oscilloscope_val", "hw_version_major", "hw_version_minor", "fw_version_unreleased",
 		# 				"hw_version_variant", "reboot", "get_adc_voltage"]
-		ignore_list = ["test_property", "test_function", "fw_version_revision", "fw_version_major", "fw_version_minor", "enter_dfu_mode",
-						"get_oscilloscope_val", "hw_version_major", "hw_version_minor", "fw_version_unreleased",
-						"hw_version_variant", "get_adc_voltage"]
+		# ignore_list = ["test_property", "test_function", "fw_version_revision", "fw_version_major", "fw_version_minor", "enter_dfu_mode",
+		# 				"get_oscilloscope_val", "hw_version_major", "hw_version_minor", "fw_version_unreleased",
+		# 				"hw_version_variant", "get_adc_voltage"]
+
 		# axis_attribute_list = []
 		model = QtGui.QStandardItemModel(0, 1, self)
 		model.setHeaderData(0, QtCore.Qt.Horizontal, "Odrive")
@@ -465,7 +510,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 					# elif
 				item.appendRow(child)
 			else:
-				if key not in ignore_list:
+				if key not in version_ignore_list:
 					child = QtGui.QStandardItem(key)
 					item.appendRow(child)
 

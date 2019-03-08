@@ -351,12 +351,28 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 									print("3 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
 
 									if cr.child(row,0).child(sub_child,0).child(sub2_child,0).hasChildren():
+										subgroupBox3 =  QtWidgets.QGroupBox(subgroupBox2)
+										subgroupBox3.setObjectName(cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
+										subgroupBox3.setTitle(cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
+										subgroupBox3_layout = QtWidgets.QGridLayout(subgroupBox3)
 										for sub3_child in range(0, cr.child(row,0).child(sub_child,0).child(sub2_child,0).rowCount()):
 											print("4 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).text())
 
 											if cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).hasChildren():
 												for sub4_child in range(0, cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).rowCount()):
 													print("5 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).child(sub4_child,0).text())
+											else:
+												print("4 no children")
+												sub5_window_list = []
+												sub5_window_list.clear()
+												sub5_window_list = subwindow_list.copy()
+												sub5_window_list.insert(0,cr.child(row,0).text())
+												sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
+												sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
+												sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).text())
+												subwindow_dict5 = add_single_layout_line(sub5_window_list, self.my_drive)
+												setup_line_items(subgroupBox3_layout, subwindow_dict5, sub3_child)
+										subgroupBox2_layout.addWidget(subgroupBox3,sub2_child,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
 									else:
 										print("3 no children")
 										sub4_window_list = []

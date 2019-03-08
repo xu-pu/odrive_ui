@@ -51,28 +51,55 @@ def find_parents_list(index):
 def add_single_layout_line( path_list, my_drive):
 	ra_dict = {}
 
-	if len(path_list) == 2:
-		if isinstance(my_drive._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
-			ra_dict["layout"] = add_pushButton( path_list)
-		elif isinstance(my_drive._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
-			ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[0]])
-	elif len(path_list) == 3:
-		if isinstance(my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
-			ra_dict["layout"] = add_pushButton( path_list)
-		elif isinstance(my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
-			ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
-	elif len(path_list) == 4:
-		if isinstance(my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
-			ra_dict["layout"] = add_pushButton( path_list)
-		elif isinstance(my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
-			ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
-	elif len(path_list) == 5:
-		if isinstance(my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
-			ra_dict["layout"] = add_pushButton( path_list)
-		elif isinstance(my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
-			ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
-
+	if path_list[1] == "config":
+		if len(path_list) == 2:
+			ra_dict["layout"] = add_config_item( path_list, my_drive._remote_attributes[path_list[0]])
+		elif len(path_list) == 3:
+			ra_dict["layout"] = add_config_item( path_list, my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+		elif len(path_list) == 4:
+			ra_dict["layout"] = add_config_item( path_list, my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+		elif len(path_list) == 5:
+			ra_dict["layout"] = add_config_item( path_list, my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+	else:
+		if len(path_list) == 2:
+			if isinstance(my_drive._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
+				ra_dict["layout"] = add_pushButton( path_list)
+			elif isinstance(my_drive._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
+				ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[0]])
+		elif len(path_list) == 3:
+			if isinstance(my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
+				ra_dict["layout"] = add_pushButton( path_list)
+			elif isinstance(my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
+				ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+		elif len(path_list) == 4:
+			if isinstance(my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
+				ra_dict["layout"] = add_pushButton( path_list)
+			elif isinstance(my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
+				ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+		elif len(path_list) == 5:
+			if isinstance(my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
+				ra_dict["layout"] = add_pushButton( path_list)
+			elif isinstance(my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]], fibre.remote_object.RemoteProperty):
+				ra_dict["layout"] = add_label( path_list, my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
 	return ra_dict
+
+def setup_line_items(grid_layout, subwindow_dict, row):
+	if subwindow_dict["layout"]["type"] == "label":
+		grid_layout.addWidget(subwindow_dict["layout"]["label"], row,0,1,1)
+		grid_layout.addWidget(subwindow_dict["layout"]["value"], row,1,1,1)
+	elif subwindow_dict["layout"]["type"] == "pushbutton":
+		grid_layout.addWidget(subwindow_dict["layout"]["pushbutton"], row,0,1,2)
+	elif subwindow_dict["layout"]["type"] == "float":
+		grid_layout.addWidget(subwindow_dict["layout"]["label"], row,0,1,1)
+		grid_layout.addWidget(subwindow_dict["layout"]["slider"], row,1,1,1)
+		grid_layout.addWidget(subwindow_dict["layout"]["value"], row,2,1,1)
+	elif subwindow_dict["layout"]["type"] == "int":
+		grid_layout.addWidget(subwindow_dict["layout"]["label"], row,0,1,1)
+		grid_layout.addWidget(subwindow_dict["layout"]["slider"], row,1,1,1)
+		grid_layout.addWidget(subwindow_dict["layout"]["value"], row,2,1,1)
+	elif subwindow_dict["layout"]["type"] == "bool":
+		grid_layout.addWidget(subwindow_dict["layout"]["label"], row,0,1,1)
+		grid_layout.addLayout(subwindow_dict["layout"]["HLayout"], row,2,1,-1)
 
 def add_config_float():
 	pass
@@ -85,6 +112,7 @@ def add_config_bool():
 
 def add_pushButton( path_list):
 	ra_dict = {}
+	ra_dict["type"] = "pushbutton"
 	ra_dict["pushbutton"] = QtWidgets.QPushButton()
 	ra_dict["pushbutton"].setObjectName(path_list[0])
 	ra_dict["pushbutton"].setText(path_list[0])
@@ -92,8 +120,117 @@ def add_pushButton( path_list):
 	ra_dict["HLayout"].addWidget(ra_dict["pushbutton"])
 	return ra_dict
 
+def add_config_item( path_list, remote_attribute):
+	ra_dict = {}
+	ra_dict["value_path"] = remote_attribute
+
+	ra_dict["label"] = QtWidgets.QLabel()
+	ra_dict["label"].setObjectName(path_list[0])
+	ra_dict["label"].setText(path_list[0])
+	ra_dict["HLayout"] = QtWidgets.QHBoxLayout()
+	# ra_dict["HLayout"].addWidget(ra_dict["label"])
+
+	ra_value = remote_attribute.get_value()
+	if type(ra_value) == float:
+		ra_dict["type"] = "float"
+		ra_dict["value"] = QtWidgets.QDoubleSpinBox()
+		ra_dict["value"].setValue(ra_value)
+		ra_dict["slider"] = QtWidgets.QSlider()
+		ra_dict["slider"].setOrientation(QtCore.Qt.Horizontal)
+		ra_dict["slider"].setMaximum(10)
+		ra_dict["slider"].setMinimum(2)
+		ra_dict["slider"].setSingleStep(0.2)
+		ra_dict["slider"].setValue(5)
+		ra_dict["HLayout"].addWidget(ra_dict["slider"])
+		ra_dict["HLayout"].addWidget(ra_dict["value"])
+
+		#TODO add signals of value changed on slider to change it inside sliderbox
+	elif type(ra_value) == int:
+		ra_dict["type"] = "int"
+		ra_dict["value"] = QtWidgets.QSpinBox()
+		ra_dict["value"].setValue(ra_value)
+		ra_dict["slider"] = QtWidgets.QSlider()
+		ra_dict["slider"].setOrientation(QtCore.Qt.Horizontal)
+		ra_dict["slider"].setMaximum(10)
+		ra_dict["slider"].setMinimum(2)
+		ra_dict["slider"].setSingleStep(0.2)
+		ra_dict["slider"].setValue(5)
+		ra_dict["HLayout"].addWidget(ra_dict["slider"])
+		ra_dict["HLayout"].addWidget(ra_dict["value"])
+
+	elif type(ra_value) == bool:
+		ra_dict["type"] = "bool"
+		ra_dict["radiobutton_t"] = QtWidgets.QRadioButton()
+		ra_dict["radiobutton_f"] = QtWidgets.QRadioButton()
+		icon_false = QtGui.QIcon()
+		icon_false.addPixmap(QtGui.QPixmap("Icons/False.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+		icon_true = QtGui.QIcon()
+		icon_true.addPixmap(QtGui.QPixmap("Icons/True.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+		ra_dict["radiobutton_t"].setIcon(icon_true)
+		ra_dict["radiobutton_f"].setIcon(icon_false)
+		ra_dict["buttonGroup"] = QtWidgets.QButtonGroup(ra_dict["HLayout"]) #
+		ra_dict["buttonGroup"].addButton(ra_dict["radiobutton_t"])
+		ra_dict["buttonGroup"].addButton(ra_dict["radiobutton_f"])
+		ra_dict["HLayout"].addWidget(ra_dict["radiobutton_t"])
+		ra_dict["HLayout"].addWidget(ra_dict["radiobutton_f"])
+		if ra_value:
+			ra_dict["radiobutton_t"].setChecked(True)
+		else:
+			ra_dict["radiobutton_f"].setChecked(True)
+		# pixmap_false = QtGui.QPixmap("Icons/False.jpg")
+		# pixmap_true = QtGui.QPixmap("Icons/True.jpg")
+		# ra_dict["value"] = QtWidgets.QLabel()
+		# if ra_value:
+		# 	ra_dict["value"].setPixmap(pixmap_true)
+		# else:
+		# 	ra_dict["value"].setPixmap(pixmap_false)
+		# ra_dict["HLayout"].addWidget(ra_dict["value"])
+	return ra_dict
+
+
+	# ra_dict["radiobutton_t"].setIcon(icon_true)
+	# ra_dict["radiobutton_f"].setIcon(icon_false)
+	# ra_dict["HLayout"] = QtWidgets.QHBoxLayout()
+	# # HLayout = QtWidgets.QHBoxLayout()
+	# buttonGroup = QtWidgets.QButtonGroup(centralWidget)
+	# buttonGroup.addButton(ra_dict["radiobutton_t"])
+	# buttonGroup.addButton(ra_dict["radiobutton_f"])
+	# ra_dict["HLayout"].addWidget(ra_dict["label"])
+	# ra_dict["HLayout"].addWidget(ra_dict["radiobutton_t"])
+	# ra_dict["HLayout"].addWidget(ra_dict["radiobutton_f"])
+
+	# self.HLayout = QtWidgets.QHBoxLayout()
+	# self.HLayout.setSpacing(6)
+	# self.HLayout.setObjectName("HLayout")
+	# self.radioButton_t = QtWidgets.QRadioButton(self.centralWidget)
+	# self.radioButton_t.setText("")
+	# self.radioButton_t.setIcon(icon)
+	# self.radioButton_t.setObjectName("radioButton_t")
+	# self.buttonGroup = QtWidgets.QButtonGroup(MainWindow)
+	# self.buttonGroup.setObjectName("buttonGroup")
+	# self.buttonGroup.addButton(self.radioButton_t)
+	# self.HLayout.addWidget(self.radioButton_t)
+
+	# self.buttonGroup = QtWidgets.QButtonGroup(MainWindow)
+	# self.buttonGroup.setObjectName("buttonGroup")
+	# self.buttonGroup.addButton(self.radioButton_t)
+	# # ra_dict["slider"].setOrientation(QtCore.Qt.Horizontal)
+
+					# print(cr.child(row,0).model().itemFromIndex(child_index))
+					# print(cr.child(row,0).model().itemFromIndex(child_index).text())
+					# subwindow_list.append(i3.model().itemFromIndex(i3).text())
+				# 	print(cr.child(row,0).text())
+				# 	label_list.append(QtWidgets.QLabel())
+				# 	spinBox_list.append(QtWidgets.QDoubleSpinBox())
+				# 	# self.axis1Velocity_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.frame_2)
+				# 	# spinBox_list[row]
+				# 	label_list[row].setObjectName(cr.child(row,0).text())
+				# 	label_list[row].setText(cr.child(row,0).text())
+				#
+
 def add_label( path_list, remote_attribute):
 	ra_dict = {}
+	ra_dict["type"] = "label"
 	ra_dict["label"] = QtWidgets.QLabel()
 	ra_dict["label"].setObjectName(path_list[0])
 	ra_dict["label"].setText(path_list[0])
@@ -117,6 +254,34 @@ def add_label( path_list, remote_attribute):
 	ra_dict["HLayout"].addWidget(ra_dict["label"])
 	ra_dict["HLayout"].addWidget(ra_dict["value"])
 	return ra_dict
+
+def add_fw_hw_label(my_drive, version_type):
+	ra_dict = {}
+	ra_d = my_drive._remote_attributes
+	if version_type == "firmware":
+		version_str = str(ra_d["fw_version_major"].get_value()) + "." + str(ra_d["fw_version_minor"].get_value()) + "." + str(ra_d["fw_version_revision"].get_value())
+		label_str = "fw_version"
+	elif version_type == "hardware":
+		version_str = str(ra_d["hw_version_major"].get_value()) + "." + str(ra_d["hw_version_minor"].get_value()) + "." + str(ra_d["hw_version_variant"].get_value())
+		label_str = "hw_version"
+
+	ra_dict["label"] = QtWidgets.QLabel()
+	ra_dict["label"].setObjectName(label_str)
+	ra_dict["label"].setText(label_str)
+	ra_dict["value"] = QtWidgets.QLabel()
+	ra_dict["value"].setText(version_str)
+	ra_dict["HLayout"] = QtWidgets.QHBoxLayout()
+	ra_dict["HLayout"].addWidget(ra_dict["label"])
+	ra_dict["HLayout"].addWidget(ra_dict["value"])
+	return ra_dict
+
+def check_version_type(label_list, my_drive):
+	label_dict = {}
+	if label_list[0] == "fw_version":
+		label_dict = add_fw_hw_label(my_drive, "firmware")
+	elif label_list[0] == "hw_version":
+		label_dict = add_fw_hw_label(my_drive, "hardware")
+	return label_dict
 
 class CustomMDIArea(QtWidgets.QMdiArea):
 	odrive_request_sig = QtCore.pyqtSignal()
@@ -178,6 +343,10 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 							print("2 - " + cr.child(row,0).child(sub_child,0).text())
 
 							if cr.child(row,0).child(sub_child,0).hasChildren():
+								subgroupBox2 =  QtWidgets.QGroupBox(subgroupBox)
+								subgroupBox2.setObjectName(cr.child(row,0).child(sub_child,0).text())
+								subgroupBox2.setTitle(cr.child(row,0).child(sub_child,0).text())
+								subgroupBox2_layout = QtWidgets.QGridLayout(subgroupBox2)
 								for sub2_child in range(0, cr.child(row,0).child(sub_child,0).rowCount()):
 									print("3 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
 
@@ -188,6 +357,18 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 											if cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).hasChildren():
 												for sub4_child in range(0, cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).rowCount()):
 													print("5 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).child(sub4_child,0).text())
+									else:
+										print("3 no children")
+										sub4_window_list = []
+										sub4_window_list.clear()
+										sub4_window_list = subwindow_list.copy()
+										sub4_window_list.insert(0,cr.child(row,0).text())
+										sub4_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
+										sub4_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
+										subwindow_dict4 = add_single_layout_line(sub4_window_list, self.my_drive)
+										setup_line_items(subgroupBox2_layout, subwindow_dict4, sub2_child)
+								subgroupBox_layout.addWidget(subgroupBox2,sub_child,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
+
 							else:
 								print("2 no children")
 								sub3_window_list = []
@@ -196,190 +377,32 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 								sub3_window_list.insert(0,cr.child(row,0).text())
 								sub3_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
 								subwindow_dict3 = add_single_layout_line(sub3_window_list, self.my_drive)
-								print(sub3_window_list)
-								# subgroupBox_layout.
-								# subgroupBox_layout.addWidget(subwindow_dict3["layout"]["label"], sub_child,0,1,1)
-								# subgroupBox_layout.addWidget(subwindow_dict3["layout"]["value"], sub_child,1,1,1)
-								if "value" in subwindow_dict3["layout"]:
-									subgroupBox_layout.addWidget(subwindow_dict3["layout"]["label"], sub_child,0,1,1)
-									subgroupBox_layout.addWidget(subwindow_dict3["layout"]["value"], sub_child,1,1,1)
-								elif "pushbutton" in subwindow_dict3["layout"]:
-									subgroupBox_layout.addWidget(subwindow_dict3["layout"]["pushbutton"], sub_child,0,1,2)
+								setup_line_items(subgroupBox_layout, subwindow_dict3, sub_child)
 						gridLayout.addWidget(subgroupBox,row,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
-								# subwindow_dict3
 					else:
 						print("1 no children")
 						sub2_window_list = []
 						sub2_window_list.clear()
 						sub2_window_list = subwindow_list.copy()
 						sub2_window_list.insert(0,cr.child(row,0).text())
-						# print(sub2_window_list)
-						subwindow_dict2 = add_single_layout_line(sub2_window_list, self.my_drive)
-						# print(subwindow_dict2)
-						# gridLayout.addRow(subwindow_dict2["layout"]["HLayout"], row,0,1,1)
-						# gridLayout.addLayout(subwindow_dict2["layout"]["HLayout"], row,0,1,-1)
-						if "value" in subwindow_dict2["layout"]:
-							gridLayout.addWidget(subwindow_dict2["layout"]["label"], row,0,1,1)
-							gridLayout.addWidget(subwindow_dict2["layout"]["value"], row,1,1,1)
-						elif "pushbutton" in subwindow_dict2["layout"]:
-							gridLayout.addWidget(subwindow_dict2["layout"]["pushbutton"], row,0,1,2)
+						if sub2_window_list[0] in ["fw_version", "hw_version"]:
+							subwindow_dict2 = check_version_type(sub2_window_list, self.my_drive)
+							gridLayout.addWidget(subwindow_dict2["label"], row,0,1,1)
+							gridLayout.addWidget(subwindow_dict2["value"], row,1,1,1)
+						else:
+							subwindow_dict2 = add_single_layout_line(sub2_window_list, self.my_drive)
+							setup_line_items(gridLayout, subwindow_dict2, row)
 			else:
 				print("0 no children")
-				if subwindow_list[0] not in version_ignore_list:
-					subwindow_dict = add_single_layout_line(subwindow_list, self.my_drive)
-					gridLayout.addLayout(subwindow_dict["layout"]["HLayout"],0,0,1,2)
+				if subwindow_list[0] in ["fw_version", "hw_version"]:
+					fw_dict = check_version_type(subwindow_list, self.my_drive)
+					gridLayout.addLayout(fw_dict["HLayout"],0,0,1,2)
 				else:
-					print("HW")
+					subwindow_dict = add_single_layout_line(subwindow_list, self.my_drive)
+					gridLayout.addLayout(subwindow_dict["layout"]["HLayout"],0,0,1,-1)
 				# gridLayout.addWidget(subwindow_dict["layout"]["label"], 0,0,1,1)
 				# gridLayout.addWidget(subwindow_dict["layout"]["value"], 0,1,1,1)
-
-				# for item in range(0, len(label_list)):
-				# gridLayout.addLayout(subwindow_dict["layout"]["HLayout"], 0,0,1,1)
-				# if "pushbutton" in ra_dict:
-				# 	gridLayout.addLayout(ra_dict["layout"]["HLayout"], 0,0,1,1)
-				# elif "spinbox" in ra_dict:
-				# 	gridLayout.addWidget(ra_dict["label"], 0,0,1,1)
-				# 	gridLayout.addWidget(ra_dict["spinbox"], 0,2,1,1)
-				# 	gridLayout.addWidget(ra_dict["slider"], 0,1,1,1)
-				# elif "doublespinbox" in ra_dict:
-				# 	gridLayout.addWidget(ra_dict["label"], 0,0,1,1)
-				# 	gridLayout.addWidget(ra_dict["doublespinbox"], 0,2,1,1)
-				# 	gridLayout.addWidget(ra_dict["slider"], 0,1,1,1)
-				# elif "radiobutton_t" in ra_dict:
-				# 	gridLayout.addLayout(ra_dict["HLayout"], 0,0,1,1)
 			self.addSubWindow(centralWidget).show()
-
-# ra_dict["label"] = QtWidgets.QLabel()
-# ra_dict["label"].setObjectName(subwindow_list[0])
-# ra_dict["label"].setText(subwindow_list[0])
-# if isinstance(self.my_drive._remote_attributes[subwindow_list[0]].get_value(), float):
-# 	# ra_dict["doublespinbox"] = QtWidgets.QDoubleSpinBox()
-# 	# ra_dict["slider"] = QtWidgets.QSlider()
-# 	# ra_dict["slider"].setOrientation(QtCore.Qt.Horizontal)
-# # elif isinstance(self.my_drive._remote_attributes[subwindow_list[0]].get_value(), int):
-# elif type(self.my_drive._remote_attributes[subwindow_list[0]].get_value()) == type(int):
-# 	# print(type(self.my_drive._remote_attributes[subwindow_list[0]].get_value()))
-# 	# ra_dict["spinbox"] = QtWidgets.QSpinBox()
-# 	# ra_dict["slider"] = QtWidgets.QSlider()
-# 	# ra_dict["slider"].setOrientation(QtCore.Qt.Horizontal)
-# elif isinstance(self.my_drive._remote_attributes[subwindow_list[0]].get_value(), bool):
-	# print(type(self.my_drive._remote_attributes[subwindow_list[0]].get_value()))
-
-	# ra_dict["radiobutton_t"] = QtWidgets.QRadioButton()
-	# ra_dict["radiobutton_f"] = QtWidgets.QRadioButton()
-	# icon_false = QtGui.QIcon()
-	# icon_false.addPixmap(QtGui.QPixmap("Icons/False.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-	# icon_true = QtGui.QIcon()
-	# icon_true.addPixmap(QtGui.QPixmap("Icons/True.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-	# ra_dict["radiobutton_t"].setIcon(icon_true)
-	# ra_dict["radiobutton_f"].setIcon(icon_false)
-	# ra_dict["HLayout"] = QtWidgets.QHBoxLayout()
-	# # HLayout = QtWidgets.QHBoxLayout()
-	# buttonGroup = QtWidgets.QButtonGroup(centralWidget)
-	# buttonGroup.addButton(ra_dict["radiobutton_t"])
-	# buttonGroup.addButton(ra_dict["radiobutton_f"])
-	# ra_dict["HLayout"].addWidget(ra_dict["label"])
-	# ra_dict["HLayout"].addWidget(ra_dict["radiobutton_t"])
-	# ra_dict["HLayout"].addWidget(ra_dict["radiobutton_f"])
-
-
-
-	# self.HLayout = QtWidgets.QHBoxLayout()
-	# self.HLayout.setSpacing(6)
-	# self.HLayout.setObjectName("HLayout")
-	# self.radioButton_t = QtWidgets.QRadioButton(self.centralWidget)
-	# self.radioButton_t.setText("")
-	# self.radioButton_t.setIcon(icon)
-	# self.radioButton_t.setObjectName("radioButton_t")
-	# self.buttonGroup = QtWidgets.QButtonGroup(MainWindow)
-	# self.buttonGroup.setObjectName("buttonGroup")
-	# self.buttonGroup.addButton(self.radioButton_t)
-	# self.HLayout.addWidget(self.radioButton_t)
-
-	# self.buttonGroup = QtWidgets.QButtonGroup(MainWindow)
-	# self.buttonGroup.setObjectName("buttonGroup")
-	# self.buttonGroup.addButton(self.radioButton_t)
-	# # ra_dict["slider"].setOrientation(QtCore.Qt.Horizontal)
-
-					# print(cr.child(row,0).model().itemFromIndex(child_index))
-					# print(cr.child(row,0).model().itemFromIndex(child_index).text())
-					# subwindow_list.append(i3.model().itemFromIndex(i3).text())
-				# 	print(cr.child(row,0).text())
-				# 	label_list.append(QtWidgets.QLabel())
-				# 	spinBox_list.append(QtWidgets.QDoubleSpinBox())
-				# 	# self.axis1Velocity_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.frame_2)
-				# 	# spinBox_list[row]
-				# 	label_list[row].setObjectName(cr.child(row,0).text())
-				# 	label_list[row].setText(cr.child(row,0).text())
-				#
-				# centralWidget = QtWidgets.QWidget(self)
-				# str1 = '-'.join(subwindow_list)
-				# centralWidget.setWindowTitle(str1)
-				# gridLayout = QtWidgets.QGridLayout(centralWidget)
-				# for item in range(0, len(label_list)):
-				# 	gridLayout.addWidget(label_list[item], item,0,1,1)
-				# 	gridLayout.addWidget(spinBox_list[item], item,1,1,1)
-				# self.addSubWindow(centralWidget).show()
-
-
-
-
-
-			# print(cr.rowCount()) #on model to Model() and get TExt
-				# print(cr.model().index(0,0))
-				# first_item = cr.model().itemFromIndex(cr.model().index(0,0)).text()
-				# print(first_item)
-				# # print(cr.index(1))
-				# print(cr.index(2))
-
-		# 	print(cr.text())
-		# 	if index.parent().isValid():
-		# 		i1 = index.parent()
-		# 		print(i1.model().itemFromIndex(i1).text())
-		# 		subwindow_list.append(i1.model().itemFromIndex(i1).text())
-		# 		if i1.parent().isValid():
-		# 			i2 = i1.parent()
-		# 			print(i2.model().itemFromIndex(i2).text())
-		# 			subwindow_list.append(i2.model().itemFromIndex(i2).text())
-		# 			if i2.parent().isValid():
-		# 				i3 = i2.parent()
-		# 				print(i3.model().itemFromIndex(i3).text())
-		# 				subwindow_list.append(i3.model().itemFromIndex(i3).text())
-		# 				if i3.parent().isValid():
-		# 					i4 = i3.parent()
-		# 					print(i4.model().itemFromIndex(i4).text())
-		# 					subwindow_list.append(i4.model().itemFromIndex(i4).text())
-		#
-		# print(subwindow_list)
-		# #TODO figure out and add all children
-		# label_list = []
-		# label_list.append(QtWidgets.QLabel())
-		# label_list.append(QtWidgets.QLabel())
-		# label_list[0].setObjectName("button0")
-		# label_list[1].setObjectName("button1")
-		# label_list[1].setText("KLOL")
-		#
-		# centralWidget = QtWidgets.QWidget(self)
-		# gridLayout = QtWidgets.QGridLayout(centralWidget)
-		# gridLayout.addWidget(label_list[0], 0,0,1,1)
-		# gridLayout.addWidget(label_list[1], 1,0,1,1)
-		# self.addSubWindow(centralWidget).show()
-
-		# self.pushButton_123 = QtWidgets.QPushButton()
-		# self.pushButton_123.setObjectName("pushButton_123")
-		# self.pushButton_1223 = QtWidgets.QPushButton()
-		# self.pushButton_1223.setObjectName("pushButton_1233")
-		# self.pushButton_1233 = QtWidgets.QPushButton()
-		# self.pushButton_1233.setObjectName("pushButton_1223")
-		# self.pushButton_1233.setText("KLOL")
-		# self.centralWidget222 = QtWidgets.QWidget(self)
-		# self.gridLayout555 = QtWidgets.QGridLayout(self.centralWidget222)
-		# self.gridLayout555.addWidget(self.pushButton_123, 0,0,1,1)
-		# self.gridLayout555.addWidget(self.pushButton_1233, 1,0,1,1)
-		# self.gridLayout555.addWidget(self.pushButton_1223, 2,0,1,1)
-		# self.addSubWindow(self.centralWidget222).show()
-
-
 
 class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 
@@ -393,29 +416,18 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
 		self.quit_shortcut.activated.connect(self.close_application)
 
-		# self.treeView.setModel(self.odr_model())
 		self.treeView.setDragEnabled(True)
 		# self.treeView.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
 		# self.treeView.setAcceptDrops(True)
 		# self.treeView.setDragDropMode(QtGui.QAbstractItemView.DragOnly)
 
-		# self.pushButton_123 = QtWidgets.QPushButton()
-		# self.pushButton_123.setObjectName("pushButton_123")
-		# self.mdiArea.addSubWindow(self.pushButton_123)
-		# self.mdiArea.dropEvent(self.droping)
-		# self.mdiArea.setAcceptDrops(True)
-
 		self.testmdi = CustomMDIArea(self)
 		# self.s1 = QtWidgets.QScrollBar()
 		self.testmdi.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
 		self.testmdi.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-		# self.testmdi.addWidget(self.s1)
-		# self.testmdi.setScrollBarPolicy()
 		self.testmdi.odrive_request_sig.connect(self.odrive_requested)
 		self.gridLayout.addWidget(self.testmdi, 0, 2, -1, 1)
-
 		self.odrive_connect()
-		# self.mdiArea.dragMoveEvent(QtGui.QDragMoveEvent())
 
 	def odrive_requested(self):
 		self.testmdi.add_odrive(self.my_drive)
@@ -441,7 +453,6 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		item2 = QtGui.QStandardItem("type222")
 		model.setItem(1, 0, item2)
 		return model
-
 
 	def load_config_template(self):
 		config_template = {}
@@ -469,14 +480,6 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 
 	def setup_odrive_model(self, my_drive):
 		print("Odrive found. Setting up model.")
-		# ignore_list = ["test_property", "test_function", "fw_version_revision", "fw_version_major", "fw_version_minor", "enter_dfu_mode",
-		# 				"save_configuration", "erase_configuration", "get_oscilloscope_val", "hw_version_major", "hw_version_minor", "fw_version_unreleased",
-		# 				"hw_version_variant", "reboot", "get_adc_voltage"]
-		# ignore_list = ["test_property", "test_function", "fw_version_revision", "fw_version_major", "fw_version_minor", "enter_dfu_mode",
-		# 				"get_oscilloscope_val", "hw_version_major", "hw_version_minor", "fw_version_unreleased",
-		# 				"hw_version_variant", "get_adc_voltage"]
-
-		# axis_attribute_list = []
 		model = QtGui.QStandardItemModel(0, 1, self)
 		model.setHeaderData(0, QtCore.Qt.Horizontal, "Odrive")
 		# model.setHeaderData(1, QtCore.Qt.Horizontal, "Type")
@@ -523,14 +526,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		# self.testmdi.show()
 		return model
 
-
-
 def main():
 	app = QtWidgets.QApplication(sys.argv)  # A new instance of QApplication
 	form = ExampleApp()                 # We set the form to be our (design)
 	form.show()                         # Show the form
 	app.exec_()                         # and execute the app
-
 
 if __name__ == '__main__':              # if we're running file directly and not importing it
 	main()                              # run the main function

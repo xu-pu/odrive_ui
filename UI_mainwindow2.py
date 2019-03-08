@@ -18,9 +18,6 @@ class Ui_MainWindow(object):
         self.gridLayout.setContentsMargins(11, 11, 11, 11)
         self.gridLayout.setSpacing(6)
         self.gridLayout.setObjectName("gridLayout")
-        self.pushButton_3 = QtWidgets.QPushButton(self.centralWidget)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.gridLayout.addWidget(self.pushButton_3, 3, 0, 1, 1)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setSpacing(6)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -47,5 +44,4 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.pushButton_3.setText(_translate("MainWindow", "PushButton"))
 

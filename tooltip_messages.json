@@ -1,0 +1,5 @@
+{
+  "read_action": "Read configuration from Odrive",
+  "connect_action": "Find Any connected Odrive",
+  "write_action": "Write configuration to Odrive"
+}

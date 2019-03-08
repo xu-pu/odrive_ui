@@ -432,6 +432,12 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
 		self.quit_shortcut.activated.connect(self.close_application)
 
+
+		self.connect_to_odrive_action = self.mainToolBar.addAction("Connect")
+		self.connect_icon = QtGui.QIcon()
+		self.connect_icon.addPixmap(QtGui.QPixmap("Icons/False.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+		self.connect_to_odrive_action.setIcon(self.connect_icon)
+		self.connect_to_odrive_action.setToolTip("Yolo")
 		self.treeView.setDragEnabled(True)
 		# self.treeView.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
 		# self.treeView.setAcceptDrops(True)

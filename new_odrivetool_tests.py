@@ -3,6 +3,7 @@
 
 import sys
 import UI_mainwindow2
+import UI_settings_window
 
 import odrive
 from odrive.enums import *
@@ -430,6 +431,84 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 				# gridLayout.addWidget(subwindow_dict["layout"]["value"], 0,1,1,1)
 			self.addSubWindow(centralWidget).show()
 
+class SettingsWindow(QtWidgets.QMainWindow, UI_settings_window.Ui_MainWindow):
+	app_name = "Settings"
+	def __init__(self):
+		# Simple reason why we use it here is that it allows us to
+		# access variables, methods etc in the design.py file
+		super(self.__class__, self).__init__()
+		self.setupUi(self)  # This is defined in design.py file automatically
+							# It sets up layout and widgets that are defined
+		self.setWindowTitle(self.app_name)
+		self.settings_dict = self.open_json("settings/custom_settings.json")
+		self.a_gb_dict = {}
+		for key in self.settings_dict["odrive_config"]["axis"]:
+			print(key)
+			self.a_gb_dict[key] = {}
+			self.a_gb_dict[key]["groupBox"] = QtWidgets.QGroupBox(self.centralwidget)
+			# self.a_gb_dict[key]["groupBox"].setGeometry(QtCore.QRect(20, 20, 571, 223))
+			self.a_gb_dict[key]["groupBox"].setTitle(key)
+			self.a_gb_dict[key]["gb_layout"] = QtWidgets.QGridLayout(self.a_gb_dict[key]["groupBox"])
+			self.a_gb_dict[key]["layout"] = QtWidgets.QGridLayout()
+
+			self.a_gb_dict[key]["name_label"] = QtWidgets.QLabel(self.a_gb_dict[key]["groupBox"])
+			self.a_gb_dict[key]["name_label"].setText("Name")
+			self.a_gb_dict[key]["layout"].addWidget(self.a_gb_dict[key]["name_label"], 0, 0, 1, 1)
+
+			self.a_gb_dict[key]["min_label"] = QtWidgets.QLabel(self.a_gb_dict[key]["groupBox"])
+			self.a_gb_dict[key]["min_label"].setText("Minimum")
+			self.a_gb_dict[key]["layout"].addWidget(self.a_gb_dict[key]["min_label"], 0, 1, 1, 1)
+
+			self.a_gb_dict[key]["max_label"] = QtWidgets.QLabel(self.a_gb_dict[key]["groupBox"])
+			self.a_gb_dict[key]["max_label"].setText("Maximum")
+			self.a_gb_dict[key]["layout"].addWidget(self.a_gb_dict[key]["max_label"], 0, 2, 1, 1)
+
+			self.a_gb_dict[key]["ss_label"] = QtWidgets.QLabel(self.a_gb_dict[key]["groupBox"])
+			self.a_gb_dict[key]["ss_label"].setText("Single Step")
+			self.a_gb_dict[key]["layout"].addWidget(self.a_gb_dict[key]["ss_label"], 0, 3, 1, 1)
+
+
+
+			self.a_gb_dict[key]["item_list"] = []
+			test_n = 1 #self.settings_dict["odrive_config"]["axis"][key].index(list_item)
+			for list_item in self.settings_dict["odrive_config"]["axis"][key]:
+				item_dict = {}
+				item_dict["name"] = QtWidgets.QLabel(self.a_gb_dict[key]["groupBox"])
+				item_dict["name"].setText(list_item["name"])
+				self.a_gb_dict[key]["layout"].addWidget(item_dict["name"],test_n , 0, 1, 1)
+
+				if list_item["type"] == "float":
+					item_dict["min"] = QtWidgets.QDoubleSpinBox(self.a_gb_dict[key]["groupBox"])
+				else:
+					item_dict["min"] = QtWidgets.QSpinBox(self.a_gb_dict[key]["groupBox"])
+				item_dict["min"].setMaximum(list_item["max"])
+				item_dict["min"].setMinimum(list_item["min"])
+				item_dict["min"].setValue(list_item["slider_min"])
+				self.a_gb_dict[key]["layout"].addWidget(item_dict["min"],test_n , 1, 1, 1)
+
+				if list_item["type"] == "float":
+					item_dict["max"] = QtWidgets.QDoubleSpinBox(self.a_gb_dict[key]["groupBox"])
+				else:
+					item_dict["max"] = QtWidgets.QSpinBox(self.a_gb_dict[key]["groupBox"])
+				item_dict["max"].setMaximum(list_item["max"])
+				item_dict["max"].setMinimum(list_item["min"])
+				item_dict["max"].setValue(list_item["slider_max"])
+				self.a_gb_dict[key]["layout"].addWidget(item_dict["max"],test_n , 2, 1, 1)
+
+
+				self.a_gb_dict[key]["item_list"].append(item_dict)
+				test_n += 1
+			self.a_gb_dict[key]["gb_layout"].addLayout(self.a_gb_dict[key]["layout"], 0, 0, 1, 1)
+
+
+
+	def open_json(self, json_path):
+		json_dict = {}
+		with open(json_path) as f:
+			json_dict = json.load(f)
+		return json_dict
+
+
 class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 
 	app_name = "Odrive Tester"
@@ -440,7 +519,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		self.setupUi(self)  # This is defined in design.py file automatically
 							# It sets up layout and widgets that are defined
 
-		self.setWindowTitle("Odrive")
+		self.setWindowTitle(self.app_name)
 
 		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
 		self.quit_shortcut.activated.connect(self.close_application)
@@ -475,6 +554,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		self.settings_icon = QtGui.QIcon()
 		self.settings_icon.addPixmap(QtGui.QPixmap(ICON_SETTINGS_PATH))
 		self.settings_action.setIcon(self.settings_icon)
+		self.settings_action.triggered.connect(self.open_settings_window)
 
 		self.help_action = self.mainToolBar.addAction("Help")
 		self.help_icon = QtGui.QIcon()
@@ -495,6 +575,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		self.testmdi.odrive_request_sig.connect(self.odrive_requested)
 		self.gridLayout.addWidget(self.testmdi, 0, 2, -1, 1)
 		self.odrive_connect()
+
+	def open_settings_window(self):
+		self.settings_window = SettingsWindow()
+		self.settings_window.show()
+
 
 	def odrive_requested(self):
 		self.testmdi.add_odrive(self.my_drive)

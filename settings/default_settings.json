@@ -1,0 +1,50 @@
+{
+  "odrive_config": {
+    "axis": {
+      "config": [
+        {
+          "name": "ramp_up_distance",
+          "type": "float",
+          "min": 0.11,
+          "max": 22.1,
+          "single_step": 0.1
+        },
+        {
+          "name": "ramp_up_time",
+          "type": "float",
+          "min": 0.11,
+          "max": 22.1,
+          "single_step": 0.1
+        },
+        {
+          "name": "spin_up_current",
+          "type": "int",
+          "min": 11,
+          "max": 21,
+          "single_step": 1
+        },
+        {
+          "name": "spin_up_target_vel",
+          "type": "int",
+          "min": 11,
+          "max": 21,
+          "single_step": 1
+        },
+        {
+          "name": "counts_per_step",
+          "type": "int",
+          "min": 11,
+          "max": 21,
+          "single_step": 1
+        },
+        {
+          "name": "spin_up_acceleration",
+          "type": "int",
+          "min": 11,
+          "max": 21,
+          "single_step": 1
+        }
+      ]
+    }
+  }
+}

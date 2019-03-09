@@ -23,6 +23,16 @@ from serialThread import odriveWorker
 ICON_TRUE_PATH = "Icons/True.jpg"
 ICON_FALSE_PATH = "Icons/False.jpg"
 ICON_NOSTATE_PATH = "Icons/NoState.jpg"
+
+ICON_CONNECT_PATH = "Icons/odrive_icons/odrive_icons_Connect.png"
+ICON_HELP_PATH = "Icons/odrive_icons/odrive_icons_Help.png"
+ICON_OPEN_PATH = "Icons/odrive_icons/odrive_icons_Open.png"
+ICON_READ_CONFIG_PATH = "Icons/odrive_icons/odrive_icons_ReadConfig.png"
+ICON_SAVE_PATH = "Icons/odrive_icons/odrive_icons_Save.png"
+ICON_SETTINGS_PATH = "Icons/odrive_icons/odrive_icons_Settings.png"
+ICON_WRITE_CONFIG_PATH = "Icons/odrive_icons/odrive_icons_WriteConfig.png"
+
+
 version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_minor","hw_version_major", "hw_version_minor", "fw_version_unreleased","hw_version_variant"]
 
 def find_parents_list(index):
@@ -337,8 +347,8 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 						subgroupBox.setTitle(cr.child(row,0).text())
 						subgroupBox_layout = QtWidgets.QGridLayout(subgroupBox)
 						# self.groupBox = QtWidgets.QGroupBox(self.centralWidget)
-				        # self.groupBox.setObjectName("groupBox")
-				        # self.gridLayout_3 = QtWidgets.QGridLayout(self.groupBox)
+						# self.groupBox.setObjectName("groupBox")
+						# self.gridLayout_3 = QtWidgets.QGridLayout(self.groupBox)
 						for sub_child in range(0, cr.child(row,0).rowCount()):
 							print("2 - " + cr.child(row,0).child(sub_child,0).text())
 
@@ -429,16 +439,51 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		super(self.__class__, self).__init__()
 		self.setupUi(self)  # This is defined in design.py file automatically
 							# It sets up layout and widgets that are defined
+
+		self.setWindowTitle("Odrive")
+
 		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
 		self.quit_shortcut.activated.connect(self.close_application)
 
-
-		self.connect_to_odrive_action = self.mainToolBar.addAction("Connect")
+		self.connect_to_odrive_action = self.mainToolBar.addAction("Connect to Odrive")
 		self.connect_icon = QtGui.QIcon()
-		self.connect_icon.addPixmap(QtGui.QPixmap("Icons/False.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+		self.connect_icon.addPixmap(QtGui.QPixmap(ICON_CONNECT_PATH), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 		self.connect_to_odrive_action.setIcon(self.connect_icon)
-		self.connect_to_odrive_action.setToolTip("Yolo")
+		self.connect_to_odrive_action.triggered.connect(self.odrive_connect)
+
+		self.save_action = self.mainToolBar.addAction("Save")
+		self.save_icon = QtGui.QIcon()
+		self.save_icon.addPixmap(QtGui.QPixmap(ICON_SAVE_PATH))
+		self.save_action.setIcon(self.save_icon)
+
+		self.open_action = self.mainToolBar.addAction("Open")
+		self.open_icon = QtGui.QIcon()
+		self.open_icon.addPixmap(QtGui.QPixmap(ICON_OPEN_PATH))
+		self.open_action.setIcon(self.open_icon)
+
+		self.read_config_action = self.mainToolBar.addAction("Read configuration")
+		self.read_config_icon = QtGui.QIcon()
+		self.read_config_icon.addPixmap(QtGui.QPixmap(ICON_READ_CONFIG_PATH))
+		self.read_config_action.setIcon(self.read_config_icon)
+
+		self.write_config_action = self.mainToolBar.addAction("Write configuration")
+		self.write_config_icon = QtGui.QIcon()
+		self.write_config_icon.addPixmap(QtGui.QPixmap(ICON_WRITE_CONFIG_PATH))
+		self.write_config_action.setIcon(self.write_config_icon)
+
+		self.settings_action = self.mainToolBar.addAction("Settings")
+		self.settings_icon = QtGui.QIcon()
+		self.settings_icon.addPixmap(QtGui.QPixmap(ICON_SETTINGS_PATH))
+		self.settings_action.setIcon(self.settings_icon)
+
+		self.help_action = self.mainToolBar.addAction("Help")
+		self.help_icon = QtGui.QIcon()
+		self.help_icon.addPixmap(QtGui.QPixmap(ICON_HELP_PATH))
+		self.help_action.setIcon(self.help_icon)
+
 		self.treeView.setDragEnabled(True)
+		self.treeView.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+		self.treeView.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
 		# self.treeView.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
 		# self.treeView.setAcceptDrops(True)
 		# self.treeView.setDragDropMode(QtGui.QAbstractItemView.DragOnly)
@@ -491,11 +536,14 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		sys.exit()
 
 	def odrive_connect(self):
+		# print("connecting")
+		self.statusBar.showMessage("Connecting...")
 		self.odrive_worker = odriveWorker()
 		self.odrive_worker.odrive_found_sig.connect(self.odrive_connected)
 		self.odrive_worker.start()
 
 	def odrive_connected(self, my_drive):
+		self.statusBar.showMessage("Connected!", 5000)
 		self.my_drive = my_drive
 		self.testmdi.add_odrive(self.my_drive)
 		self.treeView.setModel(self.setup_odrive_model(my_drive))

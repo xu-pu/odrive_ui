@@ -1,68 +1,333 @@
 {
   "odrive_config": {
-    "axis": {
-      "config": [
-        {
-          "name": "ramp_up_distance",
-          "type": "float",
-          "min": 0.11,
-          "max": 22.1,
-          "slider_min": 0.1,
-          "slider_max": 0.1,
-          "slider_step": 0.1,
-          "step": 0.1
-        },
-        {
-          "name": "ramp_up_time",
-          "type": "float",
-          "min": 0.11,
-          "max": 22.1,
-          "slider_min": 0.1,
-          "slider_max": 0.1,
-          "slider_step": 0.1,
-          "step": 0.1
-        },
-        {
-          "name": "spin_up_current",
-          "type": "int",
-          "min": 11,
-          "max": 21,
-          "slider_min": 1,
-          "slider_max": 1,
-          "slider_step": 1,
-          "step": 1
-        },
-        {
-          "name": "spin_up_target_vel",
-          "type": "int",
-          "min": 11,
-          "max": 21,
-          "slider_min": 1,
-          "slider_max": 1,
-          "slider_step": 1,
-          "step": 1
-        },
-        {
-          "name": "counts_per_step",
-          "type": "int",
-          "min": 11,
-          "max": 21,
-          "slider_min": 1,
-          "slider_max": 1,
-          "slider_step": 1,
-          "step": 1
-        },
-        {
-          "name": "spin_up_acceleration",
-          "type": "int",
-          "min": 11,
-          "max": 21,
-          "slider_min": 1,
-          "slider_max": 1,
-          "slider_step": 1,
-          "step": 1
-        }
-      ]
-    }
+    "config": [
+      {
+        "name": "ramp_up_distance",
+        "type": "float",
+        "min": 0.000001,
+        "max": 1000,
+        "slider_min": 6,
+        "slider_max": 18,
+        "slider_step": 0.1,
+        "step": 0.0001,
+        "decimals": 10
+      },
+      {
+        "name": "ramp_up_time",
+        "type": "float",
+        "min": 0.11,
+        "max": 22.1,
+        "slider_min": 0.1,
+        "slider_max": 0.1,
+        "slider_step": 0.1,
+        "step": 0.1,
+        "decimals": 10
+      },
+      {
+        "name": "spin_up_current",
+        "type": "int",
+        "min": 1,
+        "max": 100,
+        "slider_min": 5,
+        "slider_max": 15,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "spin_up_target_vel",
+        "type": "int",
+        "min": 1,
+        "max": 10000,
+        "slider_min": 200,
+        "slider_max": 600,
+        "slider_step": 10,
+        "step": 1
+      },
+      {
+        "name": "counts_per_step",
+        "type": "int",
+        "min": 1,
+        "max": 1000,
+        "slider_min": 1,
+        "slider_max": 4,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "spin_up_acceleration",
+        "type": "int",
+        "min": 1,
+        "max": 10000,
+        "slider_min": 200,
+        "slider_max": 600,
+        "slider_step": 10,
+        "step": 1
+      }
+    ],
+    "controller": [
+      {
+        "name": "vel_gain",
+        "type": "float",
+        "min": 0.000001,
+        "max": 1000,
+        "slider_min": 0.00025,
+        "slider_max": 0.00075,
+        "slider_step": 0.00005,
+        "step": 0.000001,
+        "decimals": 19
+      },
+      {
+        "name": "vel_integrator_gain",
+        "type": "float",
+        "min": 0.000001,
+        "max": 1000,
+        "slider_min": 0.002,
+        "slider_max": 0.0005,
+        "slider_step": 0.0001,
+        "step": 0.000001,
+        "decimals": 19
+      },
+      {
+        "name": "pos_gain",
+        "type": "int",
+        "min": 1,
+        "max": 1000,
+        "slider_min": 10,
+        "slider_max": 30,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "vel_limit",
+        "type": "int",
+        "min": 1,
+        "max": 1000000,
+        "slider_min": 10000,
+        "slider_max": 30000,
+        "slider_step": 8192,
+        "step": 1
+      },
+      {
+        "name": "control_mode",
+        "type": "int",
+        "min": 0,
+        "max": 4,
+        "slider_min": 0,
+        "slider_max": 4,
+        "slider_step": 1,
+        "step": 1
+      }
+    ],
+    "sensorless_estimator": [
+      {
+        "name": "pm_flux_linkage",
+        "type": "float",
+        "min": 0.000001,
+        "max": 1000,
+        "slider_min": 0.0007,
+        "slider_max": 0.0025,
+        "slider_step": 0.0001,
+        "step": 0.000001,
+        "decimals": 10
+      },
+      {
+        "name": "pll_bandwidth",
+        "type": "int",
+        "min": 1,
+        "max": 100000,
+        "slider_min": 500,
+        "slider_max": 1500,
+        "slider_step": 100,
+        "step": 1
+      },
+      {
+        "name": "observer_gain",
+        "type": "int",
+        "min": 1,
+        "max": 100000,
+        "slider_min": 500,
+        "slider_max": 1500,
+        "slider_step": 100,
+        "step": 1
+      }
+    ],
+    "motor": [
+      {
+        "name": "phase_inductance",
+        "type": "float",
+        "min": 0.0000001,
+        "max": 1000,
+        "slider_min": 0.000007,
+        "slider_max": 0.00003,
+        "slider_step": 0.000001,
+        "step": 0.000001,
+        "decimals": 10
+      },
+      {
+        "name": "phase_resistance",
+        "type": "float",
+        "min": 0.000001,
+        "max": 1000,
+        "slider_min": 0.015,
+        "slider_max": 0.06,
+        "slider_step": 0.001,
+        "step": 0.000001,
+        "decimals": 10
+      },
+      {
+        "name": "pole_pairs",
+        "type": "int",
+        "min": 1,
+        "max": 100,
+        "slider_min": 10,
+        "slider_max": 30,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "motor_type",
+        "type": "int",
+        "min": 0,
+        "max": 5,
+        "slider_min": 0,
+        "slider_max": 5,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "direction",
+        "type": "int",
+        "min": -1,
+        "max": 1,
+        "slider_min": -1,
+        "slider_max": 1,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "calibration_current",
+        "type": "int",
+        "min": 1,
+        "max": 100,
+        "slider_min": 5,
+        "slider_max": 15,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "current_lim",
+        "type": "int",
+        "min": 1,
+        "max": 100,
+        "slider_min": 5,
+        "slider_max": 15,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "requested_current_range",
+        "type": "int",
+        "min": 1,
+        "max": 100,
+        "slider_min": 35,
+        "slider_max": 100,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "current_control_bandwidth",
+        "type": "int",
+        "min": 1,
+        "max": 10000,
+        "slider_min": 500,
+        "slider_max": 1500,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "resistance_calib_max_voltage",
+        "type": "int",
+        "min": 1,
+        "max": 50,
+        "slider_min": 1,
+        "slider_max": 10,
+        "slider_step": 1,
+        "step": 1
+      }
+    ],
+    "encoder": [
+      {
+        "name": "calib_range",
+        "type": "float",
+        "min": 0.000001,
+        "max": 1000,
+        "slider_min": 0.01,
+        "slider_max": 0.0059,
+        "slider_step": 0.0001,
+        "step": 0.000001,
+        "decimals": 10
+      },
+      {
+        "name": "mode",
+        "type": "int",
+        "min": 0,
+        "max": 5,
+        "slider_min": 0,
+        "slider_max": 5,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "offset",
+        "type": "int",
+        "min": -8192,
+        "max": 8192,
+        "slider_min": 8192,
+        "slider_max": 8192,
+        "slider_step": 32,
+        "step": 1
+      },
+      {
+        "name": "cpr",
+        "type": "int",
+        "min": 1,
+        "max": 8192,
+        "slider_min": 100,
+        "slider_max": 8192,
+        "slider_step": 32,
+        "step": 1
+      },
+      {
+        "name": "idx_search_speed",
+        "type": "int",
+        "min": 1,
+        "max": 100,
+        "slider_min": 5,
+        "slider_max": 15,
+        "slider_step": 1,
+        "step": 1
+      },
+      {
+        "name": "offset_float",
+        "type": "float",
+        "min": -10.0,
+        "max": 10.0,
+        "slider_min": -1.0,
+        "slider_max": 1.0,
+        "slider_step": 1.0,
+        "step": 1.0,
+        "decimals": 10
+      },
+      {
+        "name": "bandwidth",
+        "type": "int",
+        "min": 1,
+        "max": 1000000,
+        "slider_min": 500,
+        "slider_max": 1500,
+        "slider_step": 10,
+        "step": 1
+      }
+    ]
   }
 }

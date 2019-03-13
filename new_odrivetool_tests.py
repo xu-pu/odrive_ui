@@ -59,18 +59,18 @@ def find_parents_list(index):
 	return subwindow_list
 
 
-def add_single_layout_line( path_list, my_drive):
+def add_single_layout_line(slider_config,  path_list, my_drive):
 	ra_dict = {}
 
 	if path_list[1] == "config":
 		if len(path_list) == 2:
-			ra_dict["layout"] = add_config_item( path_list, my_drive._remote_attributes[path_list[0]])
+			ra_dict["layout"] = add_config_item(slider_config, path_list, my_drive._remote_attributes[path_list[0]])
 		elif len(path_list) == 3:
-			ra_dict["layout"] = add_config_item( path_list, my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+			ra_dict["layout"] = add_config_item(slider_config, path_list, my_drive._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
 		elif len(path_list) == 4:
-			ra_dict["layout"] = add_config_item( path_list, my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+			ra_dict["layout"] = add_config_item(slider_config, path_list, my_drive._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
 		elif len(path_list) == 5:
-			ra_dict["layout"] = add_config_item( path_list, my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
+			ra_dict["layout"] = add_config_item(slider_config, path_list, my_drive._remote_attributes[path_list[3]]._remote_attributes[path_list[2]]._remote_attributes[path_list[1]]._remote_attributes[path_list[0]])
 	else:
 		if len(path_list) == 2:
 			if isinstance(my_drive._remote_attributes[path_list[0]], fibre.remote_object.RemoteFunction):
@@ -131,7 +131,12 @@ def add_pushButton( path_list):
 	ra_dict["HLayout"].addWidget(ra_dict["pushbutton"])
 	return ra_dict
 
-def add_config_item( path_list, remote_attribute):
+def add_config_item(slider_config, path_list, remote_attribute):
+	print(path_list[2])
+	if path_list[2] == "odrv0":
+		parent_name = "config"
+	else:
+		parent_name = path_list[2]
 	ra_dict = {}
 	ra_dict["value_path"] = remote_attribute
 
@@ -139,7 +144,6 @@ def add_config_item( path_list, remote_attribute):
 	ra_dict["label"].setObjectName(path_list[0])
 	ra_dict["label"].setText(path_list[0])
 	ra_dict["HLayout"] = QtWidgets.QHBoxLayout()
-	# ra_dict["HLayout"].addWidget(ra_dict["label"])
 
 	ra_value = remote_attribute.get_value()
 	if type(ra_value) == float:
@@ -148,10 +152,10 @@ def add_config_item( path_list, remote_attribute):
 		ra_dict["value"].setValue(ra_value)
 		ra_dict["slider"] = QtWidgets.QSlider()
 		ra_dict["slider"].setOrientation(QtCore.Qt.Horizontal)
-		ra_dict["slider"].setMaximum(10)
-		ra_dict["slider"].setMinimum(2)
-		ra_dict["slider"].setSingleStep(0.2)
-		ra_dict["slider"].setValue(5)
+		ra_dict["slider"].setMaximum(slider_config[parent_name] [path_list[0]]["slider_max"])
+		ra_dict["slider"].setMinimum(slider_config[parent_name] [path_list[0]]["slider_min"])
+		ra_dict["slider"].setSingleStep(slider_config[parent_name] [path_list[0]]["slider_step"])
+		ra_dict["slider"].setValue(ra_value)
 		ra_dict["HLayout"].addWidget(ra_dict["slider"])
 		ra_dict["HLayout"].addWidget(ra_dict["value"])
 
@@ -317,6 +321,8 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 		self.my_drive = my_drive
 		self.my_drive_list.append(my_drive)
 		# print(self.odrive)
+	def add_sliders_config(self, slider_config):
+		self.slider_config = slider_config
 
 	def dropEvent(self, event):
 		print("drop event")
@@ -381,7 +387,7 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 												sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
 												sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
 												sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).text())
-												subwindow_dict5 = add_single_layout_line(sub5_window_list, self.my_drive)
+												subwindow_dict5 = add_single_layout_line(self.slider_config,sub5_window_list, self.my_drive)
 												setup_line_items(subgroupBox3_layout, subwindow_dict5, sub3_child)
 										subgroupBox2_layout.addWidget(subgroupBox3,sub2_child,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
 									else:
@@ -392,7 +398,7 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 										sub4_window_list.insert(0,cr.child(row,0).text())
 										sub4_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
 										sub4_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
-										subwindow_dict4 = add_single_layout_line(sub4_window_list, self.my_drive)
+										subwindow_dict4 = add_single_layout_line(self.slider_config,sub4_window_list, self.my_drive)
 										setup_line_items(subgroupBox2_layout, subwindow_dict4, sub2_child)
 								subgroupBox_layout.addWidget(subgroupBox2,sub_child,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
 
@@ -403,7 +409,7 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 								sub3_window_list = subwindow_list.copy()
 								sub3_window_list.insert(0,cr.child(row,0).text())
 								sub3_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
-								subwindow_dict3 = add_single_layout_line(sub3_window_list, self.my_drive)
+								subwindow_dict3 = add_single_layout_line(self.slider_config,sub3_window_list, self.my_drive)
 								setup_line_items(subgroupBox_layout, subwindow_dict3, sub_child)
 						gridLayout.addWidget(subgroupBox,row,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
 					else:
@@ -417,7 +423,7 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 							gridLayout.addWidget(subwindow_dict2["label"], row,0,1,1)
 							gridLayout.addWidget(subwindow_dict2["value"], row,1,1,1)
 						else:
-							subwindow_dict2 = add_single_layout_line(sub2_window_list, self.my_drive)
+							subwindow_dict2 = add_single_layout_line(self.slider_config,sub2_window_list, self.my_drive)
 							setup_line_items(gridLayout, subwindow_dict2, row)
 			else:
 				print("0 no children")
@@ -425,7 +431,7 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 					fw_dict = check_version_type(subwindow_list, self.my_drive)
 					gridLayout.addLayout(fw_dict["HLayout"],0,0,1,2)
 				else:
-					subwindow_dict = add_single_layout_line(subwindow_list, self.my_drive)
+					subwindow_dict = add_single_layout_line(self.slider_config,subwindow_list, self.my_drive)
 					gridLayout.addLayout(subwindow_dict["layout"]["HLayout"],0,0,1,-1)
 				# gridLayout.addWidget(subwindow_dict["layout"]["label"], 0,0,1,1)
 				# gridLayout.addWidget(subwindow_dict["layout"]["value"], 0,1,1,1)
@@ -440,12 +446,31 @@ class SettingsWindow(QtWidgets.QMainWindow, UI_settings_window.Ui_MainWindow):
 		self.setupUi(self)  # This is defined in design.py file automatically
 							# It sets up layout and widgets that are defined
 		self.setWindowTitle(self.app_name)
+
+		self.mainToolBar = QtWidgets.QToolBar(self)
+		self.mainToolBar.setObjectName("mainToolBar")
+		self.addToolBar(QtCore.Qt.TopToolBarArea, self.mainToolBar)
+
+		self.save_action = self.mainToolBar.addAction("Save settings")
+		self.save_icon = QtGui.QIcon()
+		self.save_icon.addPixmap(QtGui.QPixmap(ICON_SAVE_PATH))
+		self.save_action.setIcon(self.save_icon)
+
+		self.restoreDefault_action = self.mainToolBar.addAction("Restore to default settings")
+		self.restore_icon = QtGui.QIcon()
+		self.restore_icon.addPixmap(QtGui.QPixmap(ICON_OPEN_PATH))
+		self.restoreDefault_action.setIcon(self.restore_icon)
+
+
+
 		self.settings_dict = self.open_json("settings/custom_settings.json")
 		self.a_gb_dict = {}
-		for key in self.settings_dict["odrive_config"]["axis"]:
+		# elf.gridLayout_2.addWidget(self.groupBox, 1, 2, 1, 1)
+		row = 2
+		for key in self.settings_dict["odrive_config"]:
 			print(key)
 			self.a_gb_dict[key] = {}
-			self.a_gb_dict[key]["groupBox"] = QtWidgets.QGroupBox(self.centralwidget)
+			self.a_gb_dict[key]["groupBox"] = QtWidgets.QGroupBox(self.scrollArea)
 			# self.a_gb_dict[key]["groupBox"].setGeometry(QtCore.QRect(20, 20, 571, 223))
 			self.a_gb_dict[key]["groupBox"].setTitle(key)
 			self.a_gb_dict[key]["gb_layout"] = QtWidgets.QGridLayout(self.a_gb_dict[key]["groupBox"])
@@ -467,11 +492,9 @@ class SettingsWindow(QtWidgets.QMainWindow, UI_settings_window.Ui_MainWindow):
 			self.a_gb_dict[key]["ss_label"].setText("Single Step")
 			self.a_gb_dict[key]["layout"].addWidget(self.a_gb_dict[key]["ss_label"], 0, 3, 1, 1)
 
-
-
 			self.a_gb_dict[key]["item_list"] = []
-			test_n = 1 #self.settings_dict["odrive_config"]["axis"][key].index(list_item)
-			for list_item in self.settings_dict["odrive_config"]["axis"][key]:
+			test_n = 1 #self.settings_dict["odrive_config"][key].index(list_item)
+			for list_item in self.settings_dict["odrive_config"][key]:
 				item_dict = {}
 				item_dict["name"] = QtWidgets.QLabel(self.a_gb_dict[key]["groupBox"])
 				item_dict["name"].setText(list_item["name"])
@@ -479,26 +502,43 @@ class SettingsWindow(QtWidgets.QMainWindow, UI_settings_window.Ui_MainWindow):
 
 				if list_item["type"] == "float":
 					item_dict["min"] = QtWidgets.QDoubleSpinBox(self.a_gb_dict[key]["groupBox"])
+					item_dict["min"].setDecimals(list_item["decimals"])
 				else:
 					item_dict["min"] = QtWidgets.QSpinBox(self.a_gb_dict[key]["groupBox"])
 				item_dict["min"].setMaximum(list_item["max"])
 				item_dict["min"].setMinimum(list_item["min"])
+				item_dict["min"].setSingleStep(list_item["step"])
 				item_dict["min"].setValue(list_item["slider_min"])
 				self.a_gb_dict[key]["layout"].addWidget(item_dict["min"],test_n , 1, 1, 1)
 
 				if list_item["type"] == "float":
 					item_dict["max"] = QtWidgets.QDoubleSpinBox(self.a_gb_dict[key]["groupBox"])
+					item_dict["max"].setDecimals(list_item["decimals"])
 				else:
 					item_dict["max"] = QtWidgets.QSpinBox(self.a_gb_dict[key]["groupBox"])
 				item_dict["max"].setMaximum(list_item["max"])
 				item_dict["max"].setMinimum(list_item["min"])
+				item_dict["max"].setSingleStep(list_item["step"])
 				item_dict["max"].setValue(list_item["slider_max"])
 				self.a_gb_dict[key]["layout"].addWidget(item_dict["max"],test_n , 2, 1, 1)
+
+				if list_item["type"] == "float":
+					item_dict["step"] = QtWidgets.QDoubleSpinBox(self.a_gb_dict[key]["groupBox"])
+					item_dict["step"].setDecimals(list_item["decimals"])
+				else:
+					item_dict["step"] = QtWidgets.QSpinBox(self.a_gb_dict[key]["groupBox"])
+				item_dict["step"].setMaximum(list_item["max"])
+				item_dict["step"].setMinimum(list_item["min"])
+				item_dict["step"].setSingleStep(list_item["step"])
+				item_dict["step"].setValue(list_item["slider_step"])
+				self.a_gb_dict[key]["layout"].addWidget(item_dict["step"],test_n , 3, 1, 1)
 
 
 				self.a_gb_dict[key]["item_list"].append(item_dict)
 				test_n += 1
 			self.a_gb_dict[key]["gb_layout"].addLayout(self.a_gb_dict[key]["layout"], 0, 0, 1, 1)
+			self.gridLayout_3.addWidget(self.a_gb_dict[key]["groupBox"], row,0,1,1)
+			row += 1
 
 
 
@@ -574,10 +614,21 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		self.testmdi.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
 		self.testmdi.odrive_request_sig.connect(self.odrive_requested)
 		self.gridLayout.addWidget(self.testmdi, 0, 2, -1, 1)
+
+		self.settings_window = SettingsWindow()
+		self.settings_window.show()
+
+		self.testmdi.add_sliders_config(self.settings_window.a_gb_dict)
+
 		self.odrive_connect()
 
+	def closeEvent(self, event):
+		print("User has clicked the red x on the main window")
+		self.settings_window.hide()
+		event.accept()
+
 	def open_settings_window(self):
-		self.settings_window = SettingsWindow()
+		# self.settings_window = SettingsWindow()
 		self.settings_window.show()
 
 

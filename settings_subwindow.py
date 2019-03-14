@@ -30,13 +30,11 @@ class SettingsWindow(QtWidgets.QMainWindow, UI_settings_window.Ui_MainWindow):
 		self.restore_icon.addPixmap(QtGui.QPixmap(ICON_OPEN_PATH))
 		self.restoreDefault_action.setIcon(self.restore_icon)
 
-
-
 		self.settings_dict = self.open_json("settings/custom_settings.json")
-		self.a_gb_dict = {}
+		self.a_gb_dict = {} #dict that contains a group box for each settings item
 		# elf.gridLayout_2.addWidget(self.groupBox, 1, 2, 1, 1)
 		row = 2
-		for key in self.settings_dict["odrive_config"]:
+		for key in self.settings_dict:
 			print(key)
 			self.a_gb_dict[key] = {}
 			self.a_gb_dict[key]["groupBox"] = QtWidgets.QGroupBox(self.scrollArea)
@@ -63,7 +61,7 @@ class SettingsWindow(QtWidgets.QMainWindow, UI_settings_window.Ui_MainWindow):
 
 			self.a_gb_dict[key]["item_list"] = []
 			test_n = 1 #self.settings_dict["odrive_config"][key].index(list_item)
-			for list_item in self.settings_dict["odrive_config"][key]:
+			for list_item in self.settings_dict[key]:
 				item_dict = {}
 				item_dict["name"] = QtWidgets.QLabel(self.a_gb_dict[key]["groupBox"])
 				item_dict["name"].setText(list_item["name"])

@@ -34,11 +34,9 @@ ICON_SAVE_PATH = "Icons/odrive_icons/odrive_icons_Save.png"
 ICON_SETTINGS_PATH = "Icons/odrive_icons/odrive_icons_Settings.png"
 ICON_WRITE_CONFIG_PATH = "Icons/odrive_icons/odrive_icons_WriteConfig.png"
 
-
 version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_minor","hw_version_major", "hw_version_minor", "fw_version_unreleased","hw_version_variant"]
 
 class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
-
 	app_name = "Odrive Tester"
 	def __init__(self):
 		# Simple reason why we use it here is that it allows us to

@@ -33,115 +33,115 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 	def dropEvent(self, event):
 		print("drop event")
 		subwindow_dict = {}
+		index = event.source().selectedIndexes()[0]
+		# for index in event.source().selectedIndexes():
+		subwindow_list = self.find_parents_list(index)
 
-		for index in event.source().selectedIndexes():
-			subwindow_list = self.find_parents_list(index)
+		centralWidget = QtWidgets.QWidget(self)
+		str1 = '-'.join(subwindow_list)
+		centralWidget.setWindowTitle(str1)
+		gridLayout = QtWidgets.QGridLayout(centralWidget)
 
-			centralWidget = QtWidgets.QWidget(self)
-			str1 = '-'.join(subwindow_list)
-			centralWidget.setWindowTitle(str1)
-			gridLayout = QtWidgets.QGridLayout(centralWidget)
+		print(subwindow_list)
+		cr = index.model().itemFromIndex(index)
+		# subwindow_list.append(cr.text())
+		print(cr.hasChildren())
+		if cr.hasChildren():
+			print(cr.text())
+			# print(type(cr))
+			label_list = []
+			spinBox_list = []
+			for row in range(0,cr.rowCount()):
+				print("1 - " + cr.child(row,0).text())
 
-			print(subwindow_list)
-			cr = index.model().itemFromIndex(index)
-			# subwindow_list.append(cr.text())
-			print(cr.hasChildren())
-			if cr.hasChildren():
-				print(cr.text())
-				# print(type(cr))
-				label_list = []
-				spinBox_list = []
-				for row in range(0,cr.rowCount()):
-					print("1 - " + cr.child(row,0).text())
+				if cr.child(row, 0).hasChildren():
+					subgroupBox =  QtWidgets.QGroupBox(centralWidget)
+					subgroupBox.setObjectName(cr.child(row,0).text())
+					subgroupBox.setTitle(cr.child(row,0).text())
+					subgroupBox_layout = QtWidgets.QGridLayout(subgroupBox)
+					# self.groupBox = QtWidgets.QGroupBox(self.centralWidget)
+					# self.groupBox.setObjectName("groupBox")
+					# self.gridLayout_3 = QtWidgets.QGridLayout(self.groupBox)
+					for sub_child in range(0, cr.child(row,0).rowCount()):
+						print("2 - " + cr.child(row,0).child(sub_child,0).text())
 
-					if cr.child(row, 0).hasChildren():
-						subgroupBox =  QtWidgets.QGroupBox(centralWidget)
-						subgroupBox.setObjectName(cr.child(row,0).text())
-						subgroupBox.setTitle(cr.child(row,0).text())
-						subgroupBox_layout = QtWidgets.QGridLayout(subgroupBox)
-						# self.groupBox = QtWidgets.QGroupBox(self.centralWidget)
-						# self.groupBox.setObjectName("groupBox")
-						# self.gridLayout_3 = QtWidgets.QGridLayout(self.groupBox)
-						for sub_child in range(0, cr.child(row,0).rowCount()):
-							print("2 - " + cr.child(row,0).child(sub_child,0).text())
+						if cr.child(row,0).child(sub_child,0).hasChildren():
+							subgroupBox2 =  QtWidgets.QGroupBox(subgroupBox)
+							subgroupBox2.setObjectName(cr.child(row,0).child(sub_child,0).text())
+							subgroupBox2.setTitle(cr.child(row,0).child(sub_child,0).text())
+							subgroupBox2_layout = QtWidgets.QGridLayout(subgroupBox2)
+							for sub2_child in range(0, cr.child(row,0).child(sub_child,0).rowCount()):
+								print("3 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
 
-							if cr.child(row,0).child(sub_child,0).hasChildren():
-								subgroupBox2 =  QtWidgets.QGroupBox(subgroupBox)
-								subgroupBox2.setObjectName(cr.child(row,0).child(sub_child,0).text())
-								subgroupBox2.setTitle(cr.child(row,0).child(sub_child,0).text())
-								subgroupBox2_layout = QtWidgets.QGridLayout(subgroupBox2)
-								for sub2_child in range(0, cr.child(row,0).child(sub_child,0).rowCount()):
-									print("3 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
+								if cr.child(row,0).child(sub_child,0).child(sub2_child,0).hasChildren():
+									subgroupBox3 =  QtWidgets.QGroupBox(subgroupBox2)
+									subgroupBox3.setObjectName(cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
+									subgroupBox3.setTitle(cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
+									subgroupBox3_layout = QtWidgets.QGridLayout(subgroupBox3)
+									for sub3_child in range(0, cr.child(row,0).child(sub_child,0).child(sub2_child,0).rowCount()):
+										print("4 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).text())
 
-									if cr.child(row,0).child(sub_child,0).child(sub2_child,0).hasChildren():
-										subgroupBox3 =  QtWidgets.QGroupBox(subgroupBox2)
-										subgroupBox3.setObjectName(cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
-										subgroupBox3.setTitle(cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
-										subgroupBox3_layout = QtWidgets.QGridLayout(subgroupBox3)
-										for sub3_child in range(0, cr.child(row,0).child(sub_child,0).child(sub2_child,0).rowCount()):
-											print("4 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).text())
+										if cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).hasChildren():
+											for sub4_child in range(0, cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).rowCount()):
+												print("5 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).child(sub4_child,0).text())
+										else:
+											print("4 no children")
+											sub5_window_list = []
+											sub5_window_list.clear()
+											sub5_window_list = subwindow_list.copy()
+											sub5_window_list.insert(0,cr.child(row,0).text())
+											sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
+											sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
+											sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).text())
+											subwindow_dict5 = self.add_single_layout_line(self.slider_config,sub5_window_list, self.my_drive)
+											self.setup_line_items(subgroupBox3_layout, subwindow_dict5, sub3_child)
+									subgroupBox2_layout.addWidget(subgroupBox3,sub2_child,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
+								else:
+									print("3 no children")
+									sub4_window_list = []
+									sub4_window_list.clear()
+									sub4_window_list = subwindow_list.copy()
+									sub4_window_list.insert(0,cr.child(row,0).text())
+									sub4_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
+									sub4_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
+									subwindow_dict4 = self.add_single_layout_line(self.slider_config,sub4_window_list, self.my_drive)
+									self.setup_line_items(subgroupBox2_layout, subwindow_dict4, sub2_child)
+							subgroupBox_layout.addWidget(subgroupBox2,sub_child,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
 
-											if cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).hasChildren():
-												for sub4_child in range(0, cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).rowCount()):
-													print("5 - " + cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).child(sub4_child,0).text())
-											else:
-												print("4 no children")
-												sub5_window_list = []
-												sub5_window_list.clear()
-												sub5_window_list = subwindow_list.copy()
-												sub5_window_list.insert(0,cr.child(row,0).text())
-												sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
-												sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
-												sub5_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).child(sub3_child,0).text())
-												subwindow_dict5 = self.add_single_layout_line(self.slider_config,sub5_window_list, self.my_drive)
-												self.setup_line_items(subgroupBox3_layout, subwindow_dict5, sub3_child)
-										subgroupBox2_layout.addWidget(subgroupBox3,sub2_child,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
-									else:
-										print("3 no children")
-										sub4_window_list = []
-										sub4_window_list.clear()
-										sub4_window_list = subwindow_list.copy()
-										sub4_window_list.insert(0,cr.child(row,0).text())
-										sub4_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
-										sub4_window_list.insert(0,cr.child(row,0).child(sub_child,0).child(sub2_child,0).text())
-										subwindow_dict4 = self.add_single_layout_line(self.slider_config,sub4_window_list, self.my_drive)
-										self.setup_line_items(subgroupBox2_layout, subwindow_dict4, sub2_child)
-								subgroupBox_layout.addWidget(subgroupBox2,sub_child,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
-
-							else:
-								print("2 no children")
-								sub3_window_list = []
-								sub3_window_list.clear()
-								sub3_window_list = subwindow_list.copy()
-								sub3_window_list.insert(0,cr.child(row,0).text())
-								sub3_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
-								subwindow_dict3 = self.add_single_layout_line(self.slider_config,sub3_window_list, self.my_drive)
-								self.setup_line_items(subgroupBox_layout, subwindow_dict3, sub_child)
-						gridLayout.addWidget(subgroupBox,row,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
-					else:
-						print("1 no children")
-						sub2_window_list = []
-						sub2_window_list.clear()
-						sub2_window_list = subwindow_list.copy()
-						sub2_window_list.insert(0,cr.child(row,0).text())
-						if sub2_window_list[0] in ["fw_version", "hw_version"]:
-							subwindow_dict2 = self.check_version_type(sub2_window_list, self.my_drive)
-							gridLayout.addWidget(subwindow_dict2["label"], row,0,1,1)
-							gridLayout.addWidget(subwindow_dict2["value"], row,1,1,1)
 						else:
-							subwindow_dict2 = self.add_single_layout_line(self.slider_config,sub2_window_list, self.my_drive)
-							self.setup_line_items(gridLayout, subwindow_dict2, row)
-			else:
-				print("0 no children")
-				if subwindow_list[0] in ["fw_version", "hw_version"]:
-					fw_dict = self.check_version_type(subwindow_list, self.my_drive)
-					gridLayout.addLayout(fw_dict["HLayout"],0,0,1,2)
+							print("2 no children")
+							sub3_window_list = []
+							sub3_window_list.clear()
+							sub3_window_list = subwindow_list.copy()
+							sub3_window_list.insert(0,cr.child(row,0).text())
+							sub3_window_list.insert(0,cr.child(row,0).child(sub_child,0).text())
+							subwindow_dict3 = self.add_single_layout_line(self.slider_config,sub3_window_list, self.my_drive)
+							self.setup_line_items(subgroupBox_layout, subwindow_dict3, sub_child)
+					gridLayout.addWidget(subgroupBox,row,0,1,-1,QtCore.Qt.AlignLeft)#AlignHCenter
 				else:
-					subwindow_dict = self.add_single_layout_line(self.slider_config,subwindow_list, self.my_drive)
-					gridLayout.addLayout(subwindow_dict["layout"]["HLayout"],0,0,1,-1)
-				# gridLayout.addWidget(subwindow_dict["layout"]["label"], 0,0,1,1)
-				# gridLayout.addWidget(subwindow_dict["layout"]["value"], 0,1,1,1)
-			self.addSubWindow(centralWidget).show()
+					print("1 no children")
+					sub2_window_list = []
+					sub2_window_list.clear()
+					sub2_window_list = subwindow_list.copy()
+					sub2_window_list.insert(0,cr.child(row,0).text())
+					if sub2_window_list[0] in ["fw_version", "hw_version"]:
+						subwindow_dict2 = self.check_version_type(sub2_window_list, self.my_drive)
+						gridLayout.addWidget(subwindow_dict2["label"], row,0,1,1)
+						gridLayout.addWidget(subwindow_dict2["value"], row,1,1,1)
+					else:
+						subwindow_dict2 = self.add_single_layout_line(self.slider_config,sub2_window_list, self.my_drive)
+						self.setup_line_items(gridLayout, subwindow_dict2, row)
+		else:
+			print("0 no children")
+			if subwindow_list[0] in ["fw_version", "hw_version"]:
+				fw_dict = self.check_version_type(subwindow_list, self.my_drive)
+				gridLayout.addLayout(fw_dict["HLayout"],0,0,1,2)
+			else:
+				subwindow_dict = self.add_single_layout_line(self.slider_config,subwindow_list, self.my_drive)
+				gridLayout.addLayout(subwindow_dict["layout"]["HLayout"],0,0,1,-1)
+			# gridLayout.addWidget(subwindow_dict["layout"]["label"], 0,0,1,1)
+			# gridLayout.addWidget(subwindow_dict["layout"]["value"], 0,1,1,1)
+		self.addSubWindow(centralWidget).show()
 
 
 	def find_parents_list(self, index):

@@ -2,10 +2,7 @@
 
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
-
-
 import fibre
-
 
 class CustomMDIArea(QtWidgets.QMdiArea):
 	odrive_request_sig = QtCore.pyqtSignal()
@@ -128,7 +125,7 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 						sub2_window_list = subwindow_list.copy()
 						sub2_window_list.insert(0,cr.child(row,0).text())
 						if sub2_window_list[0] in ["fw_version", "hw_version"]:
-							subwindow_dict2 = check_version_type(sub2_window_list, self.my_drive)
+							subwindow_dict2 = self.check_version_type(sub2_window_list, self.my_drive)
 							gridLayout.addWidget(subwindow_dict2["label"], row,0,1,1)
 							gridLayout.addWidget(subwindow_dict2["value"], row,1,1,1)
 						else:
@@ -137,7 +134,7 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 			else:
 				print("0 no children")
 				if subwindow_list[0] in ["fw_version", "hw_version"]:
-					fw_dict = check_version_type(subwindow_list, self.my_drive)
+					fw_dict = self.check_version_type(subwindow_list, self.my_drive)
 					gridLayout.addLayout(fw_dict["HLayout"],0,0,1,2)
 				else:
 					subwindow_dict = self.add_single_layout_line(self.slider_config,subwindow_list, self.my_drive)
@@ -380,3 +377,31 @@ class CustomMDIArea(QtWidgets.QMdiArea):
 		ra_dict["HLayout"] = QtWidgets.QHBoxLayout()
 		ra_dict["HLayout"].addWidget(ra_dict["pushbutton"])
 		return ra_dict
+
+	def add_fw_hw_label(self, my_drive, version_type):
+		ra_dict = {}
+		ra_d = my_drive._remote_attributes
+		if version_type == "firmware":
+			version_str = str(ra_d["fw_version_major"].get_value()) + "." + str(ra_d["fw_version_minor"].get_value()) + "." + str(ra_d["fw_version_revision"].get_value())
+			label_str = "fw_version"
+		elif version_type == "hardware":
+			version_str = str(ra_d["hw_version_major"].get_value()) + "." + str(ra_d["hw_version_minor"].get_value()) + "." + str(ra_d["hw_version_variant"].get_value())
+			label_str = "hw_version"
+
+		ra_dict["label"] = QtWidgets.QLabel()
+		ra_dict["label"].setObjectName(label_str)
+		ra_dict["label"].setText(label_str)
+		ra_dict["value"] = QtWidgets.QLabel()
+		ra_dict["value"].setText(version_str)
+		ra_dict["HLayout"] = QtWidgets.QHBoxLayout()
+		ra_dict["HLayout"].addWidget(ra_dict["label"])
+		ra_dict["HLayout"].addWidget(ra_dict["value"])
+		return ra_dict
+
+	def check_version_type(self, label_list, my_drive):
+		label_dict = {}
+		if label_list[0] == "fw_version":
+			label_dict = self.add_fw_hw_label(my_drive, "firmware")
+		elif label_list[0] == "hw_version":
+			label_dict = self.add_fw_hw_label(my_drive, "hardware")
+		return label_dict

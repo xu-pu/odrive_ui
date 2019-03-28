@@ -2955,6 +2955,9 @@ Control</string>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
+                     <property name="minimum">
+                      <double>-1000000.000000000000000</double>
+                     </property>
                      <property name="maximum">
                       <double>1000000.000000000000000</double>
                      </property>
@@ -6226,6 +6229,9 @@ Control</string>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
+                     <property name="minimum">
+                      <double>-1000000.000000000000000</double>
+                     </property>
                      <property name="maximum">
                       <double>1000000.000000000000000</double>
                      </property>
@@ -8134,28 +8140,28 @@ Control</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_4"/>
-  <buttongroup name="buttonGroup_20"/>
-  <buttongroup name="buttonGroup_14"/>
   <buttongroup name="buttonGroup_23"/>
-  <buttongroup name="buttonGroup_12"/>
-  <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_18"/>
-  <buttongroup name="buttonGroup_9"/>
-  <buttongroup name="buttonGroup_16"/>
-  <buttongroup name="buttonGroup_13"/>
-  <buttongroup name="buttonGroup_6"/>
-  <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup_22"/>
-  <buttongroup name="buttonGroup_15"/>
   <buttongroup name="buttonGroup_19"/>
-  <buttongroup name="buttonGroup_10"/>
-  <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup_7"/>
+  <buttongroup name="buttonGroup_12"/>
+  <buttongroup name="buttonGroup_22"/>
+  <buttongroup name="buttonGroup_13"/>
+  <buttongroup name="buttonGroup_18"/>
+  <buttongroup name="buttonGroup_16"/>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_9"/>
+  <buttongroup name="buttonGroup_4"/>
   <buttongroup name="buttonGroup_17"/>
   <buttongroup name="buttonGroup_11"/>
+  <buttongroup name="buttonGroup_7"/>
+  <buttongroup name="buttonGroup_15"/>
   <buttongroup name="buttonGroup_8"/>
-  <buttongroup name="buttonGroup_21"/>
+  <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup_10"/>
   <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_6"/>
+  <buttongroup name="buttonGroup_20"/>
+  <buttongroup name="buttonGroup_21"/>
+  <buttongroup name="buttonGroup_14"/>
  </buttongroups>
 </ui>

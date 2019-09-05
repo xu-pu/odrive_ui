@@ -662,12 +662,12 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis0.config.startup_encoder_offset_calibration = self.radioButton_startupEncoderOffsetCalibrationTrue_axis0.isChecked()
 		self.my_drive.axis0.config.enable_step_dir = self.radioButton_enableStepDirTrue_axis0.isChecked()
 
-		self.my_drive.axis0.config.ramp_up_distance = float(self.doubleSpinBox_rampUpDistanceValue_axis0.value())
-		self.my_drive.axis0.config.spin_up_current = float(self.doubleSpinBox_spinUpCurrentValue_axis0.value())
-		self.my_drive.axis0.config.spin_up_target_vel = float(self.doubleSpinBox_spinUpTargetVelValue_axis0.value())
-		self.my_drive.axis0.config.ramp_up_time = float(self.doubleSpinBox_rampUpTimeValue_axis0.value())
+		self.my_drive.axis0.config.general_lockin.ramp_distance = float(self.doubleSpinBox_rampUpDistanceValue_axis0.value())
+		self.my_drive.axis0.config.general_lockin.current = float(self.doubleSpinBox_spinUpCurrentValue_axis0.value())
+		self.my_drive.axis0.config.general_lockin.vel = float(self.doubleSpinBox_spinUpTargetVelValue_axis0.value())
+		self.my_drive.axis0.config.general_lockin.ramp_time = float(self.doubleSpinBox_rampUpTimeValue_axis0.value())
 		self.my_drive.axis0.config.counts_per_step = float(self.doubleSpinBox_countPerStepValue_axis0.value())
-		self.my_drive.axis0.config.spin_up_acceleration = float(self.doubleSpinBox_spinUpAccelerationValue_axis0.value())
+		self.my_drive.axis0.config.general_lockin.accel = float(self.doubleSpinBox_spinUpAccelerationValue_axis0.value())
 
 		self.my_drive.axis0.encoder.config.calib_range = float(self.doubleSpinBox_calibRangeValue_axis0.value())
 		self.my_drive.axis0.encoder.config.mode = int(self.spinBox_modeEncoderValue_axis0.value())
@@ -675,7 +675,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis0.encoder.config.pre_calibrated = self.radioButton_encoderPreCalibratedTrue_axis0.isChecked()
 		self.my_drive.axis0.encoder.config.use_index = self.radioButton_useIndexTrue_axis0.isChecked()
 		self.my_drive.axis0.encoder.config.cpr = int(self.spinBox_cprValue_axis0.value())
-		self.my_drive.axis0.encoder.config.idx_search_speed = float(self.doubleSpinBox_idxSearchSpeedValue_axis0.value())
+		self.my_drive.axis0.encoder.config.calib_scan_omega = float(self.doubleSpinBox_idxSearchSpeedValue_axis0.value())
 		self.my_drive.axis0.encoder.config.offset_float = float(self.doubleSpinBox_offsetFloatValue_axis0.value())
 		self.my_drive.axis0.encoder.config.bandwidth = float(self.doubleSpinBox_bandwidthValue_axis0.value())
 
@@ -710,12 +710,12 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis1.config.startup_encoder_offset_calibration = self.radioButton_startupEncoderOffsetCalibrationTrue_axis1.isChecked()
 		self.my_drive.axis1.config.enable_step_dir = self.radioButton_enableStepDirTrue_axis1.isChecked()
 
-		self.my_drive.axis1.config.ramp_up_distance = float(self.doubleSpinBox_rampUpDistanceValue_axis1.value())
-		self.my_drive.axis1.config.spin_up_current = float(self.doubleSpinBox_spinUpCurrentValue_axis1.value())
-		self.my_drive.axis1.config.spin_up_target_vel = float(self.doubleSpinBox_spinUpTargetVelValue_axis1.value())
-		self.my_drive.axis1.config.ramp_up_time = float(self.doubleSpinBox_rampUpTimeValue_axis1.value())
+		self.my_drive.axis1.config.general_lockin.ramp_distance = float(self.doubleSpinBox_rampUpDistanceValue_axis1.value())
+		self.my_drive.axis1.config.general_lockin.current = float(self.doubleSpinBox_spinUpCurrentValue_axis1.value())
+		self.my_drive.axis1.config.general_lockin.vel = float(self.doubleSpinBox_spinUpTargetVelValue_axis1.value())
+		self.my_drive.axis1.config.general_lockin.ramp_time = float(self.doubleSpinBox_rampUpTimeValue_axis1.value())
 		self.my_drive.axis1.config.counts_per_step = float(self.doubleSpinBox_countPerStepValue_axis1.value())
-		self.my_drive.axis1.config.spin_up_acceleration = float(self.doubleSpinBox_spinUpAccelerationValue_axis1.value())
+		self.my_drive.axis1.config.general_lockin.accel = float(self.doubleSpinBox_spinUpAccelerationValue_axis1.value())
 
 		self.my_drive.axis1.encoder.config.calib_range = float(self.doubleSpinBox_calibRangeValue_axis1.value())
 		self.my_drive.axis1.encoder.config.mode = int(self.spinBox_modeEncoderValue_axis1.value())
@@ -723,7 +723,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis1.encoder.config.pre_calibrated = self.radioButton_encoderPreCalibratedTrue_axis1.isChecked()
 		self.my_drive.axis1.encoder.config.use_index = self.radioButton_useIndexTrue_axis1.isChecked()
 		self.my_drive.axis1.encoder.config.cpr = int(self.spinBox_cprValue_axis1.value())
-		self.my_drive.axis1.encoder.config.idx_search_speed = float(self.doubleSpinBox_idxSearchSpeedValue_axis1.value())
+		self.my_drive.axis1.encoder.config.calib_scan_omega = float(self.doubleSpinBox_idxSearchSpeedValue_axis1.value())
 		self.my_drive.axis1.encoder.config.offset_float = float(self.doubleSpinBox_offsetFloatValue_axis1.value())
 		self.my_drive.axis1.encoder.config.bandwidth = float(self.doubleSpinBox_bandwidthValue_axis1.value())
 
@@ -899,11 +899,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			self.radioButton_enableStepDirFalse_axis0.setChecked(True)
 
 		self.doubleSpinBox_countPerStepValue_axis0.setValue(self.my_drive.axis0.config.counts_per_step)
-		self.doubleSpinBox_rampUpTimeValue_axis0.setValue(self.my_drive.axis0.config.ramp_up_time)
-		self.doubleSpinBox_rampUpDistanceValue_axis0.setValue(self.my_drive.axis0.config.ramp_up_distance)
-		self.doubleSpinBox_spinUpCurrentValue_axis0.setValue(self.my_drive.axis0.config.spin_up_current)
-		self.doubleSpinBox_spinUpAccelerationValue_axis0.setValue(self.my_drive.axis0.config.spin_up_acceleration)
-		self.doubleSpinBox_spinUpTargetVelValue_axis0.setValue(self.my_drive.axis0.config.spin_up_target_vel)
+		self.doubleSpinBox_rampUpTimeValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.ramp_time)
+		self.doubleSpinBox_rampUpDistanceValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.ramp_distance)
+		self.doubleSpinBox_spinUpCurrentValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.current)
+		self.doubleSpinBox_spinUpAccelerationValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.accel)
+		self.doubleSpinBox_spinUpTargetVelValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.vel)
 
 		self.scan_axis0_encoder_config()
 		self.scan_axis0_controller_config()
@@ -943,7 +943,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			self.radioButton_useIndexFalse_axis0.setChecked(True)
 
 
-		self.doubleSpinBox_idxSearchSpeedValue_axis0.setValue(self.my_drive.axis0.encoder.config.idx_search_speed)
+		self.doubleSpinBox_idxSearchSpeedValue_axis0.setValue(self.my_drive.axis0.encoder.config.calib_scan_omega)
 		self.spinBox_cprValue_axis0.setValue(self.my_drive.axis0.encoder.config.cpr)
 		self.spinBox_modeEncoderValue_axis0.setValue(self.my_drive.axis0.encoder.config.mode)
 		self.spinBox_offsetValue_axis0.setValue(self.my_drive.axis0.encoder.config.offset)
@@ -1054,11 +1054,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			self.radioButton_enableStepDirFalse_axis1.setChecked(True)
 
 		self.doubleSpinBox_countPerStepValue_axis1.setValue(self.my_drive.axis1.config.counts_per_step)
-		self.doubleSpinBox_rampUpTimeValue_axis1.setValue(self.my_drive.axis1.config.ramp_up_time)
-		self.doubleSpinBox_rampUpDistanceValue_axis1.setValue(self.my_drive.axis1.config.ramp_up_distance)
-		self.doubleSpinBox_spinUpCurrentValue_axis1.setValue(self.my_drive.axis1.config.spin_up_current)
-		self.doubleSpinBox_spinUpAccelerationValue_axis1.setValue(self.my_drive.axis1.config.spin_up_acceleration)
-		self.doubleSpinBox_spinUpTargetVelValue_axis1.setValue(self.my_drive.axis1.config.spin_up_target_vel)
+		self.doubleSpinBox_rampUpTimeValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.ramp_time)
+		self.doubleSpinBox_rampUpDistanceValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.ramp_distance)
+		self.doubleSpinBox_spinUpCurrentValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.current)
+		self.doubleSpinBox_spinUpAccelerationValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.accel)
+		self.doubleSpinBox_spinUpTargetVelValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.vel)
 
 		self.scan_axis1_encoder_config()
 		self.scan_axis1_controller_config()
@@ -1162,7 +1162,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		else:
 			self.radioButton_useIndexFalse_axis1.setChecked(True)
 
-		self.doubleSpinBox_idxSearchSpeedValue_axis1.setValue(self.my_drive.axis1.encoder.config.idx_search_speed)
+		self.doubleSpinBox_idxSearchSpeedValue_axis1.setValue(self.my_drive.axis1.encoder.config.calib_scan_omega)
 		self.spinBox_cprValue_axis1.setValue(self.my_drive.axis1.encoder.config.cpr)
 		self.spinBox_modeEncoderValue_axis1.setValue(self.my_drive.axis1.encoder.config.mode)
 		self.spinBox_offsetValue_axis1.setValue(self.my_drive.axis1.encoder.config.offset)

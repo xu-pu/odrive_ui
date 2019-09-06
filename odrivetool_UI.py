@@ -658,6 +658,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis0.controller.config.vel_limit = float(self.doubleSpinBox_velLimitValue_axis0.value())
 		self.my_drive.axis0.controller.config.control_mode = int(self.spinBox_controlModeValue_axis0.value())
 
+		self.my_drive.axis0.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis0.value())
+		self.my_drive.axis0.trap_traj.config.accel_limit = float(self.doubleSpinBox_accel_limit_axis0.value())
+		self.my_drive.axis0.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis0.value())
+		self.my_drive.axis0.trap_traj.config.A_per_css   = float(self.doubleSpinBox_A_per_css_axis0.value())
+
 		self.my_drive.axis0.config.startup_encoder_index_search = self.radioButton_startupEncoderIndexSearchTrue_axis0.isChecked()
 		self.my_drive.axis0.config.startup_motor_calibration = self.radioButton_startupMotorCalibrationTrue_axis0.isChecked()
 		self.my_drive.axis0.config.startup_sensorless_control = self.radioButton_startupSensorlessControlTrue_axis0.isChecked()
@@ -705,6 +710,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis1.controller.config.pos_gain = float(self.doubleSpinBox_posGainValue_axis1.value())
 		self.my_drive.axis1.controller.config.vel_limit = float(self.doubleSpinBox_velLimitValue_axis1.value())
 		self.my_drive.axis1.controller.config.control_mode = int(self.spinBox_controlModeValue_axis1.value())
+
+		self.my_drive.axis1.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis1.value())
+		self.my_drive.axis1.trap_traj.config.accel_limit = float(self.doubleSpinBox_accel_limit_axis1.value())
+		self.my_drive.axis1.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis1.value())
+		self.my_drive.axis1.trap_traj.config.A_per_css   = float(self.doubleSpinBox_A_per_css_axis1.value())
 
 		self.my_drive.axis1.config.startup_encoder_index_search = self.radioButton_startupEncoderIndexSearchTrue_axis1.isChecked()
 		self.my_drive.axis1.config.startup_motor_calibration = self.radioButton_startupMotorCalibrationTrue_axis1.isChecked()
@@ -970,6 +980,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.doubleSpinBox_velLimitValue_axis0.setValue(self.my_drive.axis0.controller.config.vel_limit)
 		self.spinBox_controlModeValue_axis0.setValue(self.my_drive.axis0.controller.config.control_mode)
 
+		self.doubleSpinBox_vel_limit_axis0.setValue(self.my_drive.axis0.trap_traj.config.vel_limit)
+		self.doubleSpinBox_accel_limit_axis0.setValue(self.my_drive.axis0.trap_traj.config.accel_limit)
+		self.doubleSpinBox_vel_limit_axis0.setValue(self.my_drive.axis0.trap_traj.config.vel_limit)
+		self.doubleSpinBox_A_per_css_axis0.setValue(self.my_drive.axis0.trap_traj.config.A_per_css)
+
 
 
 	def scan_axis0_motor_config(self):
@@ -1131,6 +1146,11 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.doubleSpinBox_velIntegratorGainValue_axis1.setValue(self.my_drive.axis1.controller.config.vel_integrator_gain)
 		self.doubleSpinBox_velLimitValue_axis1.setValue(self.my_drive.axis1.controller.config.vel_limit)
 		self.spinBox_controlModeValue_axis1.setValue(self.my_drive.axis1.controller.config.control_mode)
+
+		self.doubleSpinBox_vel_limit_axis1.setValue(self.my_drive.axis1.trap_traj.config.vel_limit)
+		self.doubleSpinBox_accel_limit_axis1.setValue(self.my_drive.axis1.trap_traj.config.accel_limit)
+		self.doubleSpinBox_vel_limit_axis1.setValue(self.my_drive.axis1.trap_traj.config.vel_limit)
+		self.doubleSpinBox_A_per_css_axis1.setValue(self.my_drive.axis1.trap_traj.config.A_per_css)
 
 	def scan_axis1_encoder_config(self):
 		if self.my_drive.axis1.encoder.index_found:

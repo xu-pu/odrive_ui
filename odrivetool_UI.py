@@ -74,11 +74,13 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.buttonGroup_14.buttonClicked.connect(self.axis_controller_mode_changed)
 
 		self.axis0PositionGo_pushButton.clicked.connect(self.send_axis0_position_go)
+		self.axis0TrajectoryGo_pushButton.clicked.connect(self.send_axis0_trajectory_go)
 		self.axis0Backward_pushButton.clicked.connect(self.send_axis0_velocity_current_backward)
 		self.axis0Stop_pushButton.clicked.connect(self.send_axis0_velocity_current_stop)
 		self.axis0Forward_pushButton.clicked.connect(self.send_axis0_velocity_current_forward)
 
 		self.axis1PositionGo_pushButton.clicked.connect(self.send_axis1_position_go)
+		self.axis1TrajectoryGo_pushButton.clicked.connect(self.send_axis1_trajectory_go)
 		self.axis1Backward_pushButton.clicked.connect(self.send_axis1_velocity_current_backward)
 		self.axis1Stop_pushButton.clicked.connect(self.send_axis1_velocity_current_stop)
 		self.axis1Forward_pushButton.clicked.connect(self.send_axis1_velocity_current_forward)
@@ -177,7 +179,8 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 	def update_controller_mode(self):
 		# print("Controller mode {}".format(self.my_drive.axis0.controller.config.control_mode))
 		axis0_control_mode = self.my_drive.axis0.controller.config.control_mode
-		if axis0_control_mode == CTRL_MODE_POSITION_CONTROL:
+
+		if axis0_control_mode == CTRL_MODE_POSITION_CONTROL or axis0_control_mode == CTRL_MODE_TRAJECTORY_CONTROL:
 			self.axis0Position_radioButton.setChecked(True)
 			self.axis_controller_fields_position_enabled(True, 0)
 		elif axis0_control_mode == CTRL_MODE_CURRENT_CONTROL:
@@ -188,7 +191,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			self.axis_controller_fields_position_enabled(False, 0)
 
 		axis1_control_mode = self.my_drive.axis1.controller.config.control_mode
-		if axis1_control_mode == CTRL_MODE_POSITION_CONTROL:
+		if axis1_control_mode == CTRL_MODE_POSITION_CONTROL or axis1_control_mode == CTRL_MODE_TRAJECTORY_CONTROL:
 			self.axis1Position_radioButton.setChecked(True)
 			self.axis_controller_fields_position_enabled(True, 1)
 		elif axis1_control_mode == CTRL_MODE_CURRENT_CONTROL:
@@ -1175,6 +1178,12 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	def send_axis1_position_go(self):
 		self.my_drive.axis1.controller.pos_setpoint = self.axis1Position_doubleSpinBox.value()
+
+	def send_axis0_trajectory_go(self):
+		self.my_drive.axis0.controller.move_to_pos(self.axis0Position_doubleSpinBox.value())
+
+	def send_axis1_trajectory_go(self):
+		self.my_drive.axis1.controller.move_to_pos(self.axis1Position_doubleSpinBox.value())
 
 	def send_axis0_velocity_current_stop(self):
 		self.send_axis_velocity_current_command(0, self.my_drive.axis0.controller.config.control_mode, 0.0)

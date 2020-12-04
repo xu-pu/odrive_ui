@@ -420,6 +420,13 @@ Control</string>
                      </property>
                     </widget>
                    </item>
+                   <item row="0" column="4">
+                    <widget class="QPushButton" name="axis1TrajectoryGo_pushButton">
+                     <property name="text">
+                      <string>Traject</string>
+                     </property>
+                    </widget>
+                   </item>
                   </layout>
                  </widget>
                 </item>
@@ -772,13 +779,6 @@ Control</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="label_16">
-                     <property name="text">
-                      <string>TextLabel</string>
-                     </property>
-                    </widget>
-                   </item>
                   </layout>
                  </widget>
                 </item>
@@ -828,6 +828,13 @@ Control</string>
                     <widget class="QPushButton" name="axis0PositionGo_pushButton">
                      <property name="text">
                       <string>Go</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="4">
+                    <widget class="QPushButton" name="axis0TrajectoryGo_pushButton">
+                     <property name="text">
+                      <string>Traject</string>
                      </property>
                     </widget>
                    </item>
@@ -2209,19 +2216,6 @@ Control</string>
                <layout class="QGridLayout" name="gridLayout_49">
                 <item row="0" column="0">
                  <layout class="QGridLayout" name="gridLayout_50">
-                  <item row="0" column="1">
-                   <spacer name="horizontalSpacer_20">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_gpio2Max">
                     <property name="font">
@@ -3387,6 +3381,113 @@ Control</string>
               <string>Controller</string>
              </attribute>
              <layout class="QGridLayout" name="gridLayout_37">
+              <item row="0" column="2">
+               <widget class="QGroupBox" name="groupBox_controller_config_3">
+                <property name="title">
+                 <string>Trajectory</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_59">
+                 <item row="0" column="0">
+                  <layout class="QGridLayout" name="gridLayout_76">
+                   <item row="2" column="0">
+                    <widget class="QLabel" name="label_17">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Decel limit</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_decel_limit_axis0">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="decimals">
+                      <number>2</number>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_19">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Vel limit</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_accel_limit_axis0">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="decimals">
+                      <number>2</number>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_vel_limit_axis0">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QLabel" name="label_16">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>A per css</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_A_per_css_axis0">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="label_18">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Accel limit</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
               <item row="0" column="1">
                <widget class="QGroupBox" name="groupBox_controller_config">
                 <property name="title">
@@ -3760,22 +3861,6 @@ Control</string>
                  <size>
                   <width>20</width>
                   <height>40</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="0" column="2">
-               <spacer name="horizontalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                 <enum>QSizePolicy::Maximum</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>300</width>
-                  <height>20</height>
                  </size>
                 </property>
                </spacer>
@@ -6661,6 +6746,113 @@ Control</string>
               <string>Controller</string>
              </attribute>
              <layout class="QGridLayout" name="gridLayout_92">
+              <item row="0" column="2">
+               <widget class="QGroupBox" name="groupBox_controller_config_3">
+                <property name="title">
+                 <string>Trajectory</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_59">
+                 <item row="0" column="0">
+                  <layout class="QGridLayout" name="gridLayout_76">
+                   <item row="2" column="0">
+                    <widget class="QLabel" name="label_17">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Decel limit</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_decel_limit_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="decimals">
+                      <number>2</number>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_19">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Vel limit</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_accel_limit_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="decimals">
+                      <number>2</number>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_vel_limit_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QLabel" name="label_16">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>A per css</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="1">
+                    <widget class="QDoubleSpinBox" name="doubleSpinBox_A_per_css_axis1">
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="maximum">
+                      <double>1000000.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="label_18">
+                     <property name="font">
+                      <font>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Accel limit</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
               <item row="0" column="1">
                <widget class="QGroupBox" name="groupBox_controller_config_2">
                 <property name="title">
@@ -7034,22 +7226,6 @@ Control</string>
                  <size>
                   <width>20</width>
                   <height>40</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="0" column="2">
-               <spacer name="horizontalSpacer_4">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                 <enum>QSizePolicy::Maximum</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>300</width>
-                  <height>20</height>
                  </size>
                 </property>
                </spacer>

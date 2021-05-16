@@ -18,6 +18,11 @@ from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
 
 from serialThread import odriveWorker
 
+CONTROL_MODE_VOLTAGE_CONTROL = 0
+CONTROL_MODE_TORQUE_CONTROL = 1
+CONTROL_MODE_VELOCITY_CONTROL = 2
+CONTROL_MODE_POSITION_CONTROL = 3
+
 ICON_TRUE = "Icons/True.jpg"
 ICON_FALSE = "Icons/False.jpg"
 ICON_NOSTATE = "Icons/NoState.jpg"
@@ -180,24 +185,24 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		# print("Controller mode {}".format(self.my_drive.axis0.controller.config.control_mode))
 		axis0_control_mode = self.my_drive.axis0.controller.config.control_mode
 
-		if axis0_control_mode == CTRL_MODE_POSITION_CONTROL or axis0_control_mode == CTRL_MODE_TRAJECTORY_CONTROL:
+		if axis0_control_mode == CONTROL_MODE_POSITION_CONTROL:# or axis0_control_mode == CTRL_MODE_TRAJECTORY_CONTROL:
 			self.axis0Position_radioButton.setChecked(True)
 			self.axis_controller_fields_position_enabled(True, 0)
-		elif axis0_control_mode == CTRL_MODE_CURRENT_CONTROL:
+		elif axis0_control_mode == CONTROL_MODE_TORQUE_CONTROL:
 			self.axis0Current_radioButton.setChecked(True)
 			self.axis_controller_fields_position_enabled(False, 0)
-		elif axis0_control_mode == CTRL_MODE_VELOCITY_CONTROL:
+		elif axis0_control_mode == CONTROL_MODE_VELOCITY_CONTROL:
 			self.axis0Velocity_radioButton.setChecked(True)
 			self.axis_controller_fields_position_enabled(False, 0)
 
 		axis1_control_mode = self.my_drive.axis1.controller.config.control_mode
-		if axis1_control_mode == CTRL_MODE_POSITION_CONTROL or axis1_control_mode == CTRL_MODE_TRAJECTORY_CONTROL:
+		if axis1_control_mode == CONTROL_MODE_POSITION_CONTROL:# or axis1_control_mode == CTRL_MODE_TRAJECTORY_CONTROL:
 			self.axis1Position_radioButton.setChecked(True)
 			self.axis_controller_fields_position_enabled(True, 1)
-		elif axis1_control_mode == CTRL_MODE_CURRENT_CONTROL:
+		elif axis1_control_mode == CONTROL_MODE_TORQUE_CONTROL:
 			self.axis1Current_radioButton.setChecked(True)
 			self.axis_controller_fields_position_enabled(False, 1)
-		elif axis1_control_mode == CTRL_MODE_VELOCITY_CONTROL:
+		elif axis1_control_mode == CONTROL_MODE_VELOCITY_CONTROL:
 			self.axis1Velocity_radioButton.setChecked(True)
 			self.axis_controller_fields_position_enabled(False, 1)
 
@@ -208,26 +213,26 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		group_name = id.sender().objectName()
 		if group_name == "buttonGroup_13":
 			if button_name == "Position":
-				self.axis_control_mode_changed(CTRL_MODE_POSITION_CONTROL, 0)
+				self.axis_control_mode_changed(CONTROL_MODE_POSITION_CONTROL, 0)
 			elif button_name == "Current":
-				self.axis_control_mode_changed(CTRL_MODE_CURRENT_CONTROL, 0)
+				self.axis_control_mode_changed(CONTROL_MODE_TORQUE_CONTROL, 0)
 			elif button_name == "Velocity":
-				self.axis_control_mode_changed(CTRL_MODE_VELOCITY_CONTROL, 0)
+				self.axis_control_mode_changed(CONTROL_MODE_VELOCITY_CONTROL, 0)
 		elif group_name == "buttonGroup_14":
 			if button_name == "Position":
-				self.axis_control_mode_changed(CTRL_MODE_POSITION_CONTROL, 1)
+				self.axis_control_mode_changed(CONTROL_MODE_POSITION_CONTROL, 1)
 			elif button_name == "Current":
-				self.axis_control_mode_changed(CTRL_MODE_CURRENT_CONTROL, 1)
+				self.axis_control_mode_changed(CONTROL_MODE_TORQUE_CONTROL, 1)
 			elif button_name == "Velocity":
-				self.axis_control_mode_changed(CTRL_MODE_VELOCITY_CONTROL, 1)
+				self.axis_control_mode_changed(CONTROL_MODE_VELOCITY_CONTROL, 1)
 
 
 	def axis_control_mode_changed(self, control_mode, axis):
-		if control_mode == CTRL_MODE_POSITION_CONTROL:
+		if control_mode == CONTROL_MODE_POSITION_CONTROL:
 			self.axis_controller_fields_position_enabled(True, axis)
-		elif control_mode == CTRL_MODE_CURRENT_CONTROL:
+		elif control_mode == CONTROL_MODE_TORQUE_CONTROL:
 			self.axis_controller_fields_position_enabled(False, axis)
-		elif control_mode == CTRL_MODE_VELOCITY_CONTROL:
+		elif control_mode == CONTROL_MODE_VELOCITY_CONTROL:
 			self.axis_controller_fields_position_enabled(False, axis)
 		# Updated mode inside odrive board
 		if axis == 0:
@@ -1214,50 +1219,50 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 	def send_axis0_velocity_current_forward(self):
 		mode = self.my_drive.axis0.controller.config.control_mode
 		value = 0
-		if mode == CTRL_MODE_CURRENT_CONTROL:
+		if mode == CONTROL_MODE_TORQUE_CONTROL:
 			value = self.axis0Current_doubleSpinBox.value()
-		elif mode == CTRL_MODE_VELOCITY_CONTROL:
+		elif mode == CONTROL_MODE_VELOCITY_CONTROL:
 			value = self.axis0Velocity_doubleSpinBox.value()
 		self.send_axis_velocity_current_command(0, mode, value)
 
 	def send_axis1_velocity_current_forward(self):
 		mode = self.my_drive.axis1.controller.config.control_mode
 		value = 0
-		if mode == CTRL_MODE_CURRENT_CONTROL:
+		if mode == CONTROL_MODE_TORQUE_CONTROL:
 			value = self.axis1Current_doubleSpinBox.value()
-		elif mode == CTRL_MODE_VELOCITY_CONTROL:
+		elif mode == CONTROL_MODE_VELOCITY_CONTROL:
 			value = self.axis1Velocity_doubleSpinBox.value()
 		self.send_axis_velocity_current_command(1, mode, value)
 
 	def send_axis0_velocity_current_backward(self):
 		mode = self.my_drive.axis0.controller.config.control_mode
 		value = 0
-		if mode == CTRL_MODE_CURRENT_CONTROL:
+		if mode == CONTROL_MODE_TORQUE_CONTROL:
 			value = self.axis0Current_doubleSpinBox.value() * -1
-		elif mode == CTRL_MODE_VELOCITY_CONTROL:
+		elif mode == CONTROL_MODE_VELOCITY_CONTROL:
 			value = self.axis0Velocity_doubleSpinBox.value() * -1
 		self.send_axis_velocity_current_command(0, mode, value)
 
 	def send_axis1_velocity_current_backward(self):
 		mode = self.my_drive.axis1.controller.config.control_mode
 		value = 0
-		if mode == CTRL_MODE_CURRENT_CONTROL:
+		if mode == CONTROL_MODE_TORQUE_CONTROL:
 			value = self.axis1Current_doubleSpinBox.value() * -1
-		elif mode == CTRL_MODE_VELOCITY_CONTROL:
+		elif mode == CONTROL_MODE_VELOCITY_CONTROL:
 			value = self.axis1Velocity_doubleSpinBox.value() * -1
 		self.send_axis_velocity_current_command(1, mode, value)
 
 
 	def send_axis_velocity_current_command(self, axis, mode, value):
 		if axis == 0:
-			if mode == CTRL_MODE_CURRENT_CONTROL:
+			if mode == CONTROL_MODE_TORQUE_CONTROL:
 				self.my_drive.axis0.controller.current_setpoint = value
-			elif mode == CTRL_MODE_VELOCITY_CONTROL:
+			elif mode == CONTROL_MODE_VELOCITY_CONTROL:
 				self.my_drive.axis0.controller.vel_setpoint = value
 		elif axis == 1:
-			if mode == CTRL_MODE_CURRENT_CONTROL:
+			if mode == CONTROL_MODE_TORQUE_CONTROL:
 				self.my_drive.axis1.controller.current_setpoint = value
-			elif mode == CTRL_MODE_VELOCITY_CONTROL:
+			elif mode == CONTROL_MODE_VELOCITY_CONTROL:
 				self.my_drive.axis1.controller.vel_setpoint = value
 
 	def clear_state_buttons(self, axis):

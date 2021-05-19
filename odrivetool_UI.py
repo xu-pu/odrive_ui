@@ -18,10 +18,6 @@ from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
 
 from serialThread import odriveWorker
 
-CONTROL_MODE_VOLTAGE_CONTROL = 0
-CONTROL_MODE_TORQUE_CONTROL = 1
-CONTROL_MODE_VELOCITY_CONTROL = 2
-CONTROL_MODE_POSITION_CONTROL = 3
 
 ICON_TRUE = "Icons/True.jpg"
 ICON_FALSE = "Icons/False.jpg"
@@ -666,7 +662,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis0.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis0.value())
 		self.my_drive.axis0.trap_traj.config.accel_limit = float(self.doubleSpinBox_accel_limit_axis0.value())
 		self.my_drive.axis0.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis0.value())
-		self.my_drive.axis0.trap_traj.config.A_per_css   = float(self.doubleSpinBox_A_per_css_axis0.value())
+		# self.my_drive.axis0.trap_traj.config.A_per_css   = float(self.doubleSpinBox_A_per_css_axis0.value())
 
 		self.my_drive.axis0.config.startup_encoder_index_search = self.radioButton_startupEncoderIndexSearchTrue_axis0.isChecked()
 		self.my_drive.axis0.config.startup_motor_calibration = self.radioButton_startupMotorCalibrationTrue_axis0.isChecked()
@@ -679,7 +675,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis0.config.general_lockin.current = float(self.doubleSpinBox_spinUpCurrentValue_axis0.value())
 		self.my_drive.axis0.config.general_lockin.vel = float(self.doubleSpinBox_spinUpTargetVelValue_axis0.value())
 		self.my_drive.axis0.config.general_lockin.ramp_time = float(self.doubleSpinBox_rampUpTimeValue_axis0.value())
-		self.my_drive.axis0.config.counts_per_step = float(self.doubleSpinBox_countPerStepValue_axis0.value())
+		self.my_drive.axis0.config.turns_per_step = float(self.doubleSpinBox_countPerStepValue_axis0.value())
 		self.my_drive.axis0.config.general_lockin.accel = float(self.doubleSpinBox_spinUpAccelerationValue_axis0.value())
 
 		self.my_drive.axis0.encoder.config.calib_range = float(self.doubleSpinBox_calibRangeValue_axis0.value())
@@ -719,7 +715,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis1.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis1.value())
 		self.my_drive.axis1.trap_traj.config.accel_limit = float(self.doubleSpinBox_accel_limit_axis1.value())
 		self.my_drive.axis1.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis1.value())
-		self.my_drive.axis1.trap_traj.config.A_per_css   = float(self.doubleSpinBox_A_per_css_axis1.value())
+		# self.my_drive.axis1.trap_traj.config.A_per_css   = float(self.doubleSpinBox_A_per_css_axis1.value())
 
 		self.my_drive.axis1.config.startup_encoder_index_search = self.radioButton_startupEncoderIndexSearchTrue_axis1.isChecked()
 		self.my_drive.axis1.config.startup_motor_calibration = self.radioButton_startupMotorCalibrationTrue_axis1.isChecked()
@@ -732,7 +728,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.my_drive.axis1.config.general_lockin.current = float(self.doubleSpinBox_spinUpCurrentValue_axis1.value())
 		self.my_drive.axis1.config.general_lockin.vel = float(self.doubleSpinBox_spinUpTargetVelValue_axis1.value())
 		self.my_drive.axis1.config.general_lockin.ramp_time = float(self.doubleSpinBox_rampUpTimeValue_axis1.value())
-		self.my_drive.axis1.config.counts_per_step = float(self.doubleSpinBox_countPerStepValue_axis1.value())
+		self.my_drive.axis1.config.turns_per_step = float(self.doubleSpinBox_countPerStepValue_axis1.value())
 		self.my_drive.axis1.config.general_lockin.accel = float(self.doubleSpinBox_spinUpAccelerationValue_axis1.value())
 
 		self.my_drive.axis1.encoder.config.calib_range = float(self.doubleSpinBox_calibRangeValue_axis1.value())
@@ -761,6 +757,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.scan_axis_config()
 
 	def scan_config_config(self):
+		print("Scanning config config")
 		# enable uart
 		# enable i2c instead of can
 		self.doubleSpinBox_dcBusOvervoltageTripLevelValue.setValue(self.my_drive.config.dc_bus_overvoltage_trip_level)
@@ -845,13 +842,13 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	def scan_can_config(self):
 		print("Scanning CAN config...")
-		self.label_TxMailboxAbortCallbackCntValue.setText(str(self.my_drive.can.TxMailboxAbortCallbackCnt))
-		self.label_nodeIdValue.setText(str(self.my_drive.can.node_id))
-		self.label_receivedMsgCntValue.setText(str(self.my_drive.can.received_msg_cnt))
-		self.label_TxMailboxCompleteCallbackCntValue.setText(str(self.my_drive.can.TxMailboxCompleteCallbackCnt))
-		self.label_unhandledMessagesValue.setText(str(self.my_drive.can.unhandled_messages))
-		self.label_receivedAckValue.setText(str(self.my_drive.can.received_ack))
-		self.label_unexpectedErrorsValue.setText(hex(self.my_drive.can.unexpected_errors))
+		# self.label_TxMailboxAbortCallbackCntValue.setText(str(self.my_drive.can.TxMailboxAbortCallbackCnt))
+		# self.label_nodeIdValue.setText(str(self.my_drive.can.node_id))
+		# self.label_receivedMsgCntValue.setText(str(self.my_drive.can.received_msg_cnt))
+		# self.label_TxMailboxCompleteCallbackCntValue.setText(str(self.my_drive.can.TxMailboxCompleteCallbackCnt))
+		# self.label_unhandledMessagesValue.setText(str(self.my_drive.can.unhandled_messages))
+		# self.label_receivedAckValue.setText(str(self.my_drive.can.received_ack))
+		# self.label_unexpectedErrorsValue.setText(hex(self.my_drive.can.unexpected_errors))
 
 	def scan_system_stats_config(self):
 		self.label_minStackSpaceAxis1Value.setText(str(self.my_drive.system_stats.min_stack_space_axis1))
@@ -916,7 +913,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		else:
 			self.radioButton_enableStepDirFalse_axis0.setChecked(True)
 
-		self.doubleSpinBox_countPerStepValue_axis0.setValue(self.my_drive.axis0.config.counts_per_step)
+		self.doubleSpinBox_countPerStepValue_axis0.setValue(self.my_drive.axis0.config.turns_per_step)
 		self.doubleSpinBox_rampUpTimeValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.ramp_time)
 		self.doubleSpinBox_rampUpDistanceValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.ramp_distance)
 		self.doubleSpinBox_spinUpCurrentValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.current)
@@ -973,9 +970,9 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	def scan_axis0_controller_config(self):
 		self.label_velSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.vel_setpoint))
-		self.label_velIntegratorCurrent_axis0.setText(str(self.my_drive.axis0.controller.vel_integrator_current))
+		self.label_velIntegratorCurrent_axis0.setText(str(self.my_drive.axis0.controller.vel_integrator_torque))
 		self.label_posSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.pos_setpoint))
-		self.label_currentSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.current_setpoint))
+		self.label_currentSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.torque_setpoint))
 		self.scan_axis0_controller_config_config()
 
 	def scan_axis0_controller_config_config(self):
@@ -988,7 +985,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.doubleSpinBox_vel_limit_axis0.setValue(self.my_drive.axis0.trap_traj.config.vel_limit)
 		self.doubleSpinBox_accel_limit_axis0.setValue(self.my_drive.axis0.trap_traj.config.accel_limit)
 		self.doubleSpinBox_vel_limit_axis0.setValue(self.my_drive.axis0.trap_traj.config.vel_limit)
-		self.doubleSpinBox_A_per_css_axis0.setValue(self.my_drive.axis0.trap_traj.config.A_per_css)
+		# self.doubleSpinBox_A_per_css_axis0.setValue(self.my_drive.axis0.trap_traj.config.A_per_css)
 
 
 
@@ -1076,7 +1073,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		else:
 			self.radioButton_enableStepDirFalse_axis1.setChecked(True)
 
-		self.doubleSpinBox_countPerStepValue_axis1.setValue(self.my_drive.axis1.config.counts_per_step)
+		self.doubleSpinBox_countPerStepValue_axis1.setValue(self.my_drive.axis1.config.turns_per_step)
 		self.doubleSpinBox_rampUpTimeValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.ramp_time)
 		self.doubleSpinBox_rampUpDistanceValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.ramp_distance)
 		self.doubleSpinBox_spinUpCurrentValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.current)
@@ -1140,9 +1137,9 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 	def scan_axis1_controller_config(self):
 		self.label_velSetpointValue_axis1.setText(str(self.my_drive.axis1.controller.vel_setpoint))
-		self.label_velIntegratorCurrent_axis1.setText(str(self.my_drive.axis1.controller.vel_integrator_current))
+		self.label_velIntegratorCurrent_axis1.setText(str(self.my_drive.axis1.controller.vel_integrator_torque))
 		self.label_posSetpointValue_axis1.setText(str(self.my_drive.axis1.controller.pos_setpoint))
-		self.label_currentSetpointValue_axis1.setText(str(self.my_drive.axis1.controller.current_setpoint))
+		self.label_currentSetpointValue_axis1.setText(str(self.my_drive.axis1.controller.torque_setpoint))
 		self.scan_axis1_controller_config_config()
 
 	def scan_axis1_controller_config_config(self):
@@ -1155,7 +1152,7 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.doubleSpinBox_vel_limit_axis1.setValue(self.my_drive.axis1.trap_traj.config.vel_limit)
 		self.doubleSpinBox_accel_limit_axis1.setValue(self.my_drive.axis1.trap_traj.config.accel_limit)
 		self.doubleSpinBox_vel_limit_axis1.setValue(self.my_drive.axis1.trap_traj.config.vel_limit)
-		self.doubleSpinBox_A_per_css_axis1.setValue(self.my_drive.axis1.trap_traj.config.A_per_css)
+		# self.doubleSpinBox_A_per_css_axis1.setValue(self.my_drive.axis1.trap_traj.config.A_per_css)
 
 	def scan_axis1_encoder_config(self):
 		if self.my_drive.axis1.encoder.index_found:
@@ -1199,10 +1196,10 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 		self.doubleSpinBox_bandwidthValue_axis1.setValue(self.my_drive.axis1.encoder.config.bandwidth)
 
 	def send_axis0_position_go(self):
-		self.my_drive.axis0.controller.pos_setpoint = self.axis0Position_doubleSpinBox.value()
+		self.my_drive.axis0.controller.input_pos = self.axis0Position_doubleSpinBox.value()
 
 	def send_axis1_position_go(self):
-		self.my_drive.axis1.controller.pos_setpoint = self.axis1Position_doubleSpinBox.value()
+		self.my_drive.axis1.controller.input_pos = self.axis1Position_doubleSpinBox.value()
 
 	def send_axis0_trajectory_go(self):
 		self.my_drive.axis0.controller.move_to_pos(self.axis0Position_doubleSpinBox.value())
@@ -1256,14 +1253,14 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 	def send_axis_velocity_current_command(self, axis, mode, value):
 		if axis == 0:
 			if mode == CONTROL_MODE_TORQUE_CONTROL:
-				self.my_drive.axis0.controller.current_setpoint = value
+				self.my_drive.axis0.controller.input_torque = value
 			elif mode == CONTROL_MODE_VELOCITY_CONTROL:
-				self.my_drive.axis0.controller.vel_setpoint = value
+				self.my_drive.axis0.controller.input_vel = value
 		elif axis == 1:
 			if mode == CONTROL_MODE_TORQUE_CONTROL:
-				self.my_drive.axis1.controller.current_setpoint = value
+				self.my_drive.axis1.controller.input_torque = value
 			elif mode == CONTROL_MODE_VELOCITY_CONTROL:
-				self.my_drive.axis1.controller.vel_setpoint = value
+				self.my_drive.axis1.controller.input_vel = value
 
 	def clear_state_buttons(self, axis):
 		if axis == 0:

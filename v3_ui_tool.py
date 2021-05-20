@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import UI_mainwindow2
 
 import odrive
 from odrive.enums import *
@@ -19,8 +18,8 @@ import pyqtgraph as pg
 from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
 
 from serialThread import odriveWorker
-from customMDI import CustomMDIArea
-from settings_subwindow import SettingsWindow
+
+import ui_odrive
 
 ICON_TRUE_PATH = "Icons/True.jpg"
 ICON_FALSE_PATH = "Icons/False.jpg"
@@ -36,7 +35,7 @@ ICON_WRITE_CONFIG_PATH = "Icons/odrive_icons/odrive_icons_WriteConfig.png"
 
 version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_minor","hw_version_major", "hw_version_minor", "fw_version_unreleased","hw_version_variant"]
 
-class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
+class ExampleApp(QtWidgets.QMainWindow, ui_odrive.Ui_odriveMainWindow):
 	app_name = "Odrive Tester"
 	def __init__(self):
 		# Simple reason why we use it here is that it allows us to
@@ -50,46 +49,40 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
 		self.quit_shortcut.activated.connect(self.close_application)
 
-		self.connect_to_odrive_action = self.mainToolBar.addAction("Connect to Odrive")
-		self.connect_icon = QtGui.QIcon()
-		self.connect_icon.addPixmap(QtGui.QPixmap(ICON_CONNECT_PATH), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-		self.connect_to_odrive_action.setIcon(self.connect_icon)
-		self.connect_to_odrive_action.triggered.connect(self.odrive_connect)
+		# self.connect_to_odrive_action = self.mainToolBar.addAction("Connect to Odrive")
+		# self.connect_icon = QtGui.QIcon()
+		# self.connect_icon.addPixmap(QtGui.QPixmap(ICON_CONNECT_PATH), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+		# self.connect_to_odrive_action.setIcon(self.connect_icon)
+		# self.connect_to_odrive_action.triggered.connect(self.odrive_connect)
 
-		self.save_action = self.mainToolBar.addAction("Save")
-		self.save_icon = QtGui.QIcon()
-		self.save_icon.addPixmap(QtGui.QPixmap(ICON_SAVE_PATH))
-		self.save_action.setIcon(self.save_icon)
+		# self.save_action = self.mainToolBar.addAction("Save")
+		# self.save_icon = QtGui.QIcon()
+		# self.save_icon.addPixmap(QtGui.QPixmap(ICON_SAVE_PATH))
+		# self.save_action.setIcon(self.save_icon)
 
-		self.open_action = self.mainToolBar.addAction("Open")
-		self.open_icon = QtGui.QIcon()
-		self.open_icon.addPixmap(QtGui.QPixmap(ICON_OPEN_PATH))
-		self.open_action.setIcon(self.open_icon)
+		# self.open_action = self.mainToolBar.addAction("Open")
+		# self.open_icon = QtGui.QIcon()
+		# self.open_icon.addPixmap(QtGui.QPixmap(ICON_OPEN_PATH))
+		# self.open_action.setIcon(self.open_icon)
 
-		self.read_config_action = self.mainToolBar.addAction("Read configuration")
-		self.read_config_icon = QtGui.QIcon()
-		self.read_config_icon.addPixmap(QtGui.QPixmap(ICON_READ_CONFIG_PATH))
-		self.read_config_action.setIcon(self.read_config_icon)
+		# self.read_config_action = self.mainToolBar.addAction("Read configuration")
+		# self.read_config_icon = QtGui.QIcon()
+		# self.read_config_icon.addPixmap(QtGui.QPixmap(ICON_READ_CONFIG_PATH))
+		# self.read_config_action.setIcon(self.read_config_icon)
 
-		self.write_config_action = self.mainToolBar.addAction("Write configuration")
-		self.write_config_icon = QtGui.QIcon()
-		self.write_config_icon.addPixmap(QtGui.QPixmap(ICON_WRITE_CONFIG_PATH))
-		self.write_config_action.setIcon(self.write_config_icon)
+		# self.write_config_action = self.mainToolBar.addAction("Write configuration")
+		# self.write_config_icon = QtGui.QIcon()
+		# self.write_config_icon.addPixmap(QtGui.QPixmap(ICON_WRITE_CONFIG_PATH))
+		# self.write_config_action.setIcon(self.write_config_icon)
 
-		self.settings_action = self.mainToolBar.addAction("Settings")
-		self.settings_icon = QtGui.QIcon()
-		self.settings_icon.addPixmap(QtGui.QPixmap(ICON_SETTINGS_PATH))
-		self.settings_action.setIcon(self.settings_icon)
-		self.settings_action.triggered.connect(self.open_settings_window)
+		# self.help_action = self.mainToolBar.addAction("Help")
+		# self.help_icon = QtGui.QIcon()
+		# self.help_icon.addPixmap(QtGui.QPixmap(ICON_HELP_PATH))
+		# self.help_action.setIcon(self.help_icon)
 
-		self.help_action = self.mainToolBar.addAction("Help")
-		self.help_icon = QtGui.QIcon()
-		self.help_icon.addPixmap(QtGui.QPixmap(ICON_HELP_PATH))
-		self.help_action.setIcon(self.help_icon)
-
-		self.treeView.setDragEnabled(True)
-		self.treeView.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-		self.treeView.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+		# self.treeView.setDragEnabled(True)
+		# self.treeView.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+		# self.treeView.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
 		# self.treeView.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
 		# self.treeView.setAcceptDrops(True)
 		# self.treeView.setDragDropMode(QtGui.QAbstractItemView.DragOnly)
@@ -101,52 +94,13 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		# self.testmdi.odrive_request_sig.connect(self.odrive_requested)
 		# self.gridLayout.addWidget(self.testmdi, 0, 2, -1, 1)
 
-		self.settings_window = SettingsWindow()
-		self.settings_window.show()
-
 		# self.testmdi.add_sliders_config(self.settings_window.a_gb_dict)
 
 		self.odrive_connect()
 
-	def closeEvent(self, event):
-		print("User has clicked the red x on the main window")
-		self.settings_window.hide()
-		event.accept()
 
-	def open_settings_window(self):
-		self.settings_window.show()
-
-
-	def odrive_requested(self):
-		self.testmdi.add_odrive(self.my_drive)
-
-	def droping(self):
-		print("drop")
-
-	def odr_model(self):
-		model = QtGui.QStandardItemModel(0, 1, self)
-		model.setHeaderData(0, QtCore.Qt.Horizontal, "Odrive")
-		# model.setHeaderData(1, QtCore.Qt.Horizontal, "Graph enable")
-		item = QtGui.QStandardItem("axis0")
-		child = QtGui.QStandardItem("controller")  # Apple
-		childbanana = QtGui.QStandardItem("config")  # Apple
-		childApple = QtGui.QStandardItem("vel_limit")  # Apple
-		child.appendRow(childbanana)
-		child.appendRow(childApple)
-
-		item.appendRow(child)
-		child2 = QtGui.QStandardItem("objects4")  # Banana
-		item.appendRow(child2)
-		model.setItem(0, 0, item)
-		item2 = QtGui.QStandardItem("type222")
-		model.setItem(1, 0, item2)
-		return model
-
-	def load_config_template(self):
-		config_template = {}
-		with open("config_template.json") as f:
-			config_template = json.load(f)
-		return config_template
+	# def odrive_requested(self):
+	# 	self.testmdi.add_odrive(self.my_drive)
 
 	def close_application(self):
 		print("whooaaaa so custom!!!")
@@ -158,15 +112,15 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 
 	def odrive_connect(self):
 		# print("connecting")
-		self.statusBar.showMessage("Connecting...")
+		self.statusbar.showMessage("Connecting...")
 		self.odrive_worker = odriveWorker()
 		self.odrive_worker.odrive_found_sig.connect(self.odrive_connected)
 		self.odrive_worker.start()
 
 	def odrive_connected(self, my_drive):
-		self.statusBar.showMessage("Connected!", 5000)
+		self.statusbar.showMessage("Connected!", 5000)
 		self.my_drive = my_drive
-		self.testmdi.add_odrive(self.my_drive)
+		# self.testmdi.add_odrive(self.my_drive)
 		self.treeView.setModel(self.setup_odrive_model(my_drive))
 
 	def setup_odrive_model(self, my_drive):
@@ -216,6 +170,8 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow2.Ui_MainWindow):
 		model.setItem(0,0,item)
 		# self.testmdi.show()
 		return model
+
+
 
 def main():
 	app = QtWidgets.QApplication(sys.argv)  # A new instance of QApplication

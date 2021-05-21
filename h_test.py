@@ -17,8 +17,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from serialThread import odriveWorker
 
-ICON_TRUE_PATH = "Icons/True.jpg"
-ICON_FALSE_PATH = "Icons/False.jpg"
+ICON_TRUE_PATH = "Icons/true.png"
+ICON_FALSE_PATH = "Icons/false.png"
 ICON_NOSTATE_PATH = "Icons/NoState.jpg"
 
 ICON_CONNECT_PATH = "Icons/odrive_icons/odrive_icons_Connect.png"
@@ -68,6 +68,9 @@ class odrive_MainWindow(object):
 		# self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 274, 237))
 		self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
 		self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+		self.sb_v_layout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+		self.sb_layout = QtWidgets.QGridLayout()
+		self.sb_v_layout.addLayout(self.sb_layout,1,0,1,1)
 		self.gridLayout.addWidget(self.scrollArea, 0, 1, 1, 1)
 
 		MainWindow.setCentralWidget(self.centralWidget)
@@ -154,55 +157,194 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		index = self.treeView.selectedIndexes()[0]
 		tree_selection = index.model().itemFromIndex(index).text()
 		print(tree_selection)
+		self.add_action_buttons()
 		if tree_selection == "General":
 			self.setup_general()
 		elif tree_selection == "Control Test":
 			pass
 		else:
-			pass
+			self.setup_config(tree_selection)
+			# self.setup()
 		# print(self.treeView.selectedIndexes()[0].text())
 
-	def setup_general(self):
-		
-		# for key in self.my_drive._remote_attributes.keys():
-		# 	if isinstance(self.my_drive._remote_attributes[key], fibre.remote_object.RemoteObject):
-		# 		pass
-		# 	else:
-		# print(key)
+	def deleteItems(self, del_layout):
+		if del_layout.count() > 0:
+			while del_layout.count():
+				item = del_layout.takeAt(0)
+				widget = item.widget()
+				if widget is not None:
+					widget.deleteLater()
+				else:
+					self.deleteItems(item.layout())
+
+	def add_action_buttons(self):
+		self.button_layout = QtWidgets.QGridLayout()
+
+		pb_apply = QtWidgets.QPushButton()
+		pb_apply.setText("Apply")
+		self.button_layout.addWidget(pb_apply,0,0,1,1)
+
+		pb_apply = QtWidgets.QPushButton()
+		pb_apply.setText("Save Configuration")
+		self.button_layout.addWidget(pb_apply,0,1,1,1)
+
+		pb_apply = QtWidgets.QPushButton()
+		pb_apply.setText("Erase Configuration")
+		self.button_layout.addWidget(pb_apply,0,2,1,1)
+
+		pb_apply = QtWidgets.QPushButton()
+		pb_apply.setText("Reboot")
+		self.button_layout.addWidget(pb_apply,0,3,1,1)
+
+		self.sb_v_layout.addLayout(self.button_layout,0,0,1,1)
+
+
+	def setup_non_members(self):
+		pass
+
+	def add_single_layout_line(self, item, my_drive):
+		line_layout = QtWidgets.QGridLayout()
+		if "access" in item.keys():
+			print(item["type"])
+			print(item["access"])
+			print(item["name"])
+			if item["access"] == "r":
+				if "int" in item["type"] or item["type"] == "float":
+					label = QtWidgets.QLabel()
+					label.setText(item["name"])
+					val_label = QtWidgets.QLabel()
+					val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+					line_layout.addWidget(label,0,0,1,1)
+					line_layout.addWidget(val_label,0,1,1,1)
+				elif item["type"] == "bool":
+					label = QtWidgets.QLabel()
+					label.setText(item["name"])
+					pixmap_false = QtGui.QPixmap("Icons/false.png")
+					pixmap_true = QtGui.QPixmap("Icons/true.png")
+					val_label = QtWidgets.QLabel()
+					# print(my_drive._remote_attributes[item["name"]].get_value())
+					if my_drive._remote_attributes[item["name"]].get_value():
+						val_label.setPixmap(pixmap_true)
+					else:
+						val_label.setPixmap(pixmap_false)
+					line_layout.addWidget(label,0,0,1,1)
+					line_layout.addWidget(val_label,0,1,1,1)
+			elif item["access"] == "rw":
+				if "int" in item["type"]:
+					label = QtWidgets.QLabel()
+					label.setText(item["name"])
+					val_label = QtWidgets.QSpinBox()
+					val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+					line_layout.addWidget(label,0,0,1,1)
+					line_layout.addWidget(val_label,0,1,1,1)
+				elif item["type"] == "float":
+					label = QtWidgets.QLabel()
+					label.setText(item["name"])
+					val_label = QtWidgets.QDoubleSpinBox()
+					val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+					line_layout.addWidget(label,0,0,1,1)
+					line_layout.addWidget(val_label,0,1,1,1)
+				elif item["type"] == "bool":
+					rb_t = QtWidgets.QRadioButton()
+					rb_f = QtWidgets.QRadioButton()
+					icon_false = QtGui.QIcon()
+					icon_false.addPixmap(QtGui.QPixmap("Icons/false.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+					icon_true = QtGui.QIcon()
+					icon_true.addPixmap(QtGui.QPixmap("Icons/true.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+					rb_t.setIcon(icon_true)
+					rb_f.setIcon(icon_false)
+					hbox = QtWidgets.QHBoxLayout()
+					bgroup = QtWidgets.QButtonGroup(hbox) #
+					bgroup.addButton(rb_t)
+					bgroup.addButton(rb_f)
+					if my_drive._remote_attributes[item["name"]].get_value():
+						rb_t.setChecked(True)
+					else:
+						rb_f.setChecked(True)
+					label = QtWidgets.QLabel()
+					label.setText(item["name"])
+					hbox.addWidget(rb_t)
+					hbox.addWidget(rb_f)
+					line_layout.addWidget(label,0,0,1,1)
+					line_layout.addLayout(hbox,0,1,1,1)
+		return line_layout
+	
+
+	def setup_group_box(self,item,my_drive):
+		groupbox =  QtWidgets.QGroupBox()
+		groupbox.setTitle(item["name"])
+		groupBox_layout = QtWidgets.QGridLayout(groupbox)
+		# print(my_drive._remote_attributes)
+		# print(item.keys())
+		row_index = 0
+		if "members" in item.keys():
+			for member in item["members"]:
+				print(member["name"])
+				if "members" in member.keys():
+					pass
+				else:
+					item_layout = self.add_single_layout_line(member, my_drive._remote_attributes[item["name"]])
+					groupBox_layout.addLayout(item_layout, row_index ,0,1,1)
+					row_index += 1
+		else:
+			item_layout = self.add_single_layout_line(item, my_drive._remote_attributes[item["name"]])
+			groupBox_layout.addLayout(item_layout)
+		return groupbox
+
+	def setup_config(self, tree_selection):
+		print("setting up config")
+		row_index = 0
+		col_index = 1
+		self.deleteItems(self.sb_layout)
 		for item in self.my_drive._json_data:
-			# print(item["name"])
+			if item["name"] == tree_selection:
+				if "members" in item.keys():
+					for member in item["members"]:
+						print(member)
+						# print(self.my_drive._remote_attributes[tree_selection]._remote_attributes[member["name"]].get_value())
+						if "members" in member.keys():
+							print("Found members")
+							# for new_member in member["members"]:
+							group = self.setup_group_box(member, self.my_drive._remote_attributes[tree_selection])
+							self.sb_layout.addWidget(group,0,col_index,1,1)
+							col_index += 1
+						else:
+							print("add Line item")
+							item_layout = self.add_single_layout_line(member, self.my_drive._remote_attributes[tree_selection])
+							self.sb_layout.addLayout(item_layout,row_index,0,1,1)
+							row_index += 1
+						# 	for new_member in member["members"]:
+						# 		print(new_member)
+						# 		group = self.setup_group_box(new_member, self.my_drive._remote_attributes[tree_selection])
+						# 		# group = self.setup_group_box(new_member, self.my_drive._remote_attributes[tree_selection]._remote_attributes[new_member["name"]])
+						# 		self.sb_layout.addWidget(group)
+								# print(new_member)
+						# item_layout = self.add_single_layout_line(member, self.my_drive._remote_attributes[tree_selection])
+
+						# self.sb_layout.addLayout(item_layout,row_index,1,1,1)
+						# row_index += 1
+				else:
+					print("Impossible case all selection are only members")
+					
+
+	def setup_general(self):
+		row_index = 0
+		self.deleteItems(self.sb_layout)
+		for item in self.my_drive._json_data:
 			if "members" in item.keys():
 				pass
-				# print("Has Members")
 			else:
-				if "access" in item.keys():
-					# print(type(item))
-					print(item["type"])
-					print(item["access"])
+				item_layout = self.add_single_layout_line(item, self.my_drive)
+				self.sb_layout.addLayout(item_layout,row_index,1,1,1)
+				row_index += 1
 
-					# if item["access"] == "r":
-						# print(item["type"])
-						# if item["type"] == "float":
-						# 	ok = self.my_drive._remote_attributes[item["name"]].get_value()
-						# 	print(ok)
-	# def odrive_requested(self):
-	# 	self.testmdi.add_odrive(self.my_drive)
-
-	# def droping(self):
-	# 	print("drop")
-
-	# def load_config_template(self):
-	# 	config_template = {}
-	# 	with open("config_template.json") as f:
-	# 		config_template = json.load(f)
-	# 	return config_template
 
 	def close_application(self):
-		print("whooaaaa so custom!!!")
-		# try:
-		# 	self.odrive_worker.stop()
-		# except:
-		# 	pass
+		print("Closing!!!")
+		try:
+			self.odrive_worker.stop()
+		except:
+			print("exp")
 		sys.exit()
 
 	def odrive_connect(self):

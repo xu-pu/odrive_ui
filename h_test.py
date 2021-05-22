@@ -209,15 +209,15 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 
 	def add_bool(self, item, my_drive):
 		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
 		if item["access"] == "r":
-			label = QtWidgets.QLabel()
-			label.setText(item["name"])
 			val_label = QtWidgets.QLabel()
 			if my_drive._remote_attributes[item["name"]].get_value():
 				val_label.setPixmap(self.PIXMAP_TRUE)
 			else:
 				val_label.setPixmap(self.PIXMAP_FALSE)
-			hbox.addWidget(label)
 			hbox.addWidget(val_label)
 		elif item["access"] == "rw":
 			rb_t = QtWidgets.QRadioButton()
@@ -235,86 +235,161 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 				rb_t.setChecked(True)
 			else:
 				rb_f.setChecked(True)
-			label = QtWidgets.QLabel()
-			label.setText(item["name"])
-			hbox.addWidget(label)
 			hbox.addWidget(rb_t)
 			hbox.addWidget(rb_f)
 		return hbox
 
-		
+	def add_float(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QDoubleSpinBox()
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
 
+
+	def add_uint64(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_uint32(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_uint16(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_uint8(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_int16(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_int32(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
+
+
+		
+# float, bool, json, uint64, uint8, uint32, object,  uint16, int32
 	def add_single_layout_line(self, item, my_drive):
 		line_layout = QtWidgets.QGridLayout()
 		if "access" in item.keys():
-			print(item["type"])
-			print(item["access"])
-			print(item["name"])
-			if item["access"] == "r":
-				if "int" in item["type"] or item["type"] == "float":
-					label = QtWidgets.QLabel()
-					label.setText(item["name"])
-					val_label = QtWidgets.QLabel()
-					val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
-					line_layout.addWidget(label,0,0,1,1)
-					line_layout.addWidget(val_label,0,1,1,1)
-				elif item["type"] == "bool":
-					line_layout.addLayout(self.add_bool(item, my_drive),0,0,1,1)
-					# label = QtWidgets.QLabel()
-					# label.setText(item["name"])
-					# pixmap_false = QtGui.QPixmap("Icons/false.png")
-					# pixmap_true = QtGui.QPixmap("Icons/true.png")
-					# val_label = QtWidgets.QLabel()
-					# # print(my_drive._remote_attributes[item["name"]].get_value())
-					# if my_drive._remote_attributes[item["name"]].get_value():
-					# 	val_label.setPixmap(pixmap_true)
-					# else:
-					# 	val_label.setPixmap(pixmap_false)
-					# line_layout.addWidget(label,0,0,1,1)
-					# line_layout.addWidget(val_label,0,1,1,1)
-			elif item["access"] == "rw":
-				if "int" in item["type"]:
-					label = QtWidgets.QLabel()
-					label.setText(item["name"])
-					val_label = QtWidgets.QSpinBox()
-					print(item)
-					print(item["name"])
-					print("Tuple?")
-					print(my_drive._remote_attributes[item["name"]].get_value())
-					val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
-					line_layout.addWidget(label,0,0,1,1)
-					line_layout.addWidget(val_label,0,1,1,1)
-				elif item["type"] == "float":
-					label = QtWidgets.QLabel()
-					label.setText(item["name"])
-					val_label = QtWidgets.QDoubleSpinBox()
-					val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
-					line_layout.addWidget(label,0,0,1,1)
-					line_layout.addWidget(val_label,0,1,1,1)
-				elif item["type"] == "bool":
-					line_layout.addLayout(self.add_bool(item, my_drive),0,0,1,1)
-					# rb_t = QtWidgets.QRadioButton()
-					# rb_f = QtWidgets.QRadioButton()
-					# icon_false = QtGui.QIcon()
-					# icon_false.addPixmap(QtGui.QPixmap("Icons/false.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-					# icon_true = QtGui.QIcon()
-					# icon_true.addPixmap(QtGui.QPixmap("Icons/true.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-					# rb_t.setIcon(icon_true)
-					# rb_f.setIcon(icon_false)
-					# hbox = QtWidgets.QHBoxLayout()
-					# bgroup = QtWidgets.QButtonGroup(hbox) #
-					# bgroup.addButton(rb_t)
-					# bgroup.addButton(rb_f)
-					# if my_drive._remote_attributes[item["name"]].get_value():
-					# 	rb_t.setChecked(True)
-					# else:
-					# 	rb_f.setChecked(True)
-					# label = QtWidgets.QLabel()
-					# label.setText(item["name"])
-					# hbox.addWidget(rb_t)
-					# hbox.addWidget(rb_f)
-					# line_layout.addWidget(label,0,0,1,1)
-					# line_layout.addLayout(hbox,0,1,1,1)
+			if item["type"] == "float":
+				line_layout.addLayout(self.add_float(item, my_drive),0,0,1,1)
+			elif item["type"] == "bool":
+				line_layout.addLayout(self.add_bool(item, my_drive),0,0,1,1)
+			elif item["type"] == "uint8":
+				line_layout.addLayout(self.add_uint8(item, my_drive),0,0,1,1)
+			elif item["type"] == "uint16":
+				line_layout.addLayout(self.add_uint16(item, my_drive),0,0,1,1)
+			elif item["type"] == "uint32":
+				line_layout.addLayout(self.add_uint32(item, my_drive),0,0,1,1)
+			elif item["type"] == "uint64":
+				line_layout.addLayout(self.add_uint64(item, my_drive),0,0,1,1)
+			elif item["type"] == "int32":
+				line_layout.addLayout(self.add_int32(item, my_drive),0,0,1,1)
+			# elif item["type"] == "uint32":
+			# 	line_layout.addLayout(self.add_uint32(item, my_drive),0,0,1,1)
+			else:
+				print(item["type"])
+				print(item)
+				# print(item["access"])
+				# print(item["name"])			# if item["access"] == "r":
+			# 	if "int" in item["type"] or item["type"] == "float":
+			# 		label = QtWidgets.QLabel()
+			# 		label.setText(item["name"])
+			# 		val_label = QtWidgets.QLabel()
+			# 		val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+			# 		line_layout.addWidget(label,0,0,1,1)
+			# 		line_layout.addWidget(val_label,0,1,1,1)
+			# 	elif item["type"] == "bool":
+			# 		line_layout.addLayout(self.add_bool(item, my_drive),0,0,1,1)
+			# elif item["access"] == "rw":
+			# 	if "int" in item["type"]:
+			# 		label = QtWidgets.QLabel()
+			# 		label.setText(item["name"])
+			# 		val_label = QtWidgets.QSpinBox()
+			# 		print(item)
+			# 		print(item["name"])
+			# 		print("Tuple?")
+			# 		print(my_drive._remote_attributes[item["name"]].get_value())
+			# 		val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			# 		line_layout.addWidget(label,0,0,1,1)
+			# 		line_layout.addWidget(val_label,0,1,1,1)
+			# 	elif item["type"] == "float":
+			# 		line_layout.addLayout(self.add_float(item, my_drive),0,0,1,1)
+			# 	elif item["type"] == "bool":
+			# 		line_layout.addLayout(self.add_bool(item, my_drive),0,0,1,1)
 		return line_layout
 	
 
@@ -327,7 +402,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		row_index = 0
 		if "members" in item.keys():
 			for member in item["members"]:
-				print(member["name"])
+				# print(member["name"])
 				if "members" in member.keys():
 					group = self.setup_group_box(member, my_drive._remote_attributes[item["name"]])
 					groupBox_layout.addWidget(group,row_index,0,1,1)
@@ -350,16 +425,16 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			if item["name"] == tree_selection:
 				if "members" in item.keys():
 					for member in item["members"]:
-						print(member)
+						# print(member)
 						# print(self.my_drive._remote_attributes[tree_selection]._remote_attributes[member["name"]].get_value())
 						if "members" in member.keys():
-							print("Found members")
+							# print("Found members")
 							# for new_member in member["members"]:
 							group = self.setup_group_box(member, self.my_drive._remote_attributes[tree_selection])
 							self.sb_layout.addWidget(group,0,col_index,1,1)
 							col_index += 1
 						else:
-							print("add Line item")
+							# print("add Line item")
 							item_layout = self.add_single_layout_line(member, self.my_drive._remote_attributes[tree_selection])
 							self.sb_layout.addLayout(item_layout,row_index,0,1,1)
 							row_index += 1

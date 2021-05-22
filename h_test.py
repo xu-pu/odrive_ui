@@ -31,6 +31,8 @@ ICON_WRITE_CONFIG_PATH = "Icons/odrive_icons/odrive_icons_WriteConfig.png"
 
 version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_minor","hw_version_major", "hw_version_minor", "fw_version_unreleased","hw_version_variant"]
 
+
+
 class odrive_MainWindow(object):
 	def setupUi(self, MainWindow):
 		MainWindow.setObjectName("MainWindow")
@@ -84,6 +86,9 @@ class odrive_MainWindow(object):
 		self.statusBar = QtWidgets.QStatusBar(MainWindow)
 		self.statusBar.setObjectName("statusBar")
 		MainWindow.setStatusBar(self.statusBar)
+
+		self.PIXMAP_FALSE = QtGui.QPixmap("Icons/false.png")
+		self.PIXMAP_TRUE = QtGui.QPixmap("Icons/true.png")
 
 		self.retranslateUi(MainWindow)
 		QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -202,6 +207,43 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 	def setup_non_members(self):
 		pass
 
+	def add_bool(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		if item["access"] == "r":
+			label = QtWidgets.QLabel()
+			label.setText(item["name"])
+			val_label = QtWidgets.QLabel()
+			if my_drive._remote_attributes[item["name"]].get_value():
+				val_label.setPixmap(self.PIXMAP_TRUE)
+			else:
+				val_label.setPixmap(self.PIXMAP_FALSE)
+			hbox.addWidget(label)
+			hbox.addWidget(val_label)
+		elif item["access"] == "rw":
+			rb_t = QtWidgets.QRadioButton()
+			rb_f = QtWidgets.QRadioButton()
+			icon_false = QtGui.QIcon()
+			icon_false.addPixmap(self.PIXMAP_FALSE, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+			icon_true = QtGui.QIcon()
+			icon_true.addPixmap(self.PIXMAP_TRUE, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+			rb_t.setIcon(icon_true)
+			rb_f.setIcon(icon_false)
+			bgroup = QtWidgets.QButtonGroup(hbox) #
+			bgroup.addButton(rb_t)
+			bgroup.addButton(rb_f)
+			if my_drive._remote_attributes[item["name"]].get_value():
+				rb_t.setChecked(True)
+			else:
+				rb_f.setChecked(True)
+			label = QtWidgets.QLabel()
+			label.setText(item["name"])
+			hbox.addWidget(label)
+			hbox.addWidget(rb_t)
+			hbox.addWidget(rb_f)
+		return hbox
+
+		
+
 	def add_single_layout_line(self, item, my_drive):
 		line_layout = QtWidgets.QGridLayout()
 		if "access" in item.keys():
@@ -217,23 +259,28 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 					line_layout.addWidget(label,0,0,1,1)
 					line_layout.addWidget(val_label,0,1,1,1)
 				elif item["type"] == "bool":
-					label = QtWidgets.QLabel()
-					label.setText(item["name"])
-					pixmap_false = QtGui.QPixmap("Icons/false.png")
-					pixmap_true = QtGui.QPixmap("Icons/true.png")
-					val_label = QtWidgets.QLabel()
-					# print(my_drive._remote_attributes[item["name"]].get_value())
-					if my_drive._remote_attributes[item["name"]].get_value():
-						val_label.setPixmap(pixmap_true)
-					else:
-						val_label.setPixmap(pixmap_false)
-					line_layout.addWidget(label,0,0,1,1)
-					line_layout.addWidget(val_label,0,1,1,1)
+					line_layout.addLayout(self.add_bool(item, my_drive),0,0,1,1)
+					# label = QtWidgets.QLabel()
+					# label.setText(item["name"])
+					# pixmap_false = QtGui.QPixmap("Icons/false.png")
+					# pixmap_true = QtGui.QPixmap("Icons/true.png")
+					# val_label = QtWidgets.QLabel()
+					# # print(my_drive._remote_attributes[item["name"]].get_value())
+					# if my_drive._remote_attributes[item["name"]].get_value():
+					# 	val_label.setPixmap(pixmap_true)
+					# else:
+					# 	val_label.setPixmap(pixmap_false)
+					# line_layout.addWidget(label,0,0,1,1)
+					# line_layout.addWidget(val_label,0,1,1,1)
 			elif item["access"] == "rw":
 				if "int" in item["type"]:
 					label = QtWidgets.QLabel()
 					label.setText(item["name"])
 					val_label = QtWidgets.QSpinBox()
+					print(item)
+					print(item["name"])
+					print("Tuple?")
+					print(my_drive._remote_attributes[item["name"]].get_value())
 					val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
 					line_layout.addWidget(label,0,0,1,1)
 					line_layout.addWidget(val_label,0,1,1,1)
@@ -245,32 +292,33 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 					line_layout.addWidget(label,0,0,1,1)
 					line_layout.addWidget(val_label,0,1,1,1)
 				elif item["type"] == "bool":
-					rb_t = QtWidgets.QRadioButton()
-					rb_f = QtWidgets.QRadioButton()
-					icon_false = QtGui.QIcon()
-					icon_false.addPixmap(QtGui.QPixmap("Icons/false.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-					icon_true = QtGui.QIcon()
-					icon_true.addPixmap(QtGui.QPixmap("Icons/true.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-					rb_t.setIcon(icon_true)
-					rb_f.setIcon(icon_false)
-					hbox = QtWidgets.QHBoxLayout()
-					bgroup = QtWidgets.QButtonGroup(hbox) #
-					bgroup.addButton(rb_t)
-					bgroup.addButton(rb_f)
-					if my_drive._remote_attributes[item["name"]].get_value():
-						rb_t.setChecked(True)
-					else:
-						rb_f.setChecked(True)
-					label = QtWidgets.QLabel()
-					label.setText(item["name"])
-					hbox.addWidget(rb_t)
-					hbox.addWidget(rb_f)
-					line_layout.addWidget(label,0,0,1,1)
-					line_layout.addLayout(hbox,0,1,1,1)
+					line_layout.addLayout(self.add_bool(item, my_drive),0,0,1,1)
+					# rb_t = QtWidgets.QRadioButton()
+					# rb_f = QtWidgets.QRadioButton()
+					# icon_false = QtGui.QIcon()
+					# icon_false.addPixmap(QtGui.QPixmap("Icons/false.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+					# icon_true = QtGui.QIcon()
+					# icon_true.addPixmap(QtGui.QPixmap("Icons/true.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+					# rb_t.setIcon(icon_true)
+					# rb_f.setIcon(icon_false)
+					# hbox = QtWidgets.QHBoxLayout()
+					# bgroup = QtWidgets.QButtonGroup(hbox) #
+					# bgroup.addButton(rb_t)
+					# bgroup.addButton(rb_f)
+					# if my_drive._remote_attributes[item["name"]].get_value():
+					# 	rb_t.setChecked(True)
+					# else:
+					# 	rb_f.setChecked(True)
+					# label = QtWidgets.QLabel()
+					# label.setText(item["name"])
+					# hbox.addWidget(rb_t)
+					# hbox.addWidget(rb_f)
+					# line_layout.addWidget(label,0,0,1,1)
+					# line_layout.addLayout(hbox,0,1,1,1)
 		return line_layout
 	
 
-	def setup_group_box(self,item,my_drive):
+	def setup_group_box(self, item, my_drive):
 		groupbox =  QtWidgets.QGroupBox()
 		groupbox.setTitle(item["name"])
 		groupBox_layout = QtWidgets.QGridLayout(groupbox)
@@ -281,7 +329,9 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			for member in item["members"]:
 				print(member["name"])
 				if "members" in member.keys():
-					pass
+					group = self.setup_group_box(member, my_drive._remote_attributes[item["name"]])
+					groupBox_layout.addWidget(group,row_index,0,1,1)
+					row_index += 1
 				else:
 					item_layout = self.add_single_layout_line(member, my_drive._remote_attributes[item["name"]])
 					groupBox_layout.addLayout(item_layout, row_index ,0,1,1)

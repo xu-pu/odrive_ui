@@ -235,8 +235,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 				rb_t.setChecked(True)
 			else:
 				rb_f.setChecked(True)
-			hbox.addWidget(rb_t)
-			hbox.addWidget(rb_f)
+			hbox2 = QtWidgets.QHBoxLayout()
+			hbox2.addWidget(rb_t)
+			hbox2.addWidget(rb_f)
+			hbox.addLayout(hbox2)
 		return hbox
 
 	def add_float(self, item, my_drive):
@@ -249,10 +251,15 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QDoubleSpinBox()
+			val_label.setMaximum(2147483647)
+			val_label.setMinimum(-2147483647)
+			val_label.setDecimals(8)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			if "torque" in item["name"]:
+				print(item["name"])
+				print(my_drive._remote_attributes[item["name"]].get_value())
 		hbox.addWidget(val_label)
 		return hbox
-
 
 	def add_uint64(self, item, my_drive):
 		hbox = QtWidgets.QHBoxLayout()
@@ -264,6 +271,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QSpinBox()
+			val_label.setMaximum(18446744073709551616)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
 		hbox.addWidget(val_label)
 		return hbox
@@ -278,6 +286,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QSpinBox()
+			val_label.setMaximum(2147483647)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
 		hbox.addWidget(val_label)
 		return hbox
@@ -292,6 +301,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QSpinBox()
+			val_label.setMaximum(65536)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
 		hbox.addWidget(val_label)
 		return hbox
@@ -306,20 +316,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QSpinBox()
-			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
-		hbox.addWidget(val_label)
-		return hbox
-
-	def add_int16(self, item, my_drive):
-		hbox = QtWidgets.QHBoxLayout()
-		label = QtWidgets.QLabel()
-		label.setText(item["name"])
-		hbox.addWidget(label)
-		if item["access"] == "r":
-			val_label = QtWidgets.QLabel()
-			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
-		elif item["access"] == "rw":
-			val_label = QtWidgets.QSpinBox()
+			val_label.setMaximum(256)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
 		hbox.addWidget(val_label)
 		return hbox
@@ -334,6 +331,8 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QSpinBox()
+			val_label.setMaximum(32768)
+			val_label.setMinimum(-32768)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
 		hbox.addWidget(val_label)
 		return hbox
@@ -358,38 +357,14 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 				line_layout.addLayout(self.add_uint64(item, my_drive),0,0,1,1)
 			elif item["type"] == "int32":
 				line_layout.addLayout(self.add_int32(item, my_drive),0,0,1,1)
-			# elif item["type"] == "uint32":
-			# 	line_layout.addLayout(self.add_uint32(item, my_drive),0,0,1,1)
 			else:
+				print("MISSING implementation")
 				print(item["type"])
 				print(item)
-				# print(item["access"])
-				# print(item["name"])			# if item["access"] == "r":
-			# 	if "int" in item["type"] or item["type"] == "float":
-			# 		label = QtWidgets.QLabel()
-			# 		label.setText(item["name"])
-			# 		val_label = QtWidgets.QLabel()
-			# 		val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
-			# 		line_layout.addWidget(label,0,0,1,1)
-			# 		line_layout.addWidget(val_label,0,1,1,1)
-			# 	elif item["type"] == "bool":
-			# 		line_layout.addLayout(self.add_bool(item, my_drive),0,0,1,1)
-			# elif item["access"] == "rw":
-			# 	if "int" in item["type"]:
-			# 		label = QtWidgets.QLabel()
-			# 		label.setText(item["name"])
-			# 		val_label = QtWidgets.QSpinBox()
-			# 		print(item)
-			# 		print(item["name"])
-			# 		print("Tuple?")
-			# 		print(my_drive._remote_attributes[item["name"]].get_value())
-			# 		val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
-			# 		line_layout.addWidget(label,0,0,1,1)
-			# 		line_layout.addWidget(val_label,0,1,1,1)
-			# 	elif item["type"] == "float":
-			# 		line_layout.addLayout(self.add_float(item, my_drive),0,0,1,1)
-			# 	elif item["type"] == "bool":
-			# 		line_layout.addLayout(self.add_bool(item, my_drive),0,0,1,1)
+		else:
+			print("MISSING implementation without access")
+			print(item["type"])
+			print(item)
 		return line_layout
 	
 
@@ -421,6 +396,8 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		row_index = 0
 		col_index = 1
 		self.deleteItems(self.sb_layout)
+		self.config_layout = QtWidgets.QGridLayout()
+		self.sb_layout.addLayout(self.config_layout,0,0,1,1)
 		for item in self.my_drive._json_data:
 			if item["name"] == tree_selection:
 				if "members" in item.keys():
@@ -431,7 +408,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 							# print("Found members")
 							# for new_member in member["members"]:
 							group = self.setup_group_box(member, self.my_drive._remote_attributes[tree_selection])
-							self.sb_layout.addWidget(group,0,col_index,1,1)
+							self.sb_layout.addWidget(group,0,col_index,10,1)
 							col_index += 1
 						else:
 							# print("add Line item")

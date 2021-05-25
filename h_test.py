@@ -58,7 +58,7 @@ class odrive_MainWindow(object):
 		# self.gridLayout.addLayout(self.horizontalLayout, 1, 1, 1, 1)
 		self.treeView = QtWidgets.QTreeView()
 		# self.treeView.setMinimumSize(QtCore.QSize(250, 0))
-		self.treeView.setMaximumSize(QtCore.QSize(250,1000))
+		self.treeView.setMaximumSize(QtCore.QSize(150,1000))
 		self.treeView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 		# self.treeView.setObjectName("treeView")
 		self.gridLayout.addWidget(self.treeView, 0, 0, 1, 1)
@@ -172,6 +172,28 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			# self.setup()
 		# print(self.treeView.selectedIndexes()[0].text())
 
+
+	def find_parent_path(self, object):
+		pass
+
+	def add_to_changes_dict(self,ok):
+		pass
+
+	def value_changed_test(self, haha):
+		print("CHANGED")
+		print(self.sender().text())
+		print(self.sender().objectName())
+		print(self.event)
+		print(haha)
+		print(self.sender().parent().objectName())
+		# Find Path.
+		# Highlight value?
+		# add to changed items list
+		
+	def apply_changes(self):
+		# send all commands to odrive
+
+
 	def deleteItems(self, del_layout):
 		try:
 			if del_layout.count() > 0:
@@ -256,13 +278,15 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QDoubleSpinBox()
+			val_label.setObjectName(item["name"])
 			val_label.setMaximum(2147483647)
 			val_label.setMinimum(-2147483647)
 			val_label.setDecimals(8)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
-			if "torque" in item["name"]:
-				print(item["name"])
-				print(my_drive._remote_attributes[item["name"]].get_value())
+			val_label.valueChanged.connect(self.value_changed_test)
+			# if "torque" in item["name"]:
+				# print(item["name"])
+				# print(my_drive._remote_attributes[item["name"]].get_value())
 		hbox.addWidget(val_label)
 		return hbox
 
@@ -376,6 +400,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 	def setup_group_box(self, item, my_drive):
 		groupbox =  QtWidgets.QGroupBox()
 		groupbox.setTitle(item["name"])
+		groupbox.setObjectName(item["name"])
 		groupBox_layout = QtWidgets.QGridLayout(groupbox)
 		# print(my_drive._remote_attributes)
 		# print(item.keys())
@@ -401,12 +426,15 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		row_index = 0
 		col_index = 1
 		first_gpio = True
+		first_config = True
 
 		member_row_index = 0
+
+		config_row_index = 0
 		
 		self.deleteItems(self.sb_layout)
-		self.config_layout = QtWidgets.QGridLayout()
-		self.sb_layout.addLayout(self.config_layout,0,0,1,1)
+		self.general_layout = QtWidgets.QGridLayout()
+		self.sb_layout.addLayout(self.general_layout,0,0,1,1)
 		for item in self.my_drive._json_data:
 			if item["name"] == tree_selection:
 				if "members" in item.keys():
@@ -420,15 +448,81 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 							# for new_member in member["members"]:
 							group = self.setup_group_box(member, self.my_drive._remote_attributes[tree_selection])
 
-							if "gpio" in member["name"]:
+							if "config" == member["name"] or "thermistor" in  member["name"]:
+								if first_config:
+									first_config = False
+									self.config_layout = QtWidgets.QGridLayout()
+									self.sb_layout.addLayout(self.config_layout,0,1,1,1)
+									self.config_layout.addWidget(group,config_row_index,0,1,1)
+									config_row_index += 1
+									if item["name"] == "can":
+										spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+										self.config_layout.addItem(spacerItem,config_row_index,0,1,1)
+								else:
+									self.config_layout.addWidget(group,config_row_index,0,1,1)
+									config_row_index += 1
+								if config_row_index == 3:
+									spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+									self.config_layout.addItem(spacerItem,config_row_index,0,1,1)
+
+							elif "motor" == member["name"]:
+								self.motor_layout = QtWidgets.QGridLayout()
+								self.sb_layout.addLayout(self.motor_layout,0,2,1,1)
+								self.motor_layout.addWidget(group,0,0,1,1)
+								spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								self.motor_layout.addItem(spacerItem,1,0,1,1)
+							elif "controller" == member["name"]:
+								# print("3")
+								self.controller_layout = QtWidgets.QGridLayout()
+								self.sb_layout.addLayout(self.controller_layout,0,3,1,1)
+								self.controller_layout.addWidget(group,0,0,1,1)
+								# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# self.motor_layout.addItem(spacerItem,1,0,1,1)
+							elif "sensorless_estimator" == member["name"]:
+								# self.motor_layout = QtWidgets.QGridLayout()
+								# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								self.controller_layout.addWidget(group,1,0,1,1)
+							elif "trap_traj" == member["name"]:
+								# self.motor_layout = QtWidgets.QGridLayout()
+								# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								self.controller_layout.addWidget(group,2,0,1,1)
+								spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								self.controller_layout.addItem(spacerItem,3,0,1,1)
+							# elif "min_endstop" == member["name"]:
+							# 	# self.motor_layout = QtWidgets.QGridLayout()
+							# 	# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+							# 	self.encoder_layout.addWidget(group,2,0,1,1)
+							# 	spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# 	self.encoder_layout.addItem(spacerItem,3,0,1,1)
+							elif "encoder" == member["name"]:
+								self.encoder_layout = QtWidgets.QGridLayout()
+								self.sb_layout.addLayout(self.encoder_layout,0,4,1,1)
+								self.encoder_layout.addWidget(group,0,0,1,1)
+								# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# self.encoder_layout.addItem(spacerItem,1,0,1,1)
+							elif "min_endstop" == member["name"]:
+								# self.motor_layout = QtWidgets.QGridLayout()
+								# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								self.encoder_layout.addWidget(group,1,0,1,1)
+								# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# self.controller_layout.addItem(spacerItem,3,0,1,1)
+							elif "max_endstop" == member["name"]:
+								# self.motor_layout = QtWidgets.QGridLayout()
+								# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								self.encoder_layout.addWidget(group,2,0,1,1)
+								spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								self.encoder_layout.addItem(spacerItem,3,0,1,1)
+							# else:
+							# 	print(member["name"])
+							elif "gpio" in member["name"]:
 								if first_gpio:
 									first_gpio = False
-									self.member_layout = QtWidgets.QGridLayout()
-									self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
-									self.member_layout.addWidget(group,member_row_index,0,1,1)
+									self.gpio_layout = QtWidgets.QGridLayout()
+									self.sb_layout.addLayout(self.gpio_layout,0,col_index,1,1)
+									self.gpio_layout.addWidget(group,member_row_index,0,1,1)
 									
 								else:
-									self.member_layout.addWidget(group,member_row_index,0,1,1)
+									self.gpio_layout.addWidget(group,member_row_index,0,1,1)
 								member_row_index += 1
 								# print(member["name"])
 								# self.member_layout.addWidget(group,group_row_index,0,1,1)
@@ -445,11 +539,53 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 							# spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
 							# # self.button_layout.addItem(spacerItem, 0, 4, 1, 1)
 							# self.sb_layout.addItem(spacerItem,1,col_index,1,1)
+
+							# if "gpio" in member["name"]:
+							# 	if first_gpio:
+							# 		first_gpio = False
+							# 		self.member_layout = QtWidgets.QGridLayout()
+							# 		self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
+							# 		self.member_layout.addWidget(group,member_row_index,0,1,1)
+									
+							# 	else:
+							# 		self.member_layout.addWidget(group,member_row_index,0,1,1)
+							# 	member_row_index += 1
+							# 	# print(member["name"])
+							# 	# self.member_layout.addWidget(group,group_row_index,0,1,1)
+							# 	# group_row_index += 1
+							# elif "thermistor" in member["name"] or "endstop" in member["name"]:
+							# 	if first_thermistor:
+							# 		first_thermistor = False
+							# 		self.member_layout = QtWidgets.QGridLayout()
+							# 		self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
+							# 		self.member_layout.addWidget(group,member_row_index,0,1,1)
+									
+							# 	else:
+							# 		self.member_layout.addWidget(group,member_row_index,0,1,1)
+							# 	member_row_index += 1
+							# 	if member_row_index == 2:
+							# 		spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# 		self.member_layout.addItem(spacerItem,member_row_index,0,1,1)
+							# 		col_index += 1
+
+
+							# else:
+							# 	self.member_layout = QtWidgets.QGridLayout()
+							# 	self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
+							# 	# group_row_index = 0
+							# 	self.member_layout.addWidget(group,0,0,1,1)
+							# 	spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# 	self.member_layout.addItem(spacerItem,1,0,1,1)
+							# 	col_index += 1
+							# col_index += 1
+							# spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# # self.button_layout.addItem(spacerItem, 0, 4, 1, 1)
+							# self.sb_layout.addItem(spacerItem,1,col_index,1,1)
 							
 						else:
 							# print("add Line item")
 							item_layout = self.add_single_layout_line(member, self.my_drive._remote_attributes[tree_selection])
-							self.config_layout.addLayout(item_layout,row_index,0,1,1)
+							self.general_layout.addLayout(item_layout,row_index,0,1,1)
 							row_index += 1
 						# 	for new_member in member["members"]:
 						# 		print(new_member)
@@ -464,7 +600,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 				else:
 					print("Impossible case all selection are only members")
 		spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-		self.config_layout.addItem(spacerItem,row_index,0,1,1)
+		self.general_layout.addItem(spacerItem,row_index,0,1,1)
 		# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 		# self.sb_layout.addItem(spacerItem,0,col_index,1,1)
 					

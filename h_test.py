@@ -173,14 +173,17 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		# print(self.treeView.selectedIndexes()[0].text())
 
 	def deleteItems(self, del_layout):
-		if del_layout.count() > 0:
-			while del_layout.count():
-				item = del_layout.takeAt(0)
-				widget = item.widget()
-				if widget is not None:
-					widget.deleteLater()
-				else:
-					self.deleteItems(item.layout())
+		try:
+			if del_layout.count() > 0:
+				while del_layout.count():
+					item = del_layout.takeAt(0)
+					widget = item.widget()
+					if widget is not None:
+						widget.deleteLater()
+					else:
+						self.deleteItems(item.layout())
+		except:
+			print("some excpetions deleting")
 
 	def add_action_buttons(self):
 		self.button_layout = QtWidgets.QGridLayout()
@@ -201,6 +204,8 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		pb_apply.setText("Reboot")
 		self.button_layout.addWidget(pb_apply,0,3,1,1)
 
+		spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+		self.button_layout.addItem(spacerItem, 0, 4, 1, 1)
 		self.sb_v_layout.addLayout(self.button_layout,0,0,1,1)
 
 
@@ -395,6 +400,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		print("setting up config")
 		row_index = 0
 		col_index = 1
+		first_gpio = True
+
+		member_row_index = 0
+		
 		self.deleteItems(self.sb_layout)
 		self.config_layout = QtWidgets.QGridLayout()
 		self.sb_layout.addLayout(self.config_layout,0,0,1,1)
@@ -403,17 +412,44 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 				if "members" in item.keys():
 					for member in item["members"]:
 						# print(member)
+						
 						# print(self.my_drive._remote_attributes[tree_selection]._remote_attributes[member["name"]].get_value())
 						if "members" in member.keys():
+							
 							# print("Found members")
 							# for new_member in member["members"]:
 							group = self.setup_group_box(member, self.my_drive._remote_attributes[tree_selection])
-							self.sb_layout.addWidget(group,0,col_index,10,1)
-							col_index += 1
+
+							if "gpio" in member["name"]:
+								if first_gpio:
+									first_gpio = False
+									self.member_layout = QtWidgets.QGridLayout()
+									self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
+									self.member_layout.addWidget(group,member_row_index,0,1,1)
+									
+								else:
+									self.member_layout.addWidget(group,member_row_index,0,1,1)
+								member_row_index += 1
+								# print(member["name"])
+								# self.member_layout.addWidget(group,group_row_index,0,1,1)
+								# group_row_index += 1
+							else:
+								self.member_layout = QtWidgets.QGridLayout()
+								self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
+								# group_row_index = 0
+								self.member_layout.addWidget(group,0,0,1,1)
+								spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								self.member_layout.addItem(spacerItem,1,0,1,1)
+								col_index += 1
+							# col_index += 1
+							# spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# # self.button_layout.addItem(spacerItem, 0, 4, 1, 1)
+							# self.sb_layout.addItem(spacerItem,1,col_index,1,1)
+							
 						else:
 							# print("add Line item")
 							item_layout = self.add_single_layout_line(member, self.my_drive._remote_attributes[tree_selection])
-							self.sb_layout.addLayout(item_layout,row_index,0,1,1)
+							self.config_layout.addLayout(item_layout,row_index,0,1,1)
 							row_index += 1
 						# 	for new_member in member["members"]:
 						# 		print(new_member)
@@ -427,6 +463,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 						# row_index += 1
 				else:
 					print("Impossible case all selection are only members")
+		spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+		self.config_layout.addItem(spacerItem,row_index,0,1,1)
+		# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+		# self.sb_layout.addItem(spacerItem,0,col_index,1,1)
 					
 
 	def setup_general(self):
@@ -439,6 +479,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 				item_layout = self.add_single_layout_line(item, self.my_drive)
 				self.sb_layout.addLayout(item_layout,row_index,1,1,1)
 				row_index += 1
+		spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# self.button_layout.addItem(spacerItem, 0, 4, 1, 1)
+		self.sb_layout.addItem(spacerItem,row_index,1,1,1)
+
 
 
 	def close_application(self):

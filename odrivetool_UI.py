@@ -59,7 +59,7 @@ class odrive_MainWindow(object):
 		# self.gridLayout.addLayout(self.horizontalLayout, 1, 1, 1, 1)
 		self.treeView = QtWidgets.QTreeView()
 		# self.treeView.setMinimumSize(QtCore.QSize(250, 0))
-		self.treeView.setMaximumSize(QtCore.QSize(150,1000))
+		self.treeView.setMaximumSize(QtCore.QSize(200,1000))
 		self.treeView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 		# self.treeView.setObjectName("treeView")
 		self.gridLayout.addWidget(self.treeView, 0, 0, 2, 1)
@@ -778,14 +778,25 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		# model.setHeaderData(1, QtCore.Qt.Horizontal, "Type")
 		 # isinstance(odrv0._remote_attributes["reboot"], fibre.remote_object.RemoteFunction)
 		item = QtGui.QStandardItem("odrv0")
-		child = QtGui.QStandardItem("General")
-		item.appendRow(child)
-		child = QtGui.QStandardItem("Control Test")
-		item.appendRow(child)
+		# child = QtGui.QStandardItem("General")
+		# item.appendRow(child)
+		# child = QtGui.QStandardItem("Control Test")
+		# item.appendRow(child)
 		for key in my_drive._remote_attributes.keys():
 			if isinstance(my_drive._remote_attributes[key], fibre.remote_object.RemoteObject):
 				child = QtGui.QStandardItem(key)
+				for child_key in my_drive._remote_attributes[key]._remote_attributes.keys():
+					if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key], fibre.remote_object.RemoteObject):
+						sub1_child = QtGui.QStandardItem(child_key)
+					# else:
+					# 	sub1_child = QtGui.QStandardItem(child_key)
+						child.appendRow(sub1_child)
 				item.appendRow(child)
+			# else:
+			# 	# if key not in version_ignore_list:
+			# 	child = QtGui.QStandardItem(key)
+			# 	item.appendRow(child)
+				# item.appendRow(child)
 		# for key in my_drive._remote_attributes.keys():
 		# 	# if key not in ignore_list:
 		# 	if isinstance(my_drive._remote_attributes[key], fibre.remote_object.RemoteObject):

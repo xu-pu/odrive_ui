@@ -36,7 +36,8 @@ version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_mi
 class odrive_MainWindow(object):
 	def setupUi(self, MainWindow):
 		MainWindow.setObjectName("MainWindow")
-		MainWindow.resize(800, 600)
+		MainWindow.resize(1280, 720)
+		# MainWindow.resize(1920, 1080)
 
 
 		# window = QtWidgets.QWidget()
@@ -61,7 +62,7 @@ class odrive_MainWindow(object):
 		self.treeView.setMaximumSize(QtCore.QSize(150,1000))
 		self.treeView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 		# self.treeView.setObjectName("treeView")
-		self.gridLayout.addWidget(self.treeView, 0, 0, 1, 1)
+		self.gridLayout.addWidget(self.treeView, 0, 0, 2, 1)
 
 		self.scrollArea = QtWidgets.QScrollArea()
 		self.scrollArea.setWidgetResizable(True)
@@ -73,7 +74,7 @@ class odrive_MainWindow(object):
 		self.sb_v_layout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
 		self.sb_layout = QtWidgets.QGridLayout()
 		self.sb_v_layout.addLayout(self.sb_layout,1,0,1,1)
-		self.gridLayout.addWidget(self.scrollArea, 0, 1, 1, 1)
+		self.gridLayout.addWidget(self.scrollArea, 1, 1, 1, 1)
 
 		MainWindow.setCentralWidget(self.centralWidget)
 		self.menuBar = QtWidgets.QMenuBar(MainWindow)
@@ -154,11 +155,15 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		# # self.treeView.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
 		# # self.treeView.setAcceptDrops(True)
 		# # self.treeView.setDragDropMode(QtGui.QAbstractItemView.DragOnly)
+
+		self.changed_settings = {}
+
 		self.treeView.clicked.connect(self.tree_item_selected)
 
 		self.odrive_connect()
 
 	def tree_item_selected(self):
+		self.changed_settings = {}
 		index = self.treeView.selectedIndexes()[0]
 		tree_selection = index.model().itemFromIndex(index).text()
 		print(tree_selection)
@@ -173,24 +178,133 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		# print(self.treeView.selectedIndexes()[0].text())
 
 
-	def find_parent_path(self, object):
-		pass
+	def find_parent_path(self, object, path_list):
+		if object.parent() == None:
+			# print("no more parents")
+			return path_list
+		else:
+			path_list.append(object.parent().objectName())
+			self.find_parent_path(object.parent(), path_list)
+		
+		return path_list
+
+	def clean_up_path(self, path_list):
+		path_list.remove('scrollAreaWidgetContents')
+		path_list.remove('qt_scrollarea_viewport')
+		path_list.remove('scrollArea')
+		path_list.remove('centralWidget')
+		path_list.remove('MainWindow')
+		try:
+			path_list.remove('')
+			path_list.remove('')
+			path_list.remove('')
+			path_list.remove('')
+			path_list.remove('')
+		except:
+			pass
+
+		return path_list
+
 
 	def add_to_changes_dict(self,ok):
 		pass
 
+	def radio_button_changed(self):
+		# print(self.sender().objectName())
+		# print(self.sender().checkedButton().objectName())
+
+		path_list = []
+		path_list.append(self.sender().objectName())
+		if self.sender().checkedButton().objectName() == "True":
+			item_value = True
+		else:
+			item_value = False
+
+		self.find_parent_path(self.sender(), path_list)
+		path_list = self.clean_up_path(path_list)
+		index = self.treeView.selectedIndexes()[0]
+		tree_selection = index.model().itemFromIndex(index).text()
+		if tree_selection == "General":
+			pass
+		else:
+			path_list.append(tree_selection)
+		odrive_parent = index.parent()
+		path_list.append(odrive_parent.model().itemFromIndex(odrive_parent).text())
+
+		# print(path_list)
+
+		pal = QtGui.QPalette()
+		pal.setColor(QtGui.QPalette.Base, QtCore.Qt.yellow)
+		# pal.setColor(QPalette::Window, Qt::blue);
+		self.sender().checkedButton().setPalette(pal)
+
+		if str(path_list) in self.changed_settings:
+			# print("FOUND ITEM")
+			self.changed_settings[str(path_list)]["value"] = item_value
+		else:
+			# print("NEW PATH")
+			self.changed_settings[str(path_list)] = {}
+			self.changed_settings[str(path_list)]["value"] = item_value
+			self.changed_settings[str(path_list)]["path"] = path_list
+		# print(self.sender().text())
+		# print(self.sender().value())
+
 	def value_changed_test(self, haha):
-		print("CHANGED")
-		print(self.sender().text())
-		print(self.sender().objectName())
-		print(self.event)
-		print(haha)
-		print(self.sender().parent().objectName())
-		# Find Path.
-		# Highlight value?
-		# add to changed items list
+		path_list = []
+		# path_list.append(self.sender().text())
+		item_value = self.sender().value()
+		# print(item_value)
+		path_list.append(self.sender().objectName())
+		self.find_parent_path(self.sender(), path_list)
+		path_list = self.clean_up_path(path_list)
+		index = self.treeView.selectedIndexes()[0]
+		tree_selection = index.model().itemFromIndex(index).text()
+		if tree_selection == "General":
+			pass
+		else:
+			path_list.append(tree_selection)
+		odrive_parent = index.parent()
+		path_list.append(odrive_parent.model().itemFromIndex(odrive_parent).text())
+		# print(path_list)
+		# QPalette pal = widget.palette();
+		pal = QtGui.QPalette()
+		pal.setColor(QtGui.QPalette.Base, QtCore.Qt.yellow)
+		# pal.setColor(QPalette::Window, Qt::blue);
+		self.sender().setPalette(pal)
+		pal = QtGui.QPalette()
+		pal.setColor(QtGui.QPalette.Button, QtCore.Qt.yellow)
+		self.pb_apply.setPalette(pal)
+
+		if str(path_list) in self.changed_settings:
+			# print("FOUND ITEM")
+			self.changed_settings[str(path_list)]["value"] = item_value
+		else:
+			# print("NEW PATH")
+			self.changed_settings[str(path_list)] = {}
+			self.changed_settings[str(path_list)]["value"] = item_value
+			self.changed_settings[str(path_list)]["path"] = path_list
+
 		
 	def apply_changes(self):
+		print(self.changed_settings)
+		for key in self.changed_settings:
+			print(len(self.changed_settings[key]["path"]))
+			path_length = len(self.changed_settings[key]["path"])
+			print(self.changed_settings[key]["value"])
+			path = self.changed_settings[key]["path"]
+			if path_length == 3:
+				exec("self.my_drive.{}.{} = {}".format(path[-2], path[-3], self.changed_settings[key]["value"]))
+				# self.my_drive._remote_attributes[]._remote_attributes[] = self.changed_settings[key]["value"]
+			elif path_length == 4:
+				exec("self.my_drive.{}.{}.{} = {}".format(path[-2], path[-3], path[-4], self.changed_settings[key]["value"]))
+				# self.my_drive._remote_attributes[path[-2]]._remote_attributes[path[-3]]._remote_attributes[path[-4]] = self.changed_settings[key]["value"]
+			elif path_length == 5:
+				exec("self.my_drive.{}.{}.{}.{} = {}".format(path[-2], path[-3], path[-4], path[-5], self.changed_settings[key]["value"]))
+				# self.my_drive._remote_attributes[path[-2]]._remote_attributes[path[-3]]._remote_attributes[path[-4]]._remote_attributes[path[-5]] = self.changed_settings[key]["value"]
+			elif path_length == 6:
+				exec("self.my_drive.{}.{}.{}.{}.{} = {}".format(path[-2], path[-3], path[-4], path[-5], path[-6], self.changed_settings[key]["value"]))
+				# self.my_drive._remote_attributes[path[-2]]._remote_attributes[path[-3]]._remote_attributes[path[-4]]._remote_attributes[path[-5]]._remote_attributes[path[-6]] = self.changed_settings[key]["value"]
+		self.tree_item_selected()
 		# send all commands to odrive
 
 
@@ -204,19 +318,20 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 						widget.deleteLater()
 					else:
 						self.deleteItems(item.layout())
-		except:
-			print("some excpetions deleting")
+		except Exception as e:
+			print("exception deleting: {}".format(e))
 
 	def add_action_buttons(self):
 		self.button_layout = QtWidgets.QGridLayout()
 
-		pb_apply = QtWidgets.QPushButton()
-		pb_apply.setText("Apply")
-		self.button_layout.addWidget(pb_apply,0,0,1,1)
+		self.pb_apply = QtWidgets.QPushButton()
+		self.pb_apply.setText("Apply")
+		self.pb_apply.pressed.connect(self.apply_changes)
+		self.button_layout.addWidget(self.pb_apply,0,0,1,1)
 
-		pb_apply = QtWidgets.QPushButton()
-		pb_apply.setText("Save Configuration")
-		self.button_layout.addWidget(pb_apply,0,1,1,1)
+		self.pb_save = QtWidgets.QPushButton()
+		self.pb_save.setText("Save Configuration")
+		self.button_layout.addWidget(self.pb_save,0,1,1,1)
 
 		pb_apply = QtWidgets.QPushButton()
 		pb_apply.setText("Erase Configuration")
@@ -228,7 +343,8 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 
 		spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 		self.button_layout.addItem(spacerItem, 0, 4, 1, 1)
-		self.sb_v_layout.addLayout(self.button_layout,0,0,1,1)
+		# self.sb_v_layout.addLayout(self.button_layout,0,0,1,1)
+		self.gridLayout.addLayout(self.button_layout, 0, 1, 1, 1)
 
 
 	def setup_non_members(self):
@@ -248,7 +364,9 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			hbox.addWidget(val_label)
 		elif item["access"] == "rw":
 			rb_t = QtWidgets.QRadioButton()
+			rb_t.setObjectName("True")
 			rb_f = QtWidgets.QRadioButton()
+			rb_f.setObjectName("False")
 			icon_false = QtGui.QIcon()
 			icon_false.addPixmap(self.PIXMAP_FALSE, QtGui.QIcon.Normal, QtGui.QIcon.Off)
 			icon_true = QtGui.QIcon()
@@ -256,6 +374,8 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			rb_t.setIcon(icon_true)
 			rb_f.setIcon(icon_false)
 			bgroup = QtWidgets.QButtonGroup(hbox) #
+			bgroup.setObjectName(item["name"])
+			bgroup.buttonClicked.connect(self.radio_button_changed)
 			bgroup.addButton(rb_t)
 			bgroup.addButton(rb_f)
 			if my_drive._remote_attributes[item["name"]].get_value():
@@ -315,8 +435,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
 			val_label.setMaximum(2147483647)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			val_label.valueChanged.connect(self.value_changed_test)
 		hbox.addWidget(val_label)
 		return hbox
 
@@ -330,8 +452,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
 			val_label.setMaximum(65536)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			val_label.valueChanged.connect(self.value_changed_test)
 		hbox.addWidget(val_label)
 		return hbox
 
@@ -345,8 +469,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
 			val_label.setMaximum(256)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			val_label.valueChanged.connect(self.value_changed_test)
 		hbox.addWidget(val_label)
 		return hbox
 
@@ -360,9 +486,11 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
 		elif item["access"] == "rw":
 			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
 			val_label.setMaximum(32768)
 			val_label.setMinimum(-32768)
 			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			val_label.valueChanged.connect(self.value_changed_test)
 		hbox.addWidget(val_label)
 		return hbox
 
@@ -391,9 +519,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 				print(item["type"])
 				print(item)
 		else:
-			print("MISSING implementation without access")
-			print(item["type"])
-			print(item)
+			pass
+			# print("MISSING implementation without access")
+			# print(item["type"])
+			# print(item)
 		return line_layout
 	
 
@@ -625,8 +754,8 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		print("Closing!!!")
 		try:
 			self.odrive_worker.stop()
-		except:
-			print("exp")
+		except Exception as e:
+			print("exception stopping, closing: {}".format(e))
 		sys.exit()
 
 	def odrive_connect(self):

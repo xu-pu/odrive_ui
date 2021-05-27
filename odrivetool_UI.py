@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import UI_mainwindow
-
 import odrive
 from odrive.enums import *
+
+import fibre
 
 import json
 import glob
@@ -13,78 +13,188 @@ import datetime
 
 import os
 
+from PyQt5 import QtCore, QtGui, QtWidgets
+from pyqtgraph import PlotWidget
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
 
 from serialThread import odriveWorker
 
+ICON_TRUE_PATH = "Icons/true.png"
+ICON_FALSE_PATH = "Icons/false.png"
+ICON_NOSTATE_PATH = "Icons/NoState.jpg"
 
-ICON_TRUE = "Icons/True.jpg"
-ICON_FALSE = "Icons/False.jpg"
-ICON_NOSTATE = "Icons/NoState.jpg"
+ICON_CONNECT_PATH = "Icons/odrive_icons/odrive_icons_Connect.png"
+ICON_HELP_PATH = "Icons/odrive_icons/odrive_icons_Help.png"
+ICON_OPEN_PATH = "Icons/odrive_icons/odrive_icons_Open.png"
+ICON_READ_CONFIG_PATH = "Icons/odrive_icons/odrive_icons_ReadConfig.png"
+ICON_SAVE_PATH = "Icons/odrive_icons/odrive_icons_Save.png"
+ICON_SETTINGS_PATH = "Icons/odrive_icons/odrive_icons_Settings.png"
+ICON_WRITE_CONFIG_PATH = "Icons/odrive_icons/odrive_icons_WriteConfig.png"
+ICON_OPEN_CONTROLLER_PATH = "Icons/odrive_icons/odrive_icons_OpenController2.png"
 
-class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
+version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_minor","hw_version_major", "hw_version_minor", "fw_version_unreleased","hw_version_variant"]
 
-	app_name = "Odrive Tester"
+class odrive_MainWindow(object):
+	def setupUi(self, MainWindow):
+		MainWindow.setObjectName("MainWindow")
+		MainWindow.resize(1280, 720)
+		# MainWindow.resize(1920, 1080)
+
+		# window = QtWidgets.QWidget()
+		# layout = QtWidgets.QVBoxLayout()
+		# layout.addWidget(QtWidgets.QTreeView())
+		# layout.addWidget(QPushButton('Bottom'))
+		# MainWindow.setCentralWidget(layout)
+
+		self.centralWidget = QtWidgets.QWidget(MainWindow)
+		self.centralWidget.setObjectName("centralWidget")
+		self.gridLayout = QtWidgets.QGridLayout(self.centralWidget)
+		# self.gridLayout.setContentsMargins(11, 11, 11, 11)
+		# self.gridLayout.setSpacing(6)
+		# self.gridLayout.setObjectName("gridLayout")
+		# self.horizontalLayout = QtWidgets.QHBoxLayout()
+		# self.horizontalLayout.setSpacing(6)
+		# self.horizontalLayout.setObjectName("horizontalLayout")
+		# self.gridLayout.addLayout(self.horizontalLayout, 1, 1, 1, 1)
+		self.treeView = QtWidgets.QTreeView()
+		# self.treeView.setMinimumSize(QtCore.QSize(250, 0))
+		self.treeView.setMaximumSize(QtCore.QSize(200,1000))
+		self.treeView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+		# self.treeView.setObjectName("treeView")
+		self.gridLayout.addWidget(self.treeView, 0, 0, 2, 1)
+
+		self.scrollArea = QtWidgets.QScrollArea()
+		self.scrollArea.setWidgetResizable(True)
+		self.scrollArea.setObjectName("scrollArea")
+		self.scrollAreaWidgetContents = QtWidgets.QWidget()
+		# self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 274, 237))
+		self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+		self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+		self.sb_v_layout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+		self.sb_layout = QtWidgets.QGridLayout()
+		self.sb_v_layout.addLayout(self.sb_layout,1,0,1,1)
+		self.gridLayout.addWidget(self.scrollArea, 1, 1, 1, 1)
+
+		MainWindow.setCentralWidget(self.centralWidget)
+		self.menuBar = QtWidgets.QMenuBar(MainWindow)
+		# self.menuBar.setGeometry(QtCore.QRect(0, 0, 1354, 22))
+		self.menuBar.setObjectName("menuBar")
+		MainWindow.setMenuBar(self.menuBar)
+		self.mainToolBar = QtWidgets.QToolBar(MainWindow)
+		self.mainToolBar.setObjectName("mainToolBar")
+		MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.mainToolBar)
+		self.statusBar = QtWidgets.QStatusBar(MainWindow)
+		self.statusBar.setObjectName("statusBar")
+		MainWindow.setStatusBar(self.statusBar)
+
+		self.PIXMAP_FALSE = QtGui.QPixmap("Icons/false.png")
+		self.PIXMAP_TRUE = QtGui.QPixmap("Icons/true.png")
+
+		self.retranslateUi(MainWindow)
+		QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+	def retranslateUi(self, MainWindow):
+		_translate = QtCore.QCoreApplication.translate
+		MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+
+class ControllerWindow(QtWidgets.QWidget, ):
+	app_name = "Controller"
 	def __init__(self):
 		# Simple reason why we use it here is that it allows us to
 		# access variables, methods etc in the design.py file
 		super(self.__class__, self).__init__()
-		self.setupUi(self)  # This is defined in design.py file automatically
+		# self.setupUi(self)  # This is defined in design.py file automatically
 							# It sets up layout and widgets that are defined
-		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
-		self.quit_shortcut.activated.connect(self.close_application)
+		self.setWindowTitle(self.app_name)
+		self.resize(1280, 720)
+		pushButton = QtWidgets.QPushButton()
+		# self.setCentralWidget(self.pushButton)
+		self.layout = QtWidgets.QGridLayout()
+		self.setLayout(self.layout)
+		# self.layout.addWidget(pushButton)
 
-		self.Scan_config_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+F"), self)
-		self.Scan_config_shortcut.activated.connect(self.scan_all_config)
+		self.hbox = QtWidgets.QHBoxLayout()
+		self.layout.addLayout(self.hbox,0,0,1,1)
 
-		self.odrive_connect_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+C"), self)
-		self.odrive_connect_shortcut.activated.connect(self.odrive_connect)
+		groupbox =  QtWidgets.QGroupBox()
+		groupbox.setTitle("test")
+		groupbox.setObjectName("test")
+		groupbox.setMaximumSize(200, 100)
 
-		self.actionScan_config.triggered.connect(self.scan_all_config)
-		self.actionTroubleshoot.triggered.connect(self.open_troubleshoot_url)
+		self.hbox.addWidget(groupbox)
 
-		self.pushButton_saveConfiguration.clicked.connect(self.save_odrive_configuration)
-		self.pushButton_eraseConfiguration.clicked.connect(self.erase_odrive_configuration)
-		self.pushButton_scanConfiguration.clicked.connect(self.scan_all_config)
-		self.pushButton_writeConfiguration.clicked.connect(self.write_config)
-		self.pushButton_connect.clicked.connect(self.odrive_connect)
-		self.pushButton_reboot.clicked.connect(self.odrive_reboot)
+		
 
-		# maybe add all buttons to the group and do only one connector for the whole group
-		self.axis0_pushButton_idle.clicked.connect(self.machine_state_clicked)
-		self.axis0_pushButton_startupSequence.clicked.connect(self.machine_state_clicked)
-		self.axis0_pushButton_fullCalibrationSequence.clicked.connect(self.machine_state_clicked)
-		self.axis0_pushButton_motorCalibration.clicked.connect(self.machine_state_clicked)
-		self.axis0_pushButton_sensorlessControl.clicked.connect(self.machine_state_clicked)
-		self.axis0_pushButton_encoderIndexSearch.clicked.connect(self.machine_state_clicked)
-		self.axis0_pushButton_encoderOffsetCalibration.clicked.connect(self.machine_state_clicked)
-		self.axis0_pushButton_closedLoopControl.clicked.connect(self.machine_state_clicked)
+		self.verticalLayout = QtWidgets.QVBoxLayout()
 
-		self.axis1_pushButton_idle.clicked.connect(self.machine_state_clicked)
-		self.axis1_pushButton_startupSequence.clicked.connect(self.machine_state_clicked)
-		self.axis1_pushButton_fullCalibrationSequence.clicked.connect(self.machine_state_clicked)
-		self.axis1_pushButton_motorCalibration.clicked.connect(self.machine_state_clicked)
-		self.axis1_pushButton_sensorlessControl.clicked.connect(self.machine_state_clicked)
-		self.axis1_pushButton_encoderIndexSearch.clicked.connect(self.machine_state_clicked)
-		self.axis1_pushButton_encoderOffsetCalibration.clicked.connect(self.machine_state_clicked)
-		self.axis1_pushButton_closedLoopControl.clicked.connect(self.machine_state_clicked)
 
-		# Axis Controlls
-		self.buttonGroup_13.buttonClicked.connect(self.axis_controller_mode_changed)
-		self.buttonGroup_14.buttonClicked.connect(self.axis_controller_mode_changed)
 
-		self.axis0PositionGo_pushButton.clicked.connect(self.send_axis0_position_go)
-		self.axis0TrajectoryGo_pushButton.clicked.connect(self.send_axis0_trajectory_go)
-		self.axis0Backward_pushButton.clicked.connect(self.send_axis0_velocity_current_backward)
-		self.axis0Stop_pushButton.clicked.connect(self.send_axis0_velocity_current_stop)
-		self.axis0Forward_pushButton.clicked.connect(self.send_axis0_velocity_current_forward)
 
-		self.axis1PositionGo_pushButton.clicked.connect(self.send_axis1_position_go)
-		self.axis1TrajectoryGo_pushButton.clicked.connect(self.send_axis1_trajectory_go)
-		self.axis1Backward_pushButton.clicked.connect(self.send_axis1_velocity_current_backward)
-		self.axis1Stop_pushButton.clicked.connect(self.send_axis1_velocity_current_stop)
-		self.axis1Forward_pushButton.clicked.connect(self.send_axis1_velocity_current_forward)
+		
+		self.plotWidget_velocity = PlotWidget()
+		self.plotWidget_velocity.setStyleSheet("")
+		self.plotWidget_velocity.setObjectName("plotWidget_velocity")
+		self.verticalLayout.addWidget(self.plotWidget_velocity)
+		self.plotWidget_current = PlotWidget()
+		self.plotWidget_current.setMinimumSize(QtCore.QSize(900, 0))
+		self.plotWidget_current.setObjectName("plotWidget_current")
+		self.verticalLayout.addWidget(self.plotWidget_current)
+		self.plotWidget_position = PlotWidget()
+		self.plotWidget_position.setObjectName("plotWidget_position")
+		self.verticalLayout.addWidget(self.plotWidget_position)
+		self.hbox.addLayout(self.verticalLayout)
+
+		self.showAxis0_checkBox = QtWidgets.QCheckBox()
+		self.showAxis0_checkBox.setChecked(True)
+		self.showAxis0_checkBox.setObjectName("showAxis0_checkBox")
+		self.verticalLayout.addWidget(self.showAxis0_checkBox)
+
+		# self.showAxis1_checkBox = QtWidgets.QCheckBox()
+		# self.showAxis1_checkBox.setEnabled(True)
+		# self.showAxis1_checkBox.setChecked(True)
+		# self.showAxis1_checkBox.setObjectName("showAxis1_checkBox")
+		# self.verticalLayout.addWidget(self.showAxis1_checkBox)
+
+		self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+		self.horizontalLayout_3.setContentsMargins(11, 11, 11, 11)
+		self.horizontalLayout_3.setSpacing(6)
+		self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+		self.showAxis1_checkBox = QtWidgets.QCheckBox()
+		self.showAxis1_checkBox.setEnabled(True)
+		self.showAxis1_checkBox.setChecked(True)
+		self.showAxis1_checkBox.setObjectName("showAxis1_checkBox")
+		self.horizontalLayout_3.addWidget(self.showAxis1_checkBox)
+		self.label_13 = QtWidgets.QLabel()
+		self.label_13.setObjectName("label_13")
+		self.horizontalLayout_3.addWidget(self.label_13)
+		self.label_14 = QtWidgets.QLabel()
+		self.label_14.setText("")
+		self.label_14.setPixmap(QtGui.QPixmap("Icons/legendLines/legendLines_Orange.png"))
+		self.label_14.setObjectName("label_14")
+		self.horizontalLayout_3.addWidget(self.label_14)
+		self.label_8 = QtWidgets.QLabel()
+		self.label_8.setObjectName("label_8")
+		self.horizontalLayout_3.addWidget(self.label_8)
+		self.label_9 = QtWidgets.QLabel()
+		self.label_9.setText("")
+		self.label_9.setPixmap(QtGui.QPixmap("Icons/legendLines/legendLines_Yellow.png"))
+		self.label_9.setObjectName("label_9")
+		self.label_13.setText("Setpoint")
+		self.label_8.setText("Estimate")
+		self.horizontalLayout_3.addWidget(self.label_9)
+
+		self.verticalLayout.addLayout(self.horizontalLayout_3)
+
+		self.clearGraph_pushButton = QtWidgets.QPushButton()
+		self.clearGraph_pushButton.setObjectName("clearGraph_pushButton")
+		self.verticalLayout.addWidget(self.clearGraph_pushButton)
+
+		self.spinBox_graphTime = QtWidgets.QSpinBox()
+		self.spinBox_graphTime.setMinimum(1)
+		self.spinBox_graphTime.setMaximum(600)
+		self.spinBox_graphTime.setProperty("value", 20)
+		self.spinBox_graphTime.setObjectName("spinBox_graphTime")
+		self.verticalLayout.addWidget(self.spinBox_graphTime)
 
 		self.showAxis0_checkBox.stateChanged.connect(self.axis0_graph_state_changed)
 		self.showAxis1_checkBox.stateChanged.connect(self.axis1_graph_state_changed)
@@ -150,11 +260,28 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 
 		self.axis0_state = None
 		self.axis1_state = None
-		self.setDisabled_odrive_ui(True)
-		self.odrive_connect()
 
-	def open_troubleshoot_url(self):
-		QtGui.QDesktopServices.openUrl(QtCore.QUrl("https://docs.odriverobotics.com/troubleshooting"))
+		# print(self.my_drive)
+	def give_odrive(self, my_drive):
+		self.my_drive = my_drive
+
+		self.timer = pg.QtCore.QTimer()
+		self.timer.timeout.connect(self.update_statuses)
+		self.timer.start(500)
+
+		self.ad["start_time"] = pg.ptime.time()
+		self.timer_graphUpdate = pg.QtCore.QTimer()
+		self.timer_graphUpdate.timeout.connect(self.update_graphs)
+		self.timer_graphUpdate.start(20)
+
+	def odrive_stopped(self):
+		self.timer.stop()
+		self.timer_graphUpdate.stop()
+
+	def clearGraph_clicked(self):
+		self.clear_axis_graph_lists("axis0")
+		self.clear_axis_graph_lists("axis1")
+		self.ad["start_time"] = pg.ptime.time()
 
 	def axis0_graph_state_changed(self, state):
 		if state != QtCore.Qt.Checked:
@@ -176,172 +303,6 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 			if self.timer_graphUpdate.isActive() == False:
 				self.timer_graphUpdate.start(20)
 				self.ad["start_time"] = pg.ptime.time()
-
-	def update_controller_mode(self):
-		# print("Controller mode {}".format(self.my_drive.axis0.controller.config.control_mode))
-		axis0_control_mode = self.my_drive.axis0.controller.config.control_mode
-
-		if axis0_control_mode == CONTROL_MODE_POSITION_CONTROL:# or axis0_control_mode == CTRL_MODE_TRAJECTORY_CONTROL:
-			self.axis0Position_radioButton.setChecked(True)
-			self.axis_controller_fields_position_enabled(True, 0)
-		elif axis0_control_mode == CONTROL_MODE_TORQUE_CONTROL:
-			self.axis0Current_radioButton.setChecked(True)
-			self.axis_controller_fields_position_enabled(False, 0)
-		elif axis0_control_mode == CONTROL_MODE_VELOCITY_CONTROL:
-			self.axis0Velocity_radioButton.setChecked(True)
-			self.axis_controller_fields_position_enabled(False, 0)
-
-		axis1_control_mode = self.my_drive.axis1.controller.config.control_mode
-		if axis1_control_mode == CONTROL_MODE_POSITION_CONTROL:# or axis1_control_mode == CTRL_MODE_TRAJECTORY_CONTROL:
-			self.axis1Position_radioButton.setChecked(True)
-			self.axis_controller_fields_position_enabled(True, 1)
-		elif axis1_control_mode == CONTROL_MODE_TORQUE_CONTROL:
-			self.axis1Current_radioButton.setChecked(True)
-			self.axis_controller_fields_position_enabled(False, 1)
-		elif axis1_control_mode == CONTROL_MODE_VELOCITY_CONTROL:
-			self.axis1Velocity_radioButton.setChecked(True)
-			self.axis_controller_fields_position_enabled(False, 1)
-
-
-
-	def axis_controller_mode_changed(self, id):
-		button_name = id.text()
-		group_name = id.sender().objectName()
-		if group_name == "buttonGroup_13":
-			if button_name == "Position":
-				self.axis_control_mode_changed(CONTROL_MODE_POSITION_CONTROL, 0)
-			elif button_name == "Current":
-				self.axis_control_mode_changed(CONTROL_MODE_TORQUE_CONTROL, 0)
-			elif button_name == "Velocity":
-				self.axis_control_mode_changed(CONTROL_MODE_VELOCITY_CONTROL, 0)
-		elif group_name == "buttonGroup_14":
-			if button_name == "Position":
-				self.axis_control_mode_changed(CONTROL_MODE_POSITION_CONTROL, 1)
-			elif button_name == "Current":
-				self.axis_control_mode_changed(CONTROL_MODE_TORQUE_CONTROL, 1)
-			elif button_name == "Velocity":
-				self.axis_control_mode_changed(CONTROL_MODE_VELOCITY_CONTROL, 1)
-
-
-	def axis_control_mode_changed(self, control_mode, axis):
-		if control_mode == CONTROL_MODE_POSITION_CONTROL:
-			self.axis_controller_fields_position_enabled(True, axis)
-		elif control_mode == CONTROL_MODE_TORQUE_CONTROL:
-			self.axis_controller_fields_position_enabled(False, axis)
-		elif control_mode == CONTROL_MODE_VELOCITY_CONTROL:
-			self.axis_controller_fields_position_enabled(False, axis)
-		# Updated mode inside odrive board
-		if axis == 0:
-			self.my_drive.axis0.controller.config.control_mode = control_mode
-			self.spinBox_controlModeValue_axis0.setValue(control_mode)
-		elif axis == 1:
-			self.my_drive.axis1.controller.config.control_mode = control_mode
-			self.spinBox_controlModeValue_axis1.setValue(control_mode)
-
-	def axis_controller_fields_position_enabled(self, state, axis):
-		if axis == 0:
-			#Enabled Position objects
-			self.axis0Position_doubleSpinBox.setEnabled(state)
-			self.axis0PositionGo_pushButton.setEnabled(state)
-			#Disable current and velocity objects
-			self.axis0Backward_pushButton.setDisabled(state)
-			self.axis0Stop_pushButton.setDisabled(state)
-			self.axis0Forward_pushButton.setDisabled(state)
-			self.axis0Velocity_doubleSpinBox.setDisabled(state)
-			self.axis0Current_doubleSpinBox.setDisabled(state)
-		elif axis == 1:
-			#Enabled Position objects
-			self.axis1Position_doubleSpinBox.setEnabled(state)
-			self.axis1PositionGo_pushButton.setEnabled(state)
-			#Disable current and velocity objects
-			self.axis1Backward_pushButton.setDisabled(state)
-			self.axis1Stop_pushButton.setDisabled(state)
-			self.axis1Forward_pushButton.setDisabled(state)
-			self.axis1Velocity_doubleSpinBox.setDisabled(state)
-			self.axis1Current_doubleSpinBox.setDisabled(state)
-
-	def close_application(self):
-		print("whooaaaa so custom!!!")
-		# try:
-		# 	self.odrive_worker.stop()
-		# except:
-		# 	pass
-		sys.exit()
-
-	def odrive_connect(self):
-		self.odrive_worker = odriveWorker()
-		self.odrive_worker.odrive_found_sig.connect(self.odrive_connected)
-		self.odrive_worker.start()
-		self.pushButton_connect.setDisabled(True)
-		self.pushButton_connect.setText("Connecting . . .")
-
-	def odrive_connected(self, my_drive):
-		self.my_drive = my_drive
-		self.pushButton_connect.setText("Connected")
-		# self.statusBar.showMessage("Serial number: {}".format(self.my_drive.serial_number))
-		#if my drive is found
-		self.timer = pg.QtCore.QTimer()
-		self.timer.timeout.connect(self.update_statuses)
-		self.timer.start(500)
-
-		self.ad["start_time"] = pg.ptime.time()
-		self.timer_graphUpdate = pg.QtCore.QTimer()
-		self.timer_graphUpdate.timeout.connect(self.update_graphs)
-		self.timer_graphUpdate.start(20)
-
-		self.setDisabled_odrive_ui(False)
-
-		self.update_controller_mode()
-		self.scan_all_config()
-
-	def setDisabled_odrive_ui(self, state):
-		self.tabWidget.setDisabled(state)
-		self.controlTab.setDisabled(state)
-		self.groupBox_13.setDisabled(state)
-
-		self.pushButton_reboot.setDisabled(state)
-		self.pushButton_scanConfiguration.setDisabled(state)
-		self.pushButton_writeConfiguration.setDisabled(state)
-		self.pushButton_saveConfiguration.setDisabled(state)
-		self.pushButton_eraseConfiguration.setDisabled(state)
-		self.pushButton_getTemp.setDisabled(state)
-
-	def update_graphs(self):
-		delta = pg.ptime.time() - self.ad["start_time"]
-		try:
-			if self.showAxis0_checkBox.isChecked():
-				self.ad["axis0"]["time_array"].append(delta)
-				self.update_velocity_graph("axis0", self.my_drive.axis0)
-				self.update_position_graph("axis0", self.my_drive.axis0)
-				self.update_current_graph("axis0", self.my_drive.axis0)
-				self.update_X_range("axis0")
-			if self.showAxis1_checkBox.isChecked():
-				self.ad["axis1"]["time_array"].append(delta)
-				self.update_velocity_graph("axis1", self.my_drive.axis1)
-				self.update_position_graph("axis1", self.my_drive.axis1)
-				self.update_current_graph("axis1", self.my_drive.axis1)
-				self.update_X_range("axis1")
-
-		except Exception as e:
-			print(e)
-			self.odrive_disconnected_exception()
-
-	def odrive_disconnected_exception(self):
-		self.timer.stop()
-		self.timer_graphUpdate.stop()
-		self.odrive_worker.stop()
-		self.pushButton_connect.setDisabled(False)
-		self.pushButton_connect.setText("Connect")
-		self.setDisabled_odrive_ui(True)
-
-		self.clear_axis_graph_lists("axis0")
-		self.clear_axis_graph_lists("axis1")
-
-	def clearGraph_clicked(self):
-		self.clear_axis_graph_lists("axis0")
-		self.clear_axis_graph_lists("axis1")
-		self.ad["start_time"] = pg.ptime.time()
-
 
 	def clear_axis_graph_lists(self, axis_key):
 		self.ad[axis_key]["time_array"] = []
@@ -392,990 +353,1113 @@ class ExampleApp(QtWidgets.QMainWindow, UI_mainwindow.Ui_MainWindow):
 				upper_limit = self.ad[axis]["time_array"][-1]
 				lower_limit = self.ad[axis]["time_array"][0]
 
-
-
 	def update_statuses(self):
+		pass
 		# self.update_voltage()
+		# try:
+		# 	self.update_machine_state()
+		# 	self.update_controller_mode()
+		# 	self.error_checks()
+		# except Exception as e:
+		# 	print(e)
+		# 	self.odrive_disconnected_exception()
+
+		# print(self.my_drive.vbus_voltage)
+	def update_graphs(self):
+		delta = pg.ptime.time() - self.ad["start_time"]
 		try:
-			self.update_machine_state()
-			self.update_controller_mode()
-			self.error_checks()
+			if self.showAxis0_checkBox.isChecked():
+				self.ad["axis0"]["time_array"].append(delta)
+				self.update_velocity_graph("axis0", self.my_drive.axis0)
+				self.update_position_graph("axis0", self.my_drive.axis0)
+				self.update_current_graph("axis0", self.my_drive.axis0)
+				self.update_X_range("axis0")
+			if self.showAxis1_checkBox.isChecked():
+				self.ad["axis1"]["time_array"].append(delta)
+				self.update_velocity_graph("axis1", self.my_drive.axis1)
+				self.update_position_graph("axis1", self.my_drive.axis1)
+				self.update_current_graph("axis1", self.my_drive.axis1)
+				self.update_X_range("axis1")
+
 		except Exception as e:
 			print(e)
-			self.odrive_disconnected_exception()
+			# self.odrive_disconnected_exception()
+
+		# self.centralWidget = QtWidgets.QWidget(MainWindow)
+		# self.centralWidget.setObjectName("centralWidget")
+		# gridLayout = QtWidgets.QGridLayout(self)
+
+		# treeView = QtWidgets.QTreeView()
+		# # self.treeView.setMinimumSize(QtCore.QSize(250, 0))
+		# treeView.setMaximumSize(QtCore.QSize(200,1000))
+		# treeView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+		# # self.treeView.setObjectName("treeView")
+		# self.layout.addWidget(treeView, 0, 0, 2, 1)
 
 
-# 		#Controller error
-# # ERROR_NONE = 0,
-# # ERROR_OVERSPEED = 0x01,
-# 		#sensorless error
-#         # ERROR_NONE = 0,
-# 		# ERROR_OVERSPEED = 0x01,
+class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
+	app_name = "Odrive Tester"
+	def __init__(self):
+		# Simple reason why we use it here is that it allows us to
+		# access variables, methods etc in the design.py file
+		super(self.__class__, self).__init__()
+		self.setupUi(self)  # This is defined in design.py file automatically
+							# It sets up layout and widgets that are defined
 
-	def error_checks(self):
-		# axis0_error = hex(self.my_drive.axis0.error)[2:]
-		# axis1_error = hex(self.my_drive.axis1.error)[2:]
-		axis0_message = "A0: "
-		axis1_message = "A1: "
-		axis0_error = self.check_axis_errors(hex(self.my_drive.axis0.error)[2:])
-		axis1_error = self.check_axis_errors(hex(self.my_drive.axis1.error)[2:])
-		axis0_encoder_error = self.check_axis_encoder_errors(hex(self.my_drive.axis0.encoder.error)[2:])
-		axis1_encoder_error = self.check_axis_encoder_errors(hex(self.my_drive.axis1.encoder.error)[2:])
-		axis0_motor_error = self.check_axis_motor_errors(hex(self.my_drive.axis0.motor.error)[2:])
-		axis1_motor_error = self.check_axis_motor_errors(hex(self.my_drive.axis1.motor.error)[2:])
+		self.setWindowTitle(self.app_name)
 
-		axis0_error += ", E: "
-		axis1_error += ", E: "
+		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
+		self.quit_shortcut.activated.connect(self.close_application)
 
-		axis0_error += axis0_encoder_error
-		axis1_error += axis1_encoder_error
+		self.connect_to_odrive_action = self.mainToolBar.addAction("Connect to Odrive")
+		self.connect_icon = QtGui.QIcon()
+		self.connect_icon.addPixmap(QtGui.QPixmap(ICON_CONNECT_PATH), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+		self.connect_to_odrive_action.setIcon(self.connect_icon)
+		self.connect_to_odrive_action.triggered.connect(self.odrive_connect)
 
-		axis0_error += ", M: "
-		axis1_error += ", M: "
+		self.open_controller = self.mainToolBar.addAction("Open Controller")
+		self.open_controller_icon = QtGui.QIcon()
+		self.open_controller_icon.addPixmap(QtGui.QPixmap(ICON_OPEN_CONTROLLER_PATH))
+		self.open_controller.setIcon(self.open_controller_icon)
+		self.open_controller.triggered.connect(self.open_controller_window)
 
-		axis0_error += axis0_motor_error
-		axis1_error += axis1_motor_error
+		# self.open_action = self.mainToolBar.addAction("Open")
+		# self.open_icon = QtGui.QIcon()
+		# self.open_icon.addPixmap(QtGui.QPixmap(ICON_OPEN_PATH))
+		# self.open_action.setIcon(self.open_icon)
 
-		axis0_message += axis0_error
-		axis1_message += axis1_error
+		# self.read_config_action = self.mainToolBar.addAction("Read configuration")
+		# self.read_config_icon = QtGui.QIcon()
+		# self.read_config_icon.addPixmap(QtGui.QPixmap(ICON_READ_CONFIG_PATH))
+		# self.read_config_action.setIcon(self.read_config_icon)
 
-		self.statusBar.showMessage(axis0_message + "    " + axis1_message)
+		# self.write_config_action = self.mainToolBar.addAction("Write configuration")
+		# self.write_config_icon = QtGui.QIcon()
+		# self.write_config_icon.addPixmap(QtGui.QPixmap(ICON_WRITE_CONFIG_PATH))
+		# self.write_config_action.setIcon(self.write_config_icon)
 
-	def check_axis_motor_errors(self, motor_error):
-		error_string = ""
-		if len(motor_error) == 1:
-			first_bit = motor_error
-			error_string = self.check_motor_error_b1(first_bit)
-		elif len(motor_error) == 2:
-			first_bit = motor_error[1]
-			second_bit = motor_error[0]
-			error_string = self.check_motor_error_b1(first_bit)
-			error_string += " - "
-			error_string += self.check_motor_error_b2(second_bit)
-		elif len(motor_error) == 3:
-			first_bit = motor_error[2]
-			second_bit = motor_error[1]
-			third_bit = motor_error[0]
-			error_string = self.check_motor_error_b1(first_bit)
-			error_string += " - "
-			error_string += self.check_motor_error_b2(second_bit)
-			error_string += " - "
-			error_string += self.check_motor_error_b3(third_bit)
-		return error_string
+		# self.settings_action = self.mainToolBar.addAction("Settings")
+		# self.settings_icon = QtGui.QIcon()
+		# self.settings_icon.addPixmap(QtGui.QPixmap(ICON_SETTINGS_PATH))
+		# self.settings_action.setIcon(self.settings_icon)
+		# self.settings_action.triggered.connect(self.open_settings_window)
 
-	def check_motor_error_b1(self, bit):
-		error_string = "NULL"
-		if bit == "0": #ERROR_NONE = 0x00,
-			error_string = "No errors"
-		elif bit == "1": #ERROR_PHASE_RESISTANCE_OUT_OF_RANGE = 0x0001,
-			error_string = "ERROR_PHASE_RESISTANCE_OUT_OF_RANGE"
-		elif bit == "2": #ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE = 0x0002,
-			error_string = "ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE"
-		elif bit == "4": #ERROR_ADC_FAILED = 0x0004,
-			error_string = "ERROR_ADC_FAILED"
-		elif bit == "8": #ERROR_DRV_FAULT = 0x0008,
-			error_string = "ERROR_DRV_FAULT"
-		return error_string
+		# self.help_action = self.mainToolBar.addAction("Help")
+		# self.help_icon = QtGui.QIcon()
+		# self.help_icon.addPixmap(QtGui.QPixmap(ICON_HELP_PATH))
+		# self.help_action.setIcon(self.help_icon)
 
-	def check_motor_error_b2(self, bit):
-		error_string = " "
-		if bit == "1": #ERROR_CONTROL_DEADLINE_MISSED = 0x0010,
-			error_string = "ERROR_CONTROL_DEADLINE_MISSED"
-		elif bit == "2": #ERROR_NOT_IMPLEMENTED_MOTOR_TYPE = 0x0020,
-			error_string = "ERROR_NOT_IMPLEMENTED_MOTOR_TYPE"
-		elif bit == "4": #ERROR_BRAKE_CURRENT_OUT_OF_RANGE = 0x0040,
-			error_string = "ERROR_BRAKE_CURRENT_OUT_OF_RANGE"
-		elif bit == "8": #ERROR_MODULATION_MAGNITUDE = 0x0080,
-			error_string = "ERROR_MODULATION_MAGNITUDE"
-		return error_string
+		# self.treeView.setDragEnabled(True)
+		# self.treeView.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+		# self.treeView.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+		# # self.treeView.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+		# # self.treeView.setAcceptDrops(True)
+		# # self.treeView.setDragDropMode(QtGui.QAbstractItemView.DragOnly)
 
-	def check_motor_error_b3(self, bit):
-		error_string = " "
-		if bit == "1": #ERROR_BRAKE_DEADTIME_VIOLATION = 0x0100,
-			error_string = "ERROR_BRAKE_DEADTIME_VIOLATION"
-		elif bit == "2": #ERROR_UNEXPECTED_TIMER_CALLBACK = 0x0200,
-			error_string = "ERROR_UNEXPECTED_TIMER_CALLBACK"
-		elif bit == "4": #ERROR_CURRENT_SENSE_SATURATION = 0x0400
-			error_string = "ERROR_CURRENT_SENSE_SATURATION"
-		return error_string
+		self.changed_settings = {}
 
-	def check_axis_encoder_errors(self, encoder_error):
-		error_string = ""
-		if len(encoder_error) == 1:
-			first_bit = encoder_error
-			error_string = self.check_encoder_error_b1(first_bit)
-		elif len(encoder_error) == 2:
-			first_bit = encoder_error[1]
-			second_bit = encoder_error[0]
-			error_string = self.check_encoder_error_b1(first_bit)
-			error_string += " - "
-			error_string += self.check_encoder_error_b2(second_bit)
-		return error_string
+		self.treeView.clicked.connect(self.tree_item_selected)
 
-	def check_encoder_error_b1(self, bit):
-		error_string = "NULL"
-		if bit == "0": #ERROR_NONE = 0x00,
-			error_string = "No errors"
-		elif bit == "1": #ERROR_UNSTABLE_GAIN = 0x01,
-			error_string = "ERROR_UNSTABLE_GAIN"
-		elif bit == "2": #ERROR_CPR_OUT_OF_RANGE = 0x02,
-			error_string = "ERROR_CPR_OUT_OF_RANGE"
-		elif bit == "4": #ERROR_NO_RESPONSE = 0x04,
-			error_string = "ERROR_NO_RESPONSE"
-		elif bit == "8": #ERROR_UNSUPPORTED_ENCODER_MODE = 0x08,
-			error_string = "ERROR_UNSUPPORTED_ENCODER_MODE"
-		return error_string
+		self.odrive_connect()
 
-	def check_encoder_error_b2(self, bit):
-		error_string = " "
-		if bit == "1": #ERROR_ILLEGAL_HALL_STATE = 0x10,
-			error_string = "ERROR_ILLEGAL_HALL_STATE"
-		elif bit == "2": #ERROR_INDEX_NOT_FOUND_YET = 0x20,
-			error_string = "ERROR_INDEX_NOT_FOUND_YET"
-		return error_string
+	def open_controller_window(self):
+		self.controller_window = ControllerWindow()
+		self.controller_window.show()
+		self.controller_window.give_odrive(self.my_drive)
+
+	def tree_item_selected(self):
+		self.changed_settings = {}
+		# index = self.treeView.selectedIndexes()[0]
+		# tree_selection = index.model().itemFromIndex(index).text()
+		# print(tree_selection)
+		self.add_action_buttons()
+
+		self.setup_config_window()
+
+		# if tree_selection == "General":
+		# 	self.setup_general()
+		# elif tree_selection == "Control Test":
+		# 	pass
+		# else:
+		# 	self.setup_config(tree_selection)
+			# self.setup()
+		# print(self.treeView.selectedIndexes()[0].text()).
 
 
-	def check_axis_errors(self, axis_error):
-		error_string = ""
-		if len(axis_error) == 1:
-			first_bit = axis_error
-			error_string = self.check_axis_error_b1(first_bit)
-		elif len(axis_error) == 2:
-			first_bit = axis_error[1]
-			second_bit = axis_error[0]
-			error_string = self.check_axis_error_b1(first_bit)
-			error_string += " - "
-			error_string += self.check_axis_error_b2(second_bit)
-		elif len(axis_error) == 3:
-			first_bit = axis_error[2]
-			second_bit = axis_error[1]
-			third_bit = axis_error[0]
-			error_string = self.check_axis_error_b1(first_bit)
-			error_string += " - "
-			error_string += self.check_axis_error_b2(second_bit)
-			error_string += " - "
-			error_string += self.check_axis_error_b3(third_bit)
-		return error_string
-
-
-	def check_axis_error_b1(self, bit):
-		error_string = "NULL"
-		if bit == "0": #ERROR_NONE = 0x00,
-			error_string = "No errors"
-		elif bit == "1": #ERROR_INVALID_STATE = 0x01, //<! an invalid state was requested
-			error_string = "ERROR_INVALID_STATE"
-		elif bit == "2": #ERROR_DC_BUS_UNDER_VOLTAGE = 0x02,
-			error_string = "ERROR_DC_BUS_UNDER_VOLTAGE"
-		elif bit == "4": #ERROR_DC_BUS_OVER_VOLTAGE = 0x04,
-			error_string = "ERROR_DC_BUS_OVER_VOLTAGE"
-		elif bit == "8": #ERROR_CURRENT_MEASUREMENT_TIMEOUT = 0x08,
-			error_string = "ERROR_CURRENT_MEASUREMENT_TIMEOUT"
-		return error_string
-
-	def check_axis_error_b2(self, bit):
-		error_string = " "
-		if bit == "1": #ERROR_BRAKE_RESISTOR_DISARMED = 0x10, //<! the brake resistor was unexpectedly disarmed
-			error_string = "ERROR_BRAKE_RESISTOR_DISARMED"
-		elif bit == "2": #ERROR_MOTOR_DISARMED = 0x20, //<! the motor was unexpectedly disarmed
-			error_string = "ERROR_MOTOR_DISARMED"
-		elif bit == "4": #ERROR_MOTOR_FAILED = 0x40, // Go to motor.hpp for information, check odrvX.axisX.motor.error for error value
-			error_string = "ERROR_MOTOR_FAILED"
-		elif bit == "8": #ERROR_SENSORLESS_ESTIMATOR_FAILED = 0x80,
-			error_string = "ERROR_SENSORLESS_ESTIMATOR_FAILED"
-		return error_string
-
-	def check_axis_error_b3(self, bit):
-		error_string = " "
-		if bit == "1": #ERROR_ENCODER_FAILED = 0x100, // Go to encoder.hpp for information, check odrvX.axisX.encoder.error for error value
-			error_string = "ERROR_ENCODER_FAILED"
-		elif bit == "2": #ERROR_CONTROLLER_FAILED = 0x200,
-			error_string = "ERROR_CONTROLLER_FAILED"
-		elif bit == "4": #ERROR_POS_CTRL_DURING_SENSORLESS = 0x400,
-			error_string = "ERROR_POS_CTRL_DURING_SENSORLESS"
-		return error_string
-
-	def update_voltage(self):
-		self.label_vbusVoltageValue.setText(str(round(self.my_drive.vbus_voltage, 2)))
-
-	def update_machine_state(self):
-		current_state = self.my_drive.axis0.current_state
-		if self.axis0_state != current_state:
-			self.axis0_state = current_state
-			print("New state axis0: {}".format(self.axis0_state))
-			self.update_machine_state_color(current_state, 0)
-
-		current_state = self.my_drive.axis1.current_state
-		if self.axis1_state != current_state:
-			self.axis1_state = current_state
-			print("New state axis1: {}".format(self.axis1_state))
-			self.update_machine_state_color(current_state, 1)
-
-	def update_machine_state_color(self, current_state, axis):
-			self.clear_state_buttons(axis)
-			if current_state == AXIS_STATE_IDLE:
-				self.idle_state(axis)
-			elif current_state == AXIS_STATE_STARTUP_SEQUENCE:
-				self.startup_seq_state(axis)
-			elif current_state == AXIS_STATE_FULL_CALIBRATION_SEQUENCE:
-				self.full_calibration_seq_state(axis)
-			elif current_state == AXIS_STATE_MOTOR_CALIBRATION:
-				self.motor_calibration_state(axis)
-			elif current_state == AXIS_STATE_SENSORLESS_CONTROL:
-				self.sensorless_control_state(axis)
-			elif current_state == AXIS_STATE_ENCODER_INDEX_SEARCH:
-				self.encoder_index_search_state(axis)
-			elif current_state == AXIS_STATE_ENCODER_OFFSET_CALIBRATION:
-				self.encoder_offset_calibration_state(axis)
-			elif current_state == AXIS_STATE_CLOSED_LOOP_CONTROL:
-				self.closed_loop_control_state(axis)
-
-	def save_odrive_configuration(self):
-		self.my_drive.save_configuration()
-
-	def erase_odrive_configuration(self):
-		self.my_drive.erase_configuration()
-
-	def write_config(self):
-		# AXIS0
-		self.my_drive.axis0.motor.config.phase_inductance = float(self.doubleSpinBox_phaseInductanceValue_axis0.value())
-		self.my_drive.axis0.motor.config.phase_resistance = float(self.doubleSpinBox_phaseResistanceValue_axis0.value())
-		self.my_drive.axis0.motor.config.pole_pairs = int(self.spinBox_poleParisValue_axis0.value())
-		self.my_drive.axis0.motor.config.motor_type = int(self.spinBox_motorTypeValue_axis0.value())
-		self.my_drive.axis0.motor.config.direction = int(self.spinBox_directionValue_axis0.value())
-		self.my_drive.axis0.motor.config.calibration_current = float(self.doubleSpinBox_calibrationCurrentValue_axis0.value())
-		self.my_drive.axis0.motor.config.current_lim = float(self.doubleSpinBox_currentLimValue_axis0.value())
-		self.my_drive.axis0.motor.config.pre_calibrated = self.radioButton_motorPreCalibratedTrue_axis0.isChecked()
-		self.my_drive.axis0.motor.config.requested_current_range = float(self.doubleSpinBox_requestedCurrentRangeValue_axis0.value())
-		# self.my_drive.axis0.motor.config.current_control_bandwidth = float(self.doubleSpinBox_currentControlBandwidthValue.value())
-		self.my_drive.axis0.motor.config.resistance_calib_max_voltage = float(self.doubleSpinBox_resistanceCalibMaxVoltageValue_axis0.value())
-
-		# self.my_drive.axis0.sensorless_estimator.config.pm_flux_linkage = float(self..value())
-		# self.my_drive.axis0.sensorless_estimator.config.pll_bandwidth = float(self..value())
-		# self.my_drive.axis0.sensorless_estimator.config.observer_gain = float(self..value())
-
-		self.my_drive.axis0.controller.config.vel_gain = float(self.doubleSpinBox_velGainValue_axis0.value())
-		self.my_drive.axis0.controller.config.vel_integrator_gain = float(self.doubleSpinBox_velIntegratorGainValue_axis0.value())
-		self.my_drive.axis0.controller.config.pos_gain = float(self.doubleSpinBox_posGainValue_axis0.value())
-		self.my_drive.axis0.controller.config.vel_limit = float(self.doubleSpinBox_velLimitValue_axis0.value())
-		self.my_drive.axis0.controller.config.control_mode = int(self.spinBox_controlModeValue_axis0.value())
-
-		self.my_drive.axis0.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis0.value())
-		self.my_drive.axis0.trap_traj.config.accel_limit = float(self.doubleSpinBox_accel_limit_axis0.value())
-		self.my_drive.axis0.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis0.value())
-		# self.my_drive.axis0.trap_traj.config.A_per_css   = float(self.doubleSpinBox_A_per_css_axis0.value())
-
-		self.my_drive.axis0.config.startup_encoder_index_search = self.radioButton_startupEncoderIndexSearchTrue_axis0.isChecked()
-		self.my_drive.axis0.config.startup_motor_calibration = self.radioButton_startupMotorCalibrationTrue_axis0.isChecked()
-		self.my_drive.axis0.config.startup_sensorless_control = self.radioButton_startupSensorlessControlTrue_axis0.isChecked()
-		self.my_drive.axis0.config.startup_closed_loop_control = self.radioButton_startupLoopControlTrue_axis0.isChecked()
-		self.my_drive.axis0.config.startup_encoder_offset_calibration = self.radioButton_startupEncoderOffsetCalibrationTrue_axis0.isChecked()
-		self.my_drive.axis0.config.enable_step_dir = self.radioButton_enableStepDirTrue_axis0.isChecked()
-
-		self.my_drive.axis0.config.general_lockin.ramp_distance = float(self.doubleSpinBox_rampUpDistanceValue_axis0.value())
-		self.my_drive.axis0.config.general_lockin.current = float(self.doubleSpinBox_spinUpCurrentValue_axis0.value())
-		self.my_drive.axis0.config.general_lockin.vel = float(self.doubleSpinBox_spinUpTargetVelValue_axis0.value())
-		self.my_drive.axis0.config.general_lockin.ramp_time = float(self.doubleSpinBox_rampUpTimeValue_axis0.value())
-		self.my_drive.axis0.config.turns_per_step = float(self.doubleSpinBox_countPerStepValue_axis0.value())
-		self.my_drive.axis0.config.general_lockin.accel = float(self.doubleSpinBox_spinUpAccelerationValue_axis0.value())
-
-		self.my_drive.axis0.encoder.config.calib_range = float(self.doubleSpinBox_calibRangeValue_axis0.value())
-		self.my_drive.axis0.encoder.config.mode = int(self.spinBox_modeEncoderValue_axis0.value())
-		self.my_drive.axis0.encoder.config.offset = int(self.spinBox_offsetValue_axis0.value())
-		self.my_drive.axis0.encoder.config.pre_calibrated = self.radioButton_encoderPreCalibratedTrue_axis0.isChecked()
-		self.my_drive.axis0.encoder.config.use_index = self.radioButton_useIndexTrue_axis0.isChecked()
-		self.my_drive.axis0.encoder.config.cpr = int(self.spinBox_cprValue_axis0.value())
-		self.my_drive.axis0.encoder.config.calib_scan_omega = float(self.doubleSpinBox_idxSearchSpeedValue_axis0.value())
-		self.my_drive.axis0.encoder.config.offset_float = float(self.doubleSpinBox_offsetFloatValue_axis0.value())
-		self.my_drive.axis0.encoder.config.bandwidth = float(self.doubleSpinBox_bandwidthValue_axis0.value())
-
-
-		# AXIS1
-		self.my_drive.axis1.motor.config.phase_inductance = float(self.doubleSpinBox_phaseInductanceValue_axis1.value())
-		self.my_drive.axis1.motor.config.phase_resistance = float(self.doubleSpinBox_phaseResistanceValue_axis1.value())
-		self.my_drive.axis1.motor.config.pole_pairs = int(self.spinBox_poleParisValue_axis1.value())
-		self.my_drive.axis1.motor.config.motor_type = int(self.spinBox_motorTypeValue_axis1.value())
-		self.my_drive.axis1.motor.config.direction = int(self.spinBox_directionValue_axis1.value())
-		self.my_drive.axis1.motor.config.calibration_current = float(self.doubleSpinBox_calibrationCurrentValue_axis1.value())
-		self.my_drive.axis1.motor.config.current_lim = float(self.doubleSpinBox_currentLimValue_axis1.value())
-		self.my_drive.axis1.motor.config.pre_calibrated = self.radioButton_motorPreCalibratedTrue_axis1.isChecked()
-		self.my_drive.axis1.motor.config.requested_current_range = float(self.doubleSpinBox_requestedCurrentRangeValue_axis1.value())
-		# self.my_drive.axis1.motor.config.current_control_bandwidth = float(self.doubleSpinBox_currentControlBandwidthValue.value())
-		self.my_drive.axis1.motor.config.resistance_calib_max_voltage = float(self.doubleSpinBox_resistanceCalibMaxVoltageValue_axis1.value())
-
-		# self.my_drive.axis1.sensorless_estimator.config.pm_flux_linkage = float(self..value())
-		# self.my_drive.axis1.sensorless_estimator.config.pll_bandwidth = float(self..value())
-		# self.my_drive.axis1.sensorless_estimator.config.observer_gain = float(self..value())
-
-		self.my_drive.axis1.controller.config.vel_gain = float(self.doubleSpinBox_velGainValue_axis1.value())
-		self.my_drive.axis1.controller.config.vel_integrator_gain = float(self.doubleSpinBox_velIntegratorGainValue_axis1.value())
-		self.my_drive.axis1.controller.config.pos_gain = float(self.doubleSpinBox_posGainValue_axis1.value())
-		self.my_drive.axis1.controller.config.vel_limit = float(self.doubleSpinBox_velLimitValue_axis1.value())
-		self.my_drive.axis1.controller.config.control_mode = int(self.spinBox_controlModeValue_axis1.value())
-
-		self.my_drive.axis1.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis1.value())
-		self.my_drive.axis1.trap_traj.config.accel_limit = float(self.doubleSpinBox_accel_limit_axis1.value())
-		self.my_drive.axis1.trap_traj.config.vel_limit   = float(self.doubleSpinBox_vel_limit_axis1.value())
-		# self.my_drive.axis1.trap_traj.config.A_per_css   = float(self.doubleSpinBox_A_per_css_axis1.value())
-
-		self.my_drive.axis1.config.startup_encoder_index_search = self.radioButton_startupEncoderIndexSearchTrue_axis1.isChecked()
-		self.my_drive.axis1.config.startup_motor_calibration = self.radioButton_startupMotorCalibrationTrue_axis1.isChecked()
-		self.my_drive.axis1.config.startup_sensorless_control = self.radioButton_startupSensorlessControlTrue_axis1.isChecked()
-		self.my_drive.axis1.config.startup_closed_loop_control = self.radioButton_startupLoopControlTrue_axis1.isChecked()
-		self.my_drive.axis1.config.startup_encoder_offset_calibration = self.radioButton_startupEncoderOffsetCalibrationTrue_axis1.isChecked()
-		self.my_drive.axis1.config.enable_step_dir = self.radioButton_enableStepDirTrue_axis1.isChecked()
-
-		self.my_drive.axis1.config.general_lockin.ramp_distance = float(self.doubleSpinBox_rampUpDistanceValue_axis1.value())
-		self.my_drive.axis1.config.general_lockin.current = float(self.doubleSpinBox_spinUpCurrentValue_axis1.value())
-		self.my_drive.axis1.config.general_lockin.vel = float(self.doubleSpinBox_spinUpTargetVelValue_axis1.value())
-		self.my_drive.axis1.config.general_lockin.ramp_time = float(self.doubleSpinBox_rampUpTimeValue_axis1.value())
-		self.my_drive.axis1.config.turns_per_step = float(self.doubleSpinBox_countPerStepValue_axis1.value())
-		self.my_drive.axis1.config.general_lockin.accel = float(self.doubleSpinBox_spinUpAccelerationValue_axis1.value())
-
-		self.my_drive.axis1.encoder.config.calib_range = float(self.doubleSpinBox_calibRangeValue_axis1.value())
-		self.my_drive.axis1.encoder.config.mode = int(self.spinBox_modeEncoderValue_axis1.value())
-		self.my_drive.axis1.encoder.config.offset = int(self.spinBox_offsetValue_axis1.value())
-		self.my_drive.axis1.encoder.config.pre_calibrated = self.radioButton_encoderPreCalibratedTrue_axis1.isChecked()
-		self.my_drive.axis1.encoder.config.use_index = self.radioButton_useIndexTrue_axis1.isChecked()
-		self.my_drive.axis1.encoder.config.cpr = int(self.spinBox_cprValue_axis1.value())
-		self.my_drive.axis1.encoder.config.calib_scan_omega = float(self.doubleSpinBox_idxSearchSpeedValue_axis1.value())
-		self.my_drive.axis1.encoder.config.offset_float = float(self.doubleSpinBox_offsetFloatValue_axis1.value())
-		self.my_drive.axis1.encoder.config.bandwidth = float(self.doubleSpinBox_bandwidthValue_axis1.value())
-
-		self.my_drive.config.dc_bus_overvoltage_trip_level = float(self.doubleSpinBox_dcBusOvervoltageTripLevelValue.value())
-		self.my_drive.config.enable_ascii_protocol_on_usb = self.radioButton_enableAsciiProtocolOnUsbTrue.isChecked()
-		self.my_drive.config.dc_bus_undervoltage_trip_level = float(self.doubleSpinBox_dcBusUndervoltageTripLevelValue.value())
-		self.my_drive.config.enable_uart = self.radioButton_enableUartTrue.isChecked()
-		self.my_drive.config.enable_i2c_instead_of_can = self.radioButton_enableI2cInsteadOfCanTrue.isChecked()
-		self.my_drive.config.brake_resistance = float(self.doubleSpinBox_brakeResistanceValue.value())
-
-	def scan_all_config(self):
-		print("Scanning all config")
-		self.scan_system_stats_config()
-		self.scan_can_config()
-		self.scan_low_level_config()
-		self.scan_config_config()
-		self.scan_axis_config()
-
-	def scan_config_config(self):
-		print("Scanning config config")
-		# enable uart
-		# enable i2c instead of can
-		self.doubleSpinBox_dcBusOvervoltageTripLevelValue.setValue(self.my_drive.config.dc_bus_overvoltage_trip_level)
-		#self.doubleSpinBox_dcBusOvervoltageTripLevelValue_2.setText(str(self.my_drive.config.dc_bus_undervoltage_trip_level))
-		#self.doubleSpinBox_brakeResistanceValue.setText(str(self.my_drive.config.brake_resistance))
-		if self.my_drive.config.enable_uart:
-			self.radioButton_enableUartTrue.setChecked(True)
+	def find_tree_parents(self, index, path_list):
+		if index.model() == None:
+			return path_list
 		else:
-			self.radioButton_enableUartFalse.setChecked(True)
+			path_list.append(index.model().itemFromIndex(index).text())
+			path_list = self.find_tree_parents(index.parent(), path_list)
+		return path_list
 
-		if self.my_drive.config.enable_i2c_instead_of_can:
-			self.radioButton_enableI2cInsteadOfCanTrue.setChecked(True)
+
+
+	def find_parent_path(self, object, path_list):
+		if object.parent() == None:
+			# print("no more parents")
+			return path_list
 		else:
-			self.radioButton_enableI2cInsteadOfCanFalse.setChecked(True)
+			path_list.append(object.parent().objectName())
+			self.find_parent_path(object.parent(), path_list)
+		
+		return path_list
 
-		if self.my_drive.config.enable_ascii_protocol_on_usb:
-			self.radioButton_enableAsciiProtocolOnUsbTrue.setChecked(True)
+	def clean_up_path(self, path_list):
+		path_list.remove('scrollAreaWidgetContents')
+		path_list.remove('qt_scrollarea_viewport')
+		path_list.remove('scrollArea')
+		path_list.remove('centralWidget')
+		path_list.remove('MainWindow')
+		try:
+			path_list.remove('')
+			path_list.remove('')
+			path_list.remove('')
+			path_list.remove('')
+			path_list.remove('')
+		except:
+			pass
+
+		return path_list
+
+
+	def add_to_changes_dict(self,ok):
+		pass
+
+	def radio_button_changed(self):
+		# print(self.sender().objectName())
+		# print(self.sender().checkedButton().objectName())
+
+		path_list = []
+		path_list.append(self.sender().objectName())
+		if self.sender().checkedButton().objectName() == "True":
+			item_value = True
 		else:
-			self.radioButton_enableAsciiProtocolOnUsbFalse.setChecked(True)
+			item_value = False
 
-		self.doubleSpinBox_dcBusOvervoltageTripLevelValue.setValue(self.my_drive.config.dc_bus_overvoltage_trip_level)
-		self.doubleSpinBox_dcBusUndervoltageTripLevelValue.setValue(self.my_drive.config.dc_bus_undervoltage_trip_level)
-		self.doubleSpinBox_brakeResistanceValue.setValue(self.my_drive.config.brake_resistance)
-		# enable ascii protocol
-		self.scan_config_gpio_pwm_config()
-
-	def scan_config_gpio_pwm_config(self):
-		self.doubleSpinBox_gpio1MaxValue.setValue(self.my_drive.config.gpio1_pwm_mapping.max)
-		self.doubleSpinBox_gpio2MaxValue.setValue(self.my_drive.config.gpio2_pwm_mapping.max)
-		self.doubleSpinBox_gpio3MaxValue.setValue(self.my_drive.config.gpio3_pwm_mapping.max)
-		self.doubleSpinBox_gpio4MaxValue.setValue(self.my_drive.config.gpio4_pwm_mapping.max)
-		self.doubleSpinBox_gpio1MinValue.setValue(self.my_drive.config.gpio1_pwm_mapping.min)
-		self.doubleSpinBox_gpio2MinValue.setValue(self.my_drive.config.gpio2_pwm_mapping.min)
-		self.doubleSpinBox_gpio3MinValue.setValue(self.my_drive.config.gpio3_pwm_mapping.min)
-		self.doubleSpinBox_gpio4MinValue.setValue(self.my_drive.config.gpio4_pwm_mapping.min)
-
-
-
-
-	def scan_low_level_config(self):
-		print("Scanning Low level config...")
-		self.label_vbusVoltageValue.setText(str(self.my_drive.vbus_voltage))
-
-		if self.my_drive.brake_resistor_armed:
-			self.icon_brakeResistorArmedValue.setPixmap(QtGui.QPixmap(ICON_TRUE))
+		self.find_parent_path(self.sender(), path_list)
+		path_list = self.clean_up_path(path_list)
+		index = self.treeView.selectedIndexes()[0]
+		tree_selection = index.model().itemFromIndex(index).text()
+		if tree_selection == "General":
+			pass
 		else:
-			self.icon_brakeResistorArmedValue.setPixmap(QtGui.QPixmap(ICON_FALSE))
+			path_list.append(tree_selection)
+		odrive_parent = index.parent()
+		path_list.append(odrive_parent.model().itemFromIndex(odrive_parent).text())
 
-		self.icon_userConfigLoadedValue.setPixmap(QtGui.QPixmap(ICON_FALSE))
+		# print(path_list)
 
-		if self.my_drive.user_config_loaded:
-			self.icon_userConfigLoadedValue.setPixmap(QtGui.QPixmap(ICON_TRUE))
+		pal = QtGui.QPalette()
+		pal.setColor(QtGui.QPalette.Base, QtCore.Qt.yellow)
+		# pal.setColor(QPalette::Window, Qt::blue);
+		self.sender().checkedButton().setPalette(pal)
+
+		if str(path_list) in self.changed_settings:
+			# print("FOUND ITEM")
+			self.changed_settings[str(path_list)]["value"] = item_value
 		else:
-			self.icon_userConfigLoadedValue.setPixmap(QtGui.QPixmap(ICON_FALSE))
+			# print("NEW PATH")
+			self.changed_settings[str(path_list)] = {}
+			self.changed_settings[str(path_list)]["value"] = item_value
+			self.changed_settings[str(path_list)]["path"] = path_list
+		# print(self.sender().text())
+		# print(self.sender().value())
 
-		self.label_hwVersionValue.setText("{}.{}".format(self.my_drive.hw_version_major, self.my_drive.hw_version_minor))
-		self.label_hwVersionVariantValue.setText(str(self.my_drive.hw_version_variant))
-		self.label_fwVersionValue.setText("{}.{}".format(self.my_drive.fw_version_major, self.my_drive.fw_version_minor))
-		self.label_fwVersionRevisionValue.setText(str(self.my_drive.fw_version_revision))
-		self.label_fwVersionUnreleasedValue.setText(str(self.my_drive.fw_version_unreleased))
+	def value_changed_test(self, haha):
+		path_list = []
+		# path_list.append(self.sender().text())
+		item_value = self.sender().value()
+		# print(item_value)
+		path_list.append(self.sender().objectName())
+		self.find_parent_path(self.sender(), path_list)
+		path_list = self.clean_up_path(path_list)
+		index = self.treeView.selectedIndexes()[0]
+		tree_selection = index.model().itemFromIndex(index).text()
+		# if tree_selection == "odrv0":
+		# 	pass
+		# else:
 
-		# Set Icon instead
-		#self.label_brakeResistorArmedValue.setText(str(self.my_drive.brake_resistor_armed))
+		path_list2 = []
+		path_list2 = self.find_tree_parents(self.treeView.selectedIndexes()[0], path_list2)
+		if len(path_list2) == 3:
+			path_list2.pop(0)
+		path_list.extend(path_list2)
+		# path_list.append(tree_selection)
 
+		# if tree_selection != "odrv0":
+		# 	odrive_parent = index.parent()
+			
+		# 	path_list.append(odrive_parent.model().itemFromIndex(odrive_parent).text())
+		# print(path_list)
+		# QPalette pal = widget.palette();
+		pal = QtGui.QPalette()
+		pal.setColor(QtGui.QPalette.Base, QtCore.Qt.yellow)
+		# pal.setColor(QPalette::Window, Qt::blue);
+		self.sender().setPalette(pal)
+		pal = QtGui.QPalette()
+		pal.setColor(QtGui.QPalette.Button, QtCore.Qt.yellow)
+		self.pb_apply.setPalette(pal)
 
-		#self.label_hwVersionMinorValue.setText(str(self.my_drive.node_id))
-		#self.label_hwVersionVariantValue.setText(str(self.my_drive.node_id))
-		#self.label_hwVersionMajorValue.setText(str(self.my_drive.node_id))
-		#self.label_getAdcVoltageValue.setText(str(self.my_drive.node_id))
-		self.label_testPropertyValue.setText(str(self.my_drive.test_property))
-		#self.label_fwVersionRevisionValue.setText(str(self.my_drive.node_id))
-		#self.label_fwVersionUnreleasedValue.setText(str(self.my_drive.node_id))
-		#self.label_fwVersionMinorValue.setText(str(self.my_drive.node_id))
-		#self.label_fwVersionMajorValue.setText(str(self.my_drive.node_id))
+		print(path_list)
 
-		#self.label_userConfigLoadedValue.setText(str(self.my_drive.user_config_loaded))
-
-		#self.label_getOscilloscopeValValue.setText(str(self.my_drive.node_id))
-		self.label_serialNumberValue.setText(hex(self.my_drive.serial_number).upper()[2:])
-
-
-
-	def scan_can_config(self):
-		print("Scanning CAN config...")
-		# self.label_TxMailboxAbortCallbackCntValue.setText(str(self.my_drive.can.TxMailboxAbortCallbackCnt))
-		# self.label_nodeIdValue.setText(str(self.my_drive.can.node_id))
-		# self.label_receivedMsgCntValue.setText(str(self.my_drive.can.received_msg_cnt))
-		# self.label_TxMailboxCompleteCallbackCntValue.setText(str(self.my_drive.can.TxMailboxCompleteCallbackCnt))
-		# self.label_unhandledMessagesValue.setText(str(self.my_drive.can.unhandled_messages))
-		# self.label_receivedAckValue.setText(str(self.my_drive.can.received_ack))
-		# self.label_unexpectedErrorsValue.setText(hex(self.my_drive.can.unexpected_errors))
-
-	def scan_system_stats_config(self):
-		self.label_minStackSpaceAxis1Value.setText(str(self.my_drive.system_stats.min_stack_space_axis1))
-		self.label_minStackSpaceStartupValue.setText(str(self.my_drive.system_stats.min_stack_space_startup))
-		self.label_minStackSpaceUartValue.setText(str(self.my_drive.system_stats.min_stack_space_uart))
-		self.label_minStackSpaceUsbIrqValue.setText(str(self.my_drive.system_stats.min_stack_space_usb_irq))
-		self.label_minStackSpaceCommsValue.setText(str(self.my_drive.system_stats.min_stack_space_comms))
-		self.label_minHeapSpaceValue.setText(str(self.my_drive.system_stats.min_heap_space))
-		self.label_minStackSpaceUsbValue.setText(str(self.my_drive.system_stats.min_stack_space_usb))
-		self.label_minStackSpaceAxis0Value.setText(str(self.my_drive.system_stats.min_stack_space_axis0))
-		self.label_uptimeValue.setText(str(self.my_drive.system_stats.uptime))
-
-		self.label_rxCntUsbValue.setText(str(self.my_drive.system_stats.usb.rx_cnt))
-		self.label_txOverrunCntValue.setText(str(self.my_drive.system_stats.usb.tx_overrun_cnt))
-		self.label_txCntValue.setText(str(self.my_drive.system_stats.usb.tx_cnt))
-		self.label_rxCntI2cValue.setText(str(self.my_drive.system_stats.i2c.rx_cnt))
-		self.label_addrValue.setText(str(self.my_drive.system_stats.i2c.addr))
-		self.label_addrMatchCnt_2.setText(str(self.my_drive.system_stats.i2c.addr_match_cnt))
-		self.label_errorCntValue.setText(hex(self.my_drive.system_stats.i2c.error_cnt))
-
-	def load_config_template(self):
-		config_template = {}
-		with open("config_template.json") as f:
-			config_template = json.load(f)
-		return config_template
-
-
-	def scan_axis_config(self):
-		self.scan_axis0_config()
-		self.scan_axis1_config()
-
-	def scan_axis0_config(self):
-		self.label_generalErrorValue_axis0.setText(hex(self.my_drive.axis0.error))
-		self.label_loopCounterValue_axis0.setText(str(self.my_drive.axis0.loop_counter))
-		if self.my_drive.axis0.config.startup_motor_calibration:
-			self.radioButton_startupMotorCalibrationTrue_axis0.setChecked(True)
+		if str(path_list) in self.changed_settings:
+			# print("FOUND ITEM")
+			self.changed_settings[str(path_list)]["value"] = item_value
 		else:
-			self.radioButton_startupMotorCalibrationFalse_axis0.setChecked(True)
-
-		if self.my_drive.axis0.config.startup_encoder_index_search:
-			self.radioButton_startupEncoderIndexSearchTrue_axis0.setChecked(True)
-		else:
-			self.radioButton_startupEncoderIndexSearchFalse_axis0.setChecked(True)
-
-		if self.my_drive.axis0.config.startup_encoder_offset_calibration:
-			self.radioButton_startupEncoderOffsetCalibrationTrue_axis0.setChecked(True)
-		else:
-			self.radioButton_startupEncoderOffsetCalibrationFalse_axis0.setChecked(True)
-
-		if self.my_drive.axis0.config.startup_closed_loop_control:
-			self.radioButton_startupLoopControlTrue_axis0.setChecked(True)
-		else:
-			self.radioButton_startupLoopControlFalse_axis0.setChecked(True)
-
-		if self.my_drive.axis0.config.startup_sensorless_control:
-			self.radioButton_startupSensorlessControlTrue_axis0.setChecked(True)
-		else:
-			self.radioButton_startupSensorlessControlFalse_axis0.setChecked(True)
-
-		if self.my_drive.axis0.config.enable_step_dir:
-			self.radioButton_enableStepDirTrue_axis0.setChecked(True)
-		else:
-			self.radioButton_enableStepDirFalse_axis0.setChecked(True)
-
-		self.doubleSpinBox_countPerStepValue_axis0.setValue(self.my_drive.axis0.config.turns_per_step)
-		self.doubleSpinBox_rampUpTimeValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.ramp_time)
-		self.doubleSpinBox_rampUpDistanceValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.ramp_distance)
-		self.doubleSpinBox_spinUpCurrentValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.current)
-		self.doubleSpinBox_spinUpAccelerationValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.accel)
-		self.doubleSpinBox_spinUpTargetVelValue_axis0.setValue(self.my_drive.axis0.config.general_lockin.vel)
-
-		self.scan_axis0_encoder_config()
-		self.scan_axis0_controller_config()
-		self.scan_axis0_motor_config()
-
-	def scan_axis0_encoder_config(self):
-		if self.my_drive.axis0.encoder.index_found:
-			self.icon_indexFoundValue_axis0.setPixmap(QtGui.QPixmap(ICON_TRUE))
-		else:
-			self.icon_indexFoundValue_axis0.setPixmap(QtGui.QPixmap(ICON_FALSE))
-
-		if self.my_drive.axis0.encoder.is_ready:
-			self.icon_isReadyEncoderValue_axis0.setPixmap(QtGui.QPixmap(ICON_TRUE))
-		else:
-			self.icon_isReadyEncoderValue_axis0.setPixmap(QtGui.QPixmap(ICON_FALSE))
-
-		self.label_posCprValue_axis0.setText(str(self.my_drive.axis0.encoder.pos_cpr))
-		self.label_posEstimateValue_axis0.setText(str(self.my_drive.axis0.encoder.pos_estimate))
-		self.label_shadowCountValue_axis0.setText(str(self.my_drive.axis0.encoder.shadow_count))
-		self.label_interpolationValue_axis0.setText(str(self.my_drive.axis0.encoder.interpolation))
-		self.label_countInCprValue_axis0.setText(str(self.my_drive.axis0.encoder.count_in_cpr))
-		self.label_hallStateValue_axis0.setText(str(self.my_drive.axis0.encoder.hall_state))
-		self.label_encoderErrorValue_axis0.setText(hex(self.my_drive.axis0.encoder.error))
-		self.label_phaseValue_axis0.setText(str(self.my_drive.axis0.encoder.phase))
-
-		self.scan_axis0_encoder_config_config()
-
-	def scan_axis0_encoder_config_config(self):
-		if self.my_drive.axis0.encoder.config.pre_calibrated:
-			self.radioButton_encoderPreCalibratedTrue_axis0.setChecked(True)
-		else:
-			self.radioButton_encoderPreCalibratedFalse_axis0.setChecked(True)
-
-		if self.my_drive.axis0.encoder.config.use_index:
-			self.radioButton_useIndexTrue_axis0.setChecked(True)
-		else:
-			self.radioButton_useIndexFalse_axis0.setChecked(True)
-
-
-		self.doubleSpinBox_idxSearchSpeedValue_axis0.setValue(self.my_drive.axis0.encoder.config.calib_scan_omega)
-		self.spinBox_cprValue_axis0.setValue(self.my_drive.axis0.encoder.config.cpr)
-		self.spinBox_modeEncoderValue_axis0.setValue(self.my_drive.axis0.encoder.config.mode)
-		self.spinBox_offsetValue_axis0.setValue(self.my_drive.axis0.encoder.config.offset)
-		self.doubleSpinBox_offsetFloatValue_axis0.setValue(self.my_drive.axis0.encoder.config.offset_float)
-		self.doubleSpinBox_calibRangeValue_axis0.setValue(self.my_drive.axis0.encoder.config.calib_range)
-		self.doubleSpinBox_bandwidthValue_axis0.setValue(self.my_drive.axis0.encoder.config.bandwidth)
-
-
-
-	def scan_axis0_controller_config(self):
-		self.label_velSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.vel_setpoint))
-		self.label_velIntegratorCurrent_axis0.setText(str(self.my_drive.axis0.controller.vel_integrator_torque))
-		self.label_posSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.pos_setpoint))
-		self.label_currentSetpointValue_axis0.setText(str(self.my_drive.axis0.controller.torque_setpoint))
-		self.scan_axis0_controller_config_config()
-
-	def scan_axis0_controller_config_config(self):
-		self.doubleSpinBox_posGainValue_axis0.setValue(self.my_drive.axis0.controller.config.pos_gain)
-		self.doubleSpinBox_velGainValue_axis0.setValue(self.my_drive.axis0.controller.config.vel_gain)
-		self.doubleSpinBox_velIntegratorGainValue_axis0.setValue(self.my_drive.axis0.controller.config.vel_integrator_gain)
-		self.doubleSpinBox_velLimitValue_axis0.setValue(self.my_drive.axis0.controller.config.vel_limit)
-		self.spinBox_controlModeValue_axis0.setValue(self.my_drive.axis0.controller.config.control_mode)
-
-		self.doubleSpinBox_vel_limit_axis0.setValue(self.my_drive.axis0.trap_traj.config.vel_limit)
-		self.doubleSpinBox_accel_limit_axis0.setValue(self.my_drive.axis0.trap_traj.config.accel_limit)
-		self.doubleSpinBox_vel_limit_axis0.setValue(self.my_drive.axis0.trap_traj.config.vel_limit)
-		# self.doubleSpinBox_A_per_css_axis0.setValue(self.my_drive.axis0.trap_traj.config.A_per_css)
-
-
-
-	def scan_axis0_motor_config(self):
-		self.scan_axis0_motor_config_config()
-		self.scan_axis0_motor_general_config()
-		self.scan_axis0_motor_currentControl_config()
-
-	def scan_axis0_motor_currentControl_config(self):
-		self.label_maxAllowedCurrentValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.max_allowed_current))
-		self.label_ibusValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.Ibus))
-		self.label_vCurrentControlIntegralDValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.v_current_control_integral_d))
-		self.label_vCurrentControlIntegralQValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.v_current_control_integral_q))
-		self.label_finalVAlphaValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.final_v_alpha))
-		self.label_finalVBetaValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.final_v_beta))
-		self.label_pGainValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.p_gain))
-		self.label_iGainValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.i_gain))
-		self.label_iqSetpointValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.Iq_setpoint))
-		self.label_iqMeasuredValue_axis0.setText(str(self.my_drive.axis0.motor.current_control.Iq_measured))
-
-
-	def scan_axis0_motor_general_config(self):
-		self.label_drvFaultValue_axis0.setText(str(self.my_drive.axis0.motor.gate_driver.drv_fault))
-		self.label_dcCalibPhBValue_axis0.setText(str(self.my_drive.axis0.motor.DC_calib_phB))
-		self.label_dcCalibPhCValue_axis0.setText(str(self.my_drive.axis0.motor.DC_calib_phC))
-		self.label_motorErrorValue_axis0.setText(hex(self.my_drive.axis0.motor.error))
-		self.label_currentMeasPhCValue_axis0.setText(str(self.my_drive.axis0.motor.current_meas_phC))
-
-		if self.my_drive.axis0.motor.is_calibrated:
-			self.icon_isCalibratedValue_axis0.setPixmap(QtGui.QPixmap(ICON_TRUE))
-		else:
-			self.icon_isCalibratedValue_axis0.setPixmap(QtGui.QPixmap(ICON_FALSE))
-
-		self.label_phaseCurrentRevGainValue_axis0.setText(str(self.my_drive.axis0.motor.phase_current_rev_gain))
-		self.label_currentMeasPhBValue_axis0.setText(str(self.my_drive.axis0.motor.current_meas_phB))
-		self.label_armedStateValue_axis0.setText(str(self.my_drive.axis0.motor.armed_state))
-
-	def scan_axis0_motor_config_config(self):
-		if self.my_drive.axis0.motor.config.pre_calibrated:
-			self.radioButton_motorPreCalibratedTrue_axis0.setChecked(True)
-		else:
-			self.radioButton_motorPreCalibratedFalse_axis0.setChecked(True)
-
-		self.doubleSpinBox_phaseInductanceValue_axis0.setValue(self.my_drive.axis0.motor.config.phase_inductance)
-		self.doubleSpinBox_phaseResistanceValue_axis0.setValue(self.my_drive.axis0.motor.config.phase_resistance)
-		self.spinBox_motorTypeValue_axis0.setValue(self.my_drive.axis0.motor.config.motor_type)
-		self.doubleSpinBox_currentControlBandwidthValue_axis0.setValue(self.my_drive.axis0.motor.config.current_control_bandwidth)
-		self.doubleSpinBox_requestedCurrentRangeValue_axis0.setValue(self.my_drive.axis0.motor.config.requested_current_range)
-		self.spinBox_directionValue_axis0.setValue(self.my_drive.axis0.motor.config.direction)
-		self.doubleSpinBox_resistanceCalibMaxVoltageValue_axis0.setValue(self.my_drive.axis0.motor.config.resistance_calib_max_voltage)
-		self.doubleSpinBox_currentLimValue_axis0.setValue(self.my_drive.axis0.motor.config.current_lim)
-		self.spinBox_poleParisValue_axis0.setValue(self.my_drive.axis0.motor.config.pole_pairs)
-		self.doubleSpinBox_calibrationCurrentValue_axis0.setValue(self.my_drive.axis0.motor.config.calibration_current)
-
-	def scan_axis1_config(self):
-		self.label_generalErrorValue_axis1.setText(hex(self.my_drive.axis1.error))
-		self.label_loopCounterValue_axis1.setText(str(self.my_drive.axis1.loop_counter))
-		if self.my_drive.axis1.config.startup_motor_calibration:
-			self.radioButton_startupMotorCalibrationTrue_axis1.setChecked(True)
-		else:
-			self.radioButton_startupMotorCalibrationFalse_axis1.setChecked(True)
-
-		if self.my_drive.axis1.config.startup_encoder_index_search:
-			self.radioButton_startupEncoderIndexSearchTrue_axis1.setChecked(True)
-		else:
-			self.radioButton_startupEncoderIndexSearchFalse_axis1.setChecked(True)
-
-		if self.my_drive.axis1.config.startup_encoder_offset_calibration:
-			self.radioButton_startupEncoderOffsetCalibrationTrue_axis1.setChecked(True)
-		else:
-			self.radioButton_startupEncoderOffsetCalibrationFalse_axis1.setChecked(True)
-
-		if self.my_drive.axis1.config.startup_closed_loop_control:
-			self.radioButton_startupLoopControlTrue_axis1.setChecked(True)
-		else:
-			self.radioButton_startupLoopControlFalse_axis1.setChecked(True)
-
-		if self.my_drive.axis1.config.startup_sensorless_control:
-			self.radioButton_startupSensorlessControlTrue_axis1.setChecked(True)
-		else:
-			self.radioButton_startupSensorlessControlFalse_axis1.setChecked(True)
-
-		if self.my_drive.axis1.config.enable_step_dir:
-			self.radioButton_enableStepDirTrue_axis1.setChecked(True)
-		else:
-			self.radioButton_enableStepDirFalse_axis1.setChecked(True)
-
-		self.doubleSpinBox_countPerStepValue_axis1.setValue(self.my_drive.axis1.config.turns_per_step)
-		self.doubleSpinBox_rampUpTimeValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.ramp_time)
-		self.doubleSpinBox_rampUpDistanceValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.ramp_distance)
-		self.doubleSpinBox_spinUpCurrentValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.current)
-		self.doubleSpinBox_spinUpAccelerationValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.accel)
-		self.doubleSpinBox_spinUpTargetVelValue_axis1.setValue(self.my_drive.axis1.config.general_lockin.vel)
-
-		self.scan_axis1_encoder_config()
-		self.scan_axis1_controller_config()
-		self.scan_axis1_motor_config()
-
-	def scan_axis1_motor_config(self):
-		self.scan_axis1_motor_config_config()
-		self.scan_axis1_motor_general_config()
-		self.scan_axis1_motor_currentControl_config()
-
-	def scan_axis1_motor_currentControl_config(self):
-		self.label_maxAllowedCurrentValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.max_allowed_current))
-		self.label_ibusValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.Ibus))
-		self.label_vCurrentControlIntegralDValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.v_current_control_integral_d))
-		self.label_vCurrentControlIntegralQValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.v_current_control_integral_q))
-		self.label_finalVAlphaValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.final_v_alpha))
-		self.label_finalVBetaValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.final_v_beta))
-		self.label_pGainValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.p_gain))
-		self.label_iGainValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.i_gain))
-		self.label_iqSetpointValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.Iq_setpoint))
-		self.label_iqMeasuredValue_axis1.setText(str(self.my_drive.axis1.motor.current_control.Iq_measured))
-
-
-	def scan_axis1_motor_general_config(self):
-		self.label_drvFaultValue_axis1.setText(str(self.my_drive.axis1.motor.gate_driver.drv_fault))
-		self.label_dcCalibPhBValue_axis1.setText(str(self.my_drive.axis1.motor.DC_calib_phB))
-		self.label_dcCalibPhCValue_axis1.setText(str(self.my_drive.axis1.motor.DC_calib_phC))
-		self.label_motorErrorValue_axis1.setText(hex(self.my_drive.axis1.motor.error))
-		self.label_currentMeasPhCValue_axis1.setText(str(self.my_drive.axis1.motor.current_meas_phC))
-
-		if self.my_drive.axis1.motor.is_calibrated:
-			self.icon_isCalibratedValue_axis1.setPixmap(QtGui.QPixmap(ICON_TRUE))
-		else:
-			self.icon_isCalibratedValue_axis1.setPixmap(QtGui.QPixmap(ICON_FALSE))
-
-		self.label_phaseCurrentRevGainValue_axis1.setText(str(self.my_drive.axis1.motor.phase_current_rev_gain))
-		self.label_currentMeasPhBValue_axis1.setText(str(self.my_drive.axis1.motor.current_meas_phB))
-		self.label_armedStateValue_axis1.setText(str(self.my_drive.axis1.motor.armed_state))
-
-	def scan_axis1_motor_config_config(self):
-		if self.my_drive.axis1.motor.config.pre_calibrated:
-			self.radioButton_motorPreCalibratedTrue_axis1.setChecked(True)
-		else:
-			self.radioButton_motorPreCalibratedFalse_axis1.setChecked(True)
-
-		self.doubleSpinBox_phaseInductanceValue_axis1.setValue(self.my_drive.axis1.motor.config.phase_inductance)
-		self.doubleSpinBox_phaseResistanceValue_axis1.setValue(self.my_drive.axis1.motor.config.phase_resistance)
-		self.spinBox_motorTypeValue_axis1.setValue(self.my_drive.axis1.motor.config.motor_type)
-		self.doubleSpinBox_currentControlBandwidthValue_axis1.setValue(self.my_drive.axis1.motor.config.current_control_bandwidth)
-		self.doubleSpinBox_requestedCurrentRangeValue_axis1.setValue(self.my_drive.axis1.motor.config.requested_current_range)
-		self.spinBox_directionValue_axis1.setValue(self.my_drive.axis1.motor.config.direction)
-		self.doubleSpinBox_resistanceCalibMaxVoltageValue_axis1.setValue(self.my_drive.axis1.motor.config.resistance_calib_max_voltage)
-		self.doubleSpinBox_currentLimValue_axis1.setValue(self.my_drive.axis1.motor.config.current_lim)
-		self.spinBox_poleParisValue_axis1.setValue(self.my_drive.axis1.motor.config.pole_pairs)
-		self.doubleSpinBox_calibrationCurrentValue_axis1.setValue(self.my_drive.axis1.motor.config.calibration_current)
-
-	def scan_axis1_controller_config(self):
-		self.label_velSetpointValue_axis1.setText(str(self.my_drive.axis1.controller.vel_setpoint))
-		self.label_velIntegratorCurrent_axis1.setText(str(self.my_drive.axis1.controller.vel_integrator_torque))
-		self.label_posSetpointValue_axis1.setText(str(self.my_drive.axis1.controller.pos_setpoint))
-		self.label_currentSetpointValue_axis1.setText(str(self.my_drive.axis1.controller.torque_setpoint))
-		self.scan_axis1_controller_config_config()
-
-	def scan_axis1_controller_config_config(self):
-		self.doubleSpinBox_posGainValue_axis1.setValue(self.my_drive.axis1.controller.config.pos_gain)
-		self.doubleSpinBox_velGainValue_axis1.setValue(self.my_drive.axis1.controller.config.vel_gain)
-		self.doubleSpinBox_velIntegratorGainValue_axis1.setValue(self.my_drive.axis1.controller.config.vel_integrator_gain)
-		self.doubleSpinBox_velLimitValue_axis1.setValue(self.my_drive.axis1.controller.config.vel_limit)
-		self.spinBox_controlModeValue_axis1.setValue(self.my_drive.axis1.controller.config.control_mode)
-
-		self.doubleSpinBox_vel_limit_axis1.setValue(self.my_drive.axis1.trap_traj.config.vel_limit)
-		self.doubleSpinBox_accel_limit_axis1.setValue(self.my_drive.axis1.trap_traj.config.accel_limit)
-		self.doubleSpinBox_vel_limit_axis1.setValue(self.my_drive.axis1.trap_traj.config.vel_limit)
-		# self.doubleSpinBox_A_per_css_axis1.setValue(self.my_drive.axis1.trap_traj.config.A_per_css)
-
-	def scan_axis1_encoder_config(self):
-		if self.my_drive.axis1.encoder.index_found:
-			self.icon_indexFoundValue_axis1.setPixmap(QtGui.QPixmap(ICON_TRUE))
-		else:
-			self.icon_indexFoundValue_axis1.setPixmap(QtGui.QPixmap(ICON_FALSE))
-
-		if self.my_drive.axis1.encoder.is_ready:
-			self.icon_isReadyEncoderValue_axis1.setPixmap(QtGui.QPixmap(ICON_TRUE))
-		else:
-			self.icon_isReadyEncoderValue_axis1.setPixmap(QtGui.QPixmap(ICON_FALSE))
-
-		self.label_posCprValue_axis1.setText(str(self.my_drive.axis1.encoder.pos_cpr))
-		self.label_posEstimateValue_axis1.setText(str(self.my_drive.axis1.encoder.pos_estimate))
-		self.label_shadowCountValue_axis1.setText(str(self.my_drive.axis1.encoder.shadow_count))
-		self.label_interpolationValue_axis1.setText(str(self.my_drive.axis1.encoder.interpolation))
-		self.label_countInCprValue_axis1.setText(str(self.my_drive.axis1.encoder.count_in_cpr))
-		self.label_hallStateValue_axis1.setText(str(self.my_drive.axis1.encoder.hall_state))
-		self.label_encoderErrorValue_axis1.setText(hex(self.my_drive.axis1.encoder.error))
-		self.label_phaseValue_axis1.setText(str(self.my_drive.axis1.encoder.phase))
-
-		self.scan_axis1_encoder_config_config()
-
-	def scan_axis1_encoder_config_config(self):
-		if self.my_drive.axis1.encoder.config.pre_calibrated:
-			self.radioButton_encoderPreCalibratedTrue_axis1.setChecked(True)
-		else:
-			self.radioButton_encoderPreCalibratedFalse_axis1.setChecked(True)
-
-		if self.my_drive.axis1.encoder.config.use_index:
-			self.radioButton_useIndexTrue_axis1.setChecked(True)
-		else:
-			self.radioButton_useIndexFalse_axis1.setChecked(True)
-
-		self.doubleSpinBox_idxSearchSpeedValue_axis1.setValue(self.my_drive.axis1.encoder.config.calib_scan_omega)
-		self.spinBox_cprValue_axis1.setValue(self.my_drive.axis1.encoder.config.cpr)
-		self.spinBox_modeEncoderValue_axis1.setValue(self.my_drive.axis1.encoder.config.mode)
-		self.spinBox_offsetValue_axis1.setValue(self.my_drive.axis1.encoder.config.offset)
-		self.doubleSpinBox_offsetFloatValue_axis1.setValue(self.my_drive.axis1.encoder.config.offset_float)
-		self.doubleSpinBox_calibRangeValue_axis1.setValue(self.my_drive.axis1.encoder.config.calib_range)
-		self.doubleSpinBox_bandwidthValue_axis1.setValue(self.my_drive.axis1.encoder.config.bandwidth)
-
-	def send_axis0_position_go(self):
-		self.my_drive.axis0.controller.input_pos = self.axis0Position_doubleSpinBox.value()
-
-	def send_axis1_position_go(self):
-		self.my_drive.axis1.controller.input_pos = self.axis1Position_doubleSpinBox.value()
-
-	def send_axis0_trajectory_go(self):
-		self.my_drive.axis0.controller.move_to_pos(self.axis0Position_doubleSpinBox.value())
-
-	def send_axis1_trajectory_go(self):
-		self.my_drive.axis1.controller.move_to_pos(self.axis1Position_doubleSpinBox.value())
-
-	def send_axis0_velocity_current_stop(self):
-		self.send_axis_velocity_current_command(0, self.my_drive.axis0.controller.config.control_mode, 0.0)
-
-	def send_axis1_velocity_current_stop(self):
-		self.send_axis_velocity_current_command(1, self.my_drive.axis1.controller.config.control_mode, 0.0)
-
-	def send_axis0_velocity_current_forward(self):
-		mode = self.my_drive.axis0.controller.config.control_mode
-		value = 0
-		if mode == CONTROL_MODE_TORQUE_CONTROL:
-			value = self.axis0Current_doubleSpinBox.value()
-		elif mode == CONTROL_MODE_VELOCITY_CONTROL:
-			value = self.axis0Velocity_doubleSpinBox.value()
-		self.send_axis_velocity_current_command(0, mode, value)
-
-	def send_axis1_velocity_current_forward(self):
-		mode = self.my_drive.axis1.controller.config.control_mode
-		value = 0
-		if mode == CONTROL_MODE_TORQUE_CONTROL:
-			value = self.axis1Current_doubleSpinBox.value()
-		elif mode == CONTROL_MODE_VELOCITY_CONTROL:
-			value = self.axis1Velocity_doubleSpinBox.value()
-		self.send_axis_velocity_current_command(1, mode, value)
-
-	def send_axis0_velocity_current_backward(self):
-		mode = self.my_drive.axis0.controller.config.control_mode
-		value = 0
-		if mode == CONTROL_MODE_TORQUE_CONTROL:
-			value = self.axis0Current_doubleSpinBox.value() * -1
-		elif mode == CONTROL_MODE_VELOCITY_CONTROL:
-			value = self.axis0Velocity_doubleSpinBox.value() * -1
-		self.send_axis_velocity_current_command(0, mode, value)
-
-	def send_axis1_velocity_current_backward(self):
-		mode = self.my_drive.axis1.controller.config.control_mode
-		value = 0
-		if mode == CONTROL_MODE_TORQUE_CONTROL:
-			value = self.axis1Current_doubleSpinBox.value() * -1
-		elif mode == CONTROL_MODE_VELOCITY_CONTROL:
-			value = self.axis1Velocity_doubleSpinBox.value() * -1
-		self.send_axis_velocity_current_command(1, mode, value)
-
-
-	def send_axis_velocity_current_command(self, axis, mode, value):
-		if axis == 0:
-			if mode == CONTROL_MODE_TORQUE_CONTROL:
-				self.my_drive.axis0.controller.input_torque = value
-			elif mode == CONTROL_MODE_VELOCITY_CONTROL:
-				self.my_drive.axis0.controller.input_vel = value
-		elif axis == 1:
-			if mode == CONTROL_MODE_TORQUE_CONTROL:
-				self.my_drive.axis1.controller.input_torque = value
-			elif mode == CONTROL_MODE_VELOCITY_CONTROL:
-				self.my_drive.axis1.controller.input_vel = value
-
-	def clear_state_buttons(self, axis):
-		if axis == 0:
-			self.axis0_pushButton_idle.setStyleSheet("")
-			self.axis0_pushButton_startupSequence.setStyleSheet("")
-			self.axis0_pushButton_fullCalibrationSequence.setStyleSheet("")
-			self.axis0_pushButton_motorCalibration.setStyleSheet("")
-			self.axis0_pushButton_sensorlessControl.setStyleSheet("")
-			self.axis0_pushButton_encoderIndexSearch.setStyleSheet("")
-			self.axis0_pushButton_encoderOffsetCalibration.setStyleSheet("")
-			self.axis0_pushButton_closedLoopControl.setStyleSheet("")
-		elif axis == 1:
-			self.axis1_pushButton_idle.setStyleSheet("")
-			self.axis1_pushButton_startupSequence.setStyleSheet("")
-			self.axis1_pushButton_fullCalibrationSequence.setStyleSheet("")
-			self.axis1_pushButton_motorCalibration.setStyleSheet("")
-			self.axis1_pushButton_sensorlessControl.setStyleSheet("")
-			self.axis1_pushButton_encoderIndexSearch.setStyleSheet("")
-			self.axis1_pushButton_encoderOffsetCalibration.setStyleSheet("")
-			self.axis1_pushButton_closedLoopControl.setStyleSheet("")
-
-	def idle_state(self, axis):
-		if axis == 0:
-			self.axis0_pushButton_idle.setStyleSheet("background-color: rgb(246, 224, 143);")
-		elif axis == 1:
-			self.axis1_pushButton_idle.setStyleSheet("background-color: rgb(246, 224, 143);")
-
-	def startup_seq_state(self, axis):
-		if axis == 0:
-			self.axis0_pushButton_startupSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
-		elif axis == 1:
-			self.axis1_pushButton_startupSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
-
-	def full_calibration_seq_state(self, axis):
-		if axis == 0:
-			self.axis0_pushButton_fullCalibrationSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
-		elif axis == 1:
-			self.axis1_pushButton_fullCalibrationSequence.setStyleSheet("background-color: rgb(246, 224, 143);")
-
-	def motor_calibration_state(self, axis):
-		if axis == 0:
-			self.axis0_pushButton_motorCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
-		elif axis == 1:
-			self.axis1_pushButton_motorCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
-
-	def sensorless_control_state(self, axis):
-		if axis == 0:
-			self.axis0_pushButton_sensorlessControl.setStyleSheet("background-color: rgb(246, 224, 143);")
-		elif axis == 1:
-			self.axis1_pushButton_sensorlessControl.setStyleSheet("background-color: rgb(246, 224, 143);")
-
-	def encoder_index_search_state(self, axis):
-		if axis == 0:
-			self.axis0_pushButton_encoderIndexSearch.setStyleSheet("background-color: rgb(246, 224, 143);")
-		elif axis == 1:
-			self.axis1_pushButton_encoderIndexSearch.setStyleSheet("background-color: rgb(246, 224, 143);")
-
-	def encoder_offset_calibration_state(self, axis):
-		if axis == 0:
-			self.axis0_pushButton_encoderOffsetCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
-		elif axis == 1:
-			self.axis1_pushButton_encoderOffsetCalibration.setStyleSheet("background-color: rgb(246, 224, 143);")
-
-	def closed_loop_control_state(self, axis):
-		if axis == 0:
-			self.axis0_pushButton_closedLoopControl.setStyleSheet("background-color: rgb(246, 224, 143);")
-		elif axis == 1:
-			self.axis1_pushButton_closedLoopControl.setStyleSheet("background-color: rgb(246, 224, 143);")
-
-	def save_config(self):
-		self.my_drive.save_configuration()
+			# print("NEW PATH")
+			self.changed_settings[str(path_list)] = {}
+			self.changed_settings[str(path_list)]["value"] = item_value
+			self.changed_settings[str(path_list)]["path"] = path_list
+
+		
+	def apply_changes(self):
+		print(self.changed_settings)
+		for key in self.changed_settings:
+			print(len(self.changed_settings[key]["path"]))
+			path_length = len(self.changed_settings[key]["path"])
+			print(self.changed_settings[key]["value"])
+			path = self.changed_settings[key]["path"]
+			if path_length == 3:
+				exec("self.my_drive.{}.{} = {}".format(path[-2], path[-3], self.changed_settings[key]["value"]))
+				# self.my_drive._remote_attributes[]._remote_attributes[] = self.changed_settings[key]["value"]
+			elif path_length == 4:
+				exec("self.my_drive.{}.{}.{} = {}".format(path[-2], path[-3], path[-4], self.changed_settings[key]["value"]))
+				# self.my_drive._remote_attributes[path[-2]]._remote_attributes[path[-3]]._remote_attributes[path[-4]] = self.changed_settings[key]["value"]
+			elif path_length == 5:
+				exec("self.my_drive.{}.{}.{}.{} = {}".format(path[-2], path[-3], path[-4], path[-5], self.changed_settings[key]["value"]))
+				# self.my_drive._remote_attributes[path[-2]]._remote_attributes[path[-3]]._remote_attributes[path[-4]]._remote_attributes[path[-5]] = self.changed_settings[key]["value"]
+			elif path_length == 6:
+				exec("self.my_drive.{}.{}.{}.{}.{} = {}".format(path[-2], path[-3], path[-4], path[-5], path[-6], self.changed_settings[key]["value"]))
+				# self.my_drive._remote_attributes[path[-2]]._remote_attributes[path[-3]]._remote_attributes[path[-4]]._remote_attributes[path[-5]]._remote_attributes[path[-6]] = self.changed_settings[key]["value"]
+		self.tree_item_selected()
+		# send all commands to odrive
+
+
+	def deleteItems(self, del_layout):
+		try:
+			if del_layout.count() > 0:
+				while del_layout.count():
+					item = del_layout.takeAt(0)
+					widget = item.widget()
+					if widget is not None:
+						widget.deleteLater()
+					else:
+						self.deleteItems(item.layout())
+		except Exception as e:
+			print("exception deleting: {}".format(e))
 
 	def odrive_reboot(self):
 		try:
 			self.my_drive.reboot()
+		except:
+			print("did we reboot?")
+
+		try:
+			self.odrive_worker.stop()
 		except Exception as e:
-			print(e)
-			self.odrive_disconnected_exception()
+			print("exception stopping, closing: {}".format(e))
+		self.deleteItems(self.sb_layout)
+		self.odrive_connect()
 
-	def machine_state_clicked(self):
-		button_name = self.sender().objectName()
-		axis_name = button_name[:5]
-		m_state_name = button_name[17:]
-		print(axis_name)
-		print(m_state_name)
+	def odrive_save_configuration(self):
+		self.my_drive.save_configuration()
 
-		if axis_name == "axis0":
-			axis = self.my_drive.axis0
-		elif axis_name == "axis1":
-			axis = self.my_drive.axis1
+	def odrive_erase_configuration(self):
+		self.my_drive.erase_configuration()
 
-		if m_state_name == "idle":
-			axis.requested_state = AXIS_STATE_IDLE
-		elif m_state_name == "startupSequence":
-			axis.requested_state = AXIS_STATE_STARTUP_SEQUENCE
-		elif m_state_name == "fullCalibrationSequence":
-			axis.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
-		elif m_state_name == "motorCalibration":
-			axis.requested_state = AXIS_STATE_MOTOR_CALIBRATION
-		elif m_state_name == "sensorlessControl":
-			axis.requested_state = AXIS_STATE_SENSORLESS_CONTROL
-		elif m_state_name == "encoderIndexSearch":
-			axis.requested_state = AXIS_STATE_ENCODER_INDEX_SEARCH
-		elif m_state_name == "encoderOffsetCalibration":
-			axis.requested_state = AXIS_STATE_ENCODER_OFFSET_CALIBRATION
-		elif m_state_name == "closedLoopControl":
-			axis.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
+	def add_action_buttons(self):
+		self.button_layout = QtWidgets.QGridLayout()
+
+		self.pb_apply = QtWidgets.QPushButton()
+		self.pb_apply.setText("Apply")
+		self.pb_apply.pressed.connect(self.apply_changes)
+		self.button_layout.addWidget(self.pb_apply,0,0,1,1)
+
+		self.pb_save = QtWidgets.QPushButton()
+		self.pb_save.setText("Save Configuration")
+		self.pb_save.pressed.connect(self.odrive_save_configuration)
+		self.button_layout.addWidget(self.pb_save,0,1,1,1)
+
+		self.pb_erase = QtWidgets.QPushButton()
+		self.pb_erase.setText("Erase Configuration")
+		self.pb_erase.pressed.connect(self.odrive_erase_configuration)
+		self.button_layout.addWidget(self.pb_erase,0,2,1,1)
+
+		self.pb_reboot = QtWidgets.QPushButton()
+		self.pb_reboot.setText("Reboot")
+		self.pb_reboot.pressed.connect(self.odrive_reboot)
+		self.button_layout.addWidget(self.pb_reboot,0,3,1,1)
+
+		spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+		self.button_layout.addItem(spacerItem, 0, 4, 1, 1)
+		# self.sb_v_layout.addLayout(self.button_layout,0,0,1,1)
+		self.gridLayout.addLayout(self.button_layout, 0, 1, 1, 1)
+
+
+	def setup_non_members(self):
+		pass
+
+	def function_button_pressed(self):
+		print(self.sender().objectName())
+
+	def add_function(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		function_button = QtWidgets.QPushButton()
+		function_button.setText(item["name"])
+		function_button.setObjectName(item["name"])
+		function_button.pressed.connect(self.function_button_pressed)
+		hbox.addWidget(function_button)
+		# print(item)
+		if item["inputs"]:
+			# print("has inputs")
+			for input in item["inputs"]:
+				# print("input name {} type {}".format(input["name"], input["type"]))
+				if input["type"] == "int32":
+					hbox.addLayout(self.add_input_int32(input))
+				elif input["type"] == "uint32":
+					hbox.addLayout(self.add_input_uint32(input))
+				elif input["type"] == "float":
+					hbox.addLayout(self.add_input_float(input))
+				elif input["type"] == "bool":
+					hbox.addLayout(self.add_input_bool(input))
+				else:
+					print("MISSING INPUT TYPE: {}".format(input["type"]))
+		else:
+			# print("no input")
+			pass
+		# function_button.pressed.connect(self.odrive_save_configuration)
+		
+		return hbox
+
+	def add_input_bool(self, item):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "rw":
+			rb_t = QtWidgets.QRadioButton()
+			rb_t.setObjectName("True")
+			rb_f = QtWidgets.QRadioButton()
+			rb_f.setObjectName("False")
+			icon_false = QtGui.QIcon()
+			icon_false.addPixmap(self.PIXMAP_FALSE, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+			icon_true = QtGui.QIcon()
+			icon_true.addPixmap(self.PIXMAP_TRUE, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+			rb_t.setIcon(icon_true)
+			rb_f.setIcon(icon_false)
+			bgroup = QtWidgets.QButtonGroup(hbox) #
+			bgroup.setObjectName(item["name"])
+			# bgroup.buttonClicked.connect(self.radio_button_changed)
+			bgroup.addButton(rb_t)
+			bgroup.addButton(rb_f)
+			# if my_drive._remote_attributes[item["name"]].get_value():
+			# 	rb_t.setChecked(True)
+			# else:
+			# 	rb_f.setChecked(True)
+			hbox2 = QtWidgets.QHBoxLayout()
+			hbox2.addWidget(rb_t)
+			hbox2.addWidget(rb_f)
+			hbox.addLayout(hbox2)
+		return hbox
+
+	def add_input_float(self, item):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "rw":
+			val_label = QtWidgets.QDoubleSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(2147483647)
+			val_label.setMinimum(-2147483647)
+			val_label.setDecimals(8)
+			# val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			# val_label.valueChanged.connect(self.value_changed_test)
+			# if "torque" in item["name"]:
+				# print(item["name"])
+				# print(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_input_uint32(self, item):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(2147483647)
+			# val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			# val_label.valueChanged.connect(self.value_changed_test)
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_input_int32(self, item):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(32768)
+			val_label.setMinimum(-32768)
+			# val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			# val_label.valueChanged.connect(self.value_changed_test)
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_bool(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			if my_drive._remote_attributes[item["name"]].get_value():
+				val_label.setPixmap(self.PIXMAP_TRUE)
+			else:
+				val_label.setPixmap(self.PIXMAP_FALSE)
+			hbox.addWidget(val_label)
+		elif item["access"] == "rw":
+			rb_t = QtWidgets.QRadioButton()
+			rb_t.setObjectName("True")
+			rb_f = QtWidgets.QRadioButton()
+			rb_f.setObjectName("False")
+			icon_false = QtGui.QIcon()
+			icon_false.addPixmap(self.PIXMAP_FALSE, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+			icon_true = QtGui.QIcon()
+			icon_true.addPixmap(self.PIXMAP_TRUE, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+			rb_t.setIcon(icon_true)
+			rb_f.setIcon(icon_false)
+			bgroup = QtWidgets.QButtonGroup(hbox) #
+			bgroup.setObjectName(item["name"])
+			bgroup.buttonClicked.connect(self.radio_button_changed)
+			bgroup.addButton(rb_t)
+			bgroup.addButton(rb_f)
+			if my_drive._remote_attributes[item["name"]].get_value():
+				rb_t.setChecked(True)
+			else:
+				rb_f.setChecked(True)
+			hbox2 = QtWidgets.QHBoxLayout()
+			hbox2.addWidget(rb_t)
+			hbox2.addWidget(rb_f)
+			hbox.addLayout(hbox2)
+		return hbox
+
+	def add_float(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QDoubleSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(2147483647)
+			val_label.setMinimum(-2147483647)
+			val_label.setDecimals(8)
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			val_label.valueChanged.connect(self.value_changed_test)
+			# if "torque" in item["name"]:
+				# print(item["name"])
+				# print(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_uint64(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setMaximum(18446744073709551616)
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_uint32(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(2147483647)
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			val_label.valueChanged.connect(self.value_changed_test)
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_uint16(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(65536)
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			val_label.valueChanged.connect(self.value_changed_test)
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_uint8(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(256)
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			val_label.valueChanged.connect(self.value_changed_test)
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_int32(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "r":
+			val_label = QtWidgets.QLabel()
+			val_label.setText(str(my_drive._remote_attributes[item["name"]].get_value()))
+		elif item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(32768)
+			val_label.setMinimum(-32768)
+			val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			val_label.valueChanged.connect(self.value_changed_test)
+		hbox.addWidget(val_label)
+		return hbox
+
+
+		
+# float, bool, json, uint64, uint8, uint32, object,  uint16, int32
+	def add_single_layout_line(self, item, my_drive):
+		line_layout = QtWidgets.QGridLayout()
+		if "access" in item.keys():
+			if item["type"] == "float":
+				line_layout.addLayout(self.add_float(item, my_drive),0,0,1,1)
+			elif item["type"] == "bool":
+				line_layout.addLayout(self.add_bool(item, my_drive),0,0,1,1)
+			elif item["type"] == "uint8":
+				line_layout.addLayout(self.add_uint8(item, my_drive),0,0,1,1)
+			elif item["type"] == "uint16":
+				line_layout.addLayout(self.add_uint16(item, my_drive),0,0,1,1)
+			elif item["type"] == "uint32":
+				line_layout.addLayout(self.add_uint32(item, my_drive),0,0,1,1)
+			elif item["type"] == "uint64":
+				line_layout.addLayout(self.add_uint64(item, my_drive),0,0,1,1)
+			elif item["type"] == "int32":
+				line_layout.addLayout(self.add_int32(item, my_drive),0,0,1,1)
+			else:
+				print("MISSING implementation {")
+				print(item["type"])
+				print(item)
+		else:
+			if item["type"] == "function":
+				line_layout.addLayout(self.add_function(item, my_drive),0,0,1,1)
+			else:
+			# pass
+				print("MISSING implementation without access")
+				print(item["type"])
+				print(item)
+		return line_layout
+	
+
+	def setup_group_box(self, item, my_drive):
+		groupbox =  QtWidgets.QGroupBox()
+		groupbox.setTitle(item["name"])
+		groupbox.setObjectName(item["name"])
+		groupBox_layout = QtWidgets.QGridLayout(groupbox)
+		# print(my_drive._remote_attributes)
+		# print(item.keys())
+		row_index = 0
+		if "members" in item.keys():
+			for member in item["members"]:
+				# print(member["name"])
+				if "members" in member.keys():
+					group = self.setup_group_box(member, my_drive._remote_attributes[item["name"]])
+					groupBox_layout.addWidget(group,row_index,0,1,1)
+					row_index += 1
+				else:
+					item_layout = self.add_single_layout_line(member, my_drive._remote_attributes[item["name"]])
+					groupBox_layout.addLayout(item_layout, row_index ,0,1,1)
+					row_index += 1
+		else:
+			item_layout = self.add_single_layout_line(item, my_drive._remote_attributes[item["name"]])
+			groupBox_layout.addLayout(item_layout)
+		return groupbox
+
+
+	def setup_config_window(self):
+		# print("setting up config")
+		path_list = []
+		path_list = self.find_tree_parents(self.treeView.selectedIndexes()[0], path_list)
+		# print("setting up config")
+		row_index = 0
+		col_index = 1
+		first_gpio = True
+		first_config = True
+		member_row_index = 0
+		config_row_index = 0
+		
+		self.deleteItems(self.sb_layout)
+		self.general_layout = QtWidgets.QGridLayout()
+		self.sb_layout.addLayout(self.general_layout,0,0,1,1)
+
+		path_len = len(path_list)
+		path_list.reverse()
+		# print(path_list)
+
+		if path_len == 1:
+			self.setup_general()
+			# print("setup general") # Only high level
+		elif path_len == 2:
+			# print("first row findings") # setup only high level
+			for item in self.my_drive._json_data:
+				if item["name"] == path_list[1]:
+					if "members" in item.keys():
+						for member in item["members"]:
+							if "members" in member.keys():
+								pass
+								# group = self.setup_group_box(member, self.my_drive._remote_attributes[path_list[1]])
+							else:
+								# print("add Line item")
+								item_layout = self.add_single_layout_line(member, self.my_drive._remote_attributes[path_list[1]])
+								self.general_layout.addLayout(item_layout,row_index,0,1,1)
+								row_index += 1
+					else:
+						print("Impossible case all selection are only members")
+			spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+			self.general_layout.addItem(spacerItem,row_index,0,1,1)
+		elif path_len == 3:
+			# print("Setting up fully")
+			# print("first row findings") # setup only high level
+			for item in self.my_drive._json_data:
+				if item["name"] == path_list[1]:
+					if "members" in item.keys():
+						for member in item["members"]:
+							if "members" in member.keys():
+								if member["name"] == path_list[2]:
+									group = self.setup_group_box(member, self.my_drive._remote_attributes[path_list[1]])
+
+									self.member_layout = QtWidgets.QGridLayout()
+									self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
+									# group_row_index = 0
+									self.member_layout.addWidget(group,0,0,1,1)
+									spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+									self.member_layout.addItem(spacerItem,1,0,1,1)
+									col_index += 1
+								# if "config" == member["name"] or "thermistor" in  member["name"]:
+								# 	if first_config:
+								# 		first_config = False
+								# 		self.config_layout = QtWidgets.QGridLayout()
+								# 		self.sb_layout.addLayout(self.config_layout,0,1,1,1)
+								# 		self.config_layout.addWidget(group,config_row_index,0,1,1)
+								# 		config_row_index += 1
+								# 		if item["name"] == "can":
+								# 			spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# 			self.config_layout.addItem(spacerItem,config_row_index,0,1,1)
+								# 	else:
+								# 		self.config_layout.addWidget(group,config_row_index,0,1,1)
+								# 		config_row_index += 1
+								# 	if config_row_index == 3:
+								# 		spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# 		self.config_layout.addItem(spacerItem,config_row_index,0,1,1)
+
+								# elif "motor" == member["name"]:
+								# 	self.motor_layout = QtWidgets.QGridLayout()
+								# 	self.sb_layout.addLayout(self.motor_layout,0,2,1,1)
+								# 	self.motor_layout.addWidget(group,0,0,1,1)
+								# 	spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# 	self.motor_layout.addItem(spacerItem,1,0,1,1)
+								# elif "controller" == member["name"]:
+								# 	# print("3")
+								# 	self.controller_layout = QtWidgets.QGridLayout()
+								# 	self.sb_layout.addLayout(self.controller_layout,0,3,1,1)
+								# 	self.controller_layout.addWidget(group,0,0,1,1)
+								# 	# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# 	# self.motor_layout.addItem(spacerItem,1,0,1,1)
+								# elif "sensorless_estimator" == member["name"]:
+								# 	# self.motor_layout = QtWidgets.QGridLayout()
+								# 	# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								# 	self.controller_layout.addWidget(group,1,0,1,1)
+								# elif "trap_traj" == member["name"]:
+								# 	# self.motor_layout = QtWidgets.QGridLayout()
+								# 	# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								# 	self.controller_layout.addWidget(group,2,0,1,1)
+								# 	spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# 	self.controller_layout.addItem(spacerItem,3,0,1,1)
+								# # elif "min_endstop" == member["name"]:
+								# # 	# self.motor_layout = QtWidgets.QGridLayout()
+								# # 	# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								# # 	self.encoder_layout.addWidget(group,2,0,1,1)
+								# # 	spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# # 	self.encoder_layout.addItem(spacerItem,3,0,1,1)
+								# elif "encoder" == member["name"]:
+								# 	self.encoder_layout = QtWidgets.QGridLayout()
+								# 	self.sb_layout.addLayout(self.encoder_layout,0,4,1,1)
+								# 	self.encoder_layout.addWidget(group,0,0,1,1)
+								# 	# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# 	# self.encoder_layout.addItem(spacerItem,1,0,1,1)
+								# elif "min_endstop" == member["name"]:
+								# 	# self.motor_layout = QtWidgets.QGridLayout()
+								# 	# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								# 	self.encoder_layout.addWidget(group,1,0,1,1)
+								# 	# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# 	# self.controller_layout.addItem(spacerItem,3,0,1,1)
+								# elif "max_endstop" == member["name"]:
+								# 	# self.motor_layout = QtWidgets.QGridLayout()
+								# 	# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								# 	self.encoder_layout.addWidget(group,2,0,1,1)
+								# 	spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# 	self.encoder_layout.addItem(spacerItem,3,0,1,1)
+								# # else:
+								# # 	print(member["name"])
+								# elif "gpio" in member["name"]:
+								# 	if first_gpio:
+								# 		first_gpio = False
+								# 		self.gpio_layout = QtWidgets.QGridLayout()
+								# 		self.sb_layout.addLayout(self.gpio_layout,0,col_index,1,1)
+								# 		self.gpio_layout.addWidget(group,member_row_index,0,1,1)
+										
+								# 	else:
+								# 		self.gpio_layout.addWidget(group,member_row_index,0,1,1)
+								# 	member_row_index += 1
+								# 	# print(member["name"])
+								# 	# self.member_layout.addWidget(group,group_row_index,0,1,1)
+								# 	# group_row_index += 1
+								# else:
+								
+								# group = self.setup_group_box(member, self.my_drive._remote_attributes[path_list[1]])
+							# else:
+							# 	# print("add Line item")
+							# 	item_layout = self.add_single_layout_line(member, self.my_drive._remote_attributes[path_list[1]])
+							# 	self.general_layout.addLayout(item_layout,row_index,0,1,1)
+							# 	row_index += 1
+					else:
+						print("Impossible case all selection are only members")
+			spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+			self.general_layout.addItem(spacerItem,row_index,0,1,1)
+
+	def setup_config(self, tree_selection):
+		# print("setting up config")
+		row_index = 0
+		col_index = 1
+		first_gpio = True
+		first_config = True
+
+		member_row_index = 0
+
+		config_row_index = 0
+		
+		self.deleteItems(self.sb_layout)
+		self.general_layout = QtWidgets.QGridLayout()
+		self.sb_layout.addLayout(self.general_layout,0,0,1,1)
+		for item in self.my_drive._json_data:
+			if item["name"] == tree_selection:
+				if "members" in item.keys():
+					for member in item["members"]:
+						# print(member)
+						
+						# print(self.my_drive._remote_attributes[tree_selection]._remote_attributes[member["name"]].get_value())
+						if "members" in member.keys():
+							
+							# print("Found members")
+							# for new_member in member["members"]:
+							group = self.setup_group_box(member, self.my_drive._remote_attributes[tree_selection])
+
+							if "config" == member["name"] or "thermistor" in  member["name"]:
+								if first_config:
+									first_config = False
+									self.config_layout = QtWidgets.QGridLayout()
+									self.sb_layout.addLayout(self.config_layout,0,1,1,1)
+									self.config_layout.addWidget(group,config_row_index,0,1,1)
+									config_row_index += 1
+									if item["name"] == "can":
+										spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+										self.config_layout.addItem(spacerItem,config_row_index,0,1,1)
+								else:
+									self.config_layout.addWidget(group,config_row_index,0,1,1)
+									config_row_index += 1
+								if config_row_index == 3:
+									spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+									self.config_layout.addItem(spacerItem,config_row_index,0,1,1)
+
+							elif "motor" == member["name"]:
+								self.motor_layout = QtWidgets.QGridLayout()
+								self.sb_layout.addLayout(self.motor_layout,0,2,1,1)
+								self.motor_layout.addWidget(group,0,0,1,1)
+								spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								self.motor_layout.addItem(spacerItem,1,0,1,1)
+							elif "controller" == member["name"]:
+								# print("3")
+								self.controller_layout = QtWidgets.QGridLayout()
+								self.sb_layout.addLayout(self.controller_layout,0,3,1,1)
+								self.controller_layout.addWidget(group,0,0,1,1)
+								# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# self.motor_layout.addItem(spacerItem,1,0,1,1)
+							elif "sensorless_estimator" == member["name"]:
+								# self.motor_layout = QtWidgets.QGridLayout()
+								# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								self.controller_layout.addWidget(group,1,0,1,1)
+							elif "trap_traj" == member["name"]:
+								# self.motor_layout = QtWidgets.QGridLayout()
+								# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								self.controller_layout.addWidget(group,2,0,1,1)
+								spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								self.controller_layout.addItem(spacerItem,3,0,1,1)
+							# elif "min_endstop" == member["name"]:
+							# 	# self.motor_layout = QtWidgets.QGridLayout()
+							# 	# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+							# 	self.encoder_layout.addWidget(group,2,0,1,1)
+							# 	spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# 	self.encoder_layout.addItem(spacerItem,3,0,1,1)
+							elif "encoder" == member["name"]:
+								self.encoder_layout = QtWidgets.QGridLayout()
+								self.sb_layout.addLayout(self.encoder_layout,0,4,1,1)
+								self.encoder_layout.addWidget(group,0,0,1,1)
+								# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# self.encoder_layout.addItem(spacerItem,1,0,1,1)
+							elif "min_endstop" == member["name"]:
+								# self.motor_layout = QtWidgets.QGridLayout()
+								# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								self.encoder_layout.addWidget(group,1,0,1,1)
+								# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								# self.controller_layout.addItem(spacerItem,3,0,1,1)
+							elif "max_endstop" == member["name"]:
+								# self.motor_layout = QtWidgets.QGridLayout()
+								# self.sb_layout.addLayout(self.motor_layout,1,3,1,1)
+								self.encoder_layout.addWidget(group,2,0,1,1)
+								spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								self.encoder_layout.addItem(spacerItem,3,0,1,1)
+							# else:
+							# 	print(member["name"])
+							elif "gpio" in member["name"]:
+								if first_gpio:
+									first_gpio = False
+									self.gpio_layout = QtWidgets.QGridLayout()
+									self.sb_layout.addLayout(self.gpio_layout,0,col_index,1,1)
+									self.gpio_layout.addWidget(group,member_row_index,0,1,1)
+									
+								else:
+									self.gpio_layout.addWidget(group,member_row_index,0,1,1)
+								member_row_index += 1
+								# print(member["name"])
+								# self.member_layout.addWidget(group,group_row_index,0,1,1)
+								# group_row_index += 1
+							else:
+								self.member_layout = QtWidgets.QGridLayout()
+								self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
+								# group_row_index = 0
+								self.member_layout.addWidget(group,0,0,1,1)
+								spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+								self.member_layout.addItem(spacerItem,1,0,1,1)
+								col_index += 1
+							# col_index += 1
+							# spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# # self.button_layout.addItem(spacerItem, 0, 4, 1, 1)
+							# self.sb_layout.addItem(spacerItem,1,col_index,1,1)
+
+							# if "gpio" in member["name"]:
+							# 	if first_gpio:
+							# 		first_gpio = False
+							# 		self.member_layout = QtWidgets.QGridLayout()
+							# 		self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
+							# 		self.member_layout.addWidget(group,member_row_index,0,1,1)
+									
+							# 	else:
+							# 		self.member_layout.addWidget(group,member_row_index,0,1,1)
+							# 	member_row_index += 1
+							# 	# print(member["name"])
+							# 	# self.member_layout.addWidget(group,group_row_index,0,1,1)
+							# 	# group_row_index += 1
+							# elif "thermistor" in member["name"] or "endstop" in member["name"]:
+							# 	if first_thermistor:
+							# 		first_thermistor = False
+							# 		self.member_layout = QtWidgets.QGridLayout()
+							# 		self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
+							# 		self.member_layout.addWidget(group,member_row_index,0,1,1)
+									
+							# 	else:
+							# 		self.member_layout.addWidget(group,member_row_index,0,1,1)
+							# 	member_row_index += 1
+							# 	if member_row_index == 2:
+							# 		spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# 		self.member_layout.addItem(spacerItem,member_row_index,0,1,1)
+							# 		col_index += 1
+
+
+							# else:
+							# 	self.member_layout = QtWidgets.QGridLayout()
+							# 	self.sb_layout.addLayout(self.member_layout,0,col_index,1,1)
+							# 	# group_row_index = 0
+							# 	self.member_layout.addWidget(group,0,0,1,1)
+							# 	spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# 	self.member_layout.addItem(spacerItem,1,0,1,1)
+							# 	col_index += 1
+							# col_index += 1
+							# spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# # self.button_layout.addItem(spacerItem, 0, 4, 1, 1)
+							# self.sb_layout.addItem(spacerItem,1,col_index,1,1)
+							
+						else:
+							# print("add Line item")
+							item_layout = self.add_single_layout_line(member, self.my_drive._remote_attributes[tree_selection])
+							self.general_layout.addLayout(item_layout,row_index,0,1,1)
+							row_index += 1
+						# 	for new_member in member["members"]:
+						# 		print(new_member)
+						# 		group = self.setup_group_box(new_member, self.my_drive._remote_attributes[tree_selection])
+						# 		# group = self.setup_group_box(new_member, self.my_drive._remote_attributes[tree_selection]._remote_attributes[new_member["name"]])
+						# 		self.sb_layout.addWidget(group)
+								# print(new_member)
+						# item_layout = self.add_single_layout_line(member, self.my_drive._remote_attributes[tree_selection])
+
+						# self.sb_layout.addLayout(item_layout,row_index,1,1,1)
+						# row_index += 1
+				else:
+					print("Impossible case all selection are only members")
+		spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+		self.general_layout.addItem(spacerItem,row_index,0,1,1)
+		# spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+		# self.sb_layout.addItem(spacerItem,0,col_index,1,1)
+					
+
+	def setup_general(self):
+		row_index = 0
+		self.deleteItems(self.sb_layout)
+		for item in self.my_drive._json_data:
+			if "members" in item.keys():
+				pass
+			else:
+				item_layout = self.add_single_layout_line(item, self.my_drive)
+				self.sb_layout.addLayout(item_layout,row_index,1,1,1)
+				row_index += 1
+		spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+							# self.button_layout.addItem(spacerItem, 0, 4, 1, 1)
+		self.sb_layout.addItem(spacerItem,row_index,1,1,1)
+
+
+
+	def close_application(self):
+		print("Closing!!!")
+		try:
+			self.odrive_worker.stop()
+		except Exception as e:
+			print("exception stopping, closing: {}".format(e))
+		sys.exit()
+
+	def odrive_connect(self):
+		# print("connecting")
+		self.statusBar.showMessage("Connecting...")
+		self.odrive_worker = odriveWorker()
+		self.odrive_worker.odrive_found_sig.connect(self.odrive_connected)
+		self.odrive_worker.start()
+
+	def odrive_connected(self, my_drive):
+		self.statusBar.showMessage("Connected!", 5000)
+		self.my_drive = my_drive
+		# self.testmdi.add_odrive(self.my_drive)
+		self.treeView.setModel(self.setup_odrive_model(my_drive))
+
+	def setup_odrive_model(self, my_drive):
+		print("Odrive found. Setting up model.")
+		model = QtGui.QStandardItemModel(0, 1, self)
+		model.setHeaderData(0, QtCore.Qt.Horizontal, "Odrive")
+		# model.setHeaderData(1, QtCore.Qt.Horizontal, "Type")
+		 # isinstance(odrv0._remote_attributes["reboot"], fibre.remote_object.RemoteFunction)
+		item = QtGui.QStandardItem("odrv0")
+		# child = QtGui.QStandardItem("General")
+		# item.appendRow(child)
+		# child = QtGui.QStandardItem("Control Test")
+		# item.appendRow(child)
+		for key in my_drive._remote_attributes.keys():
+			if isinstance(my_drive._remote_attributes[key], fibre.remote_object.RemoteObject):
+				child = QtGui.QStandardItem(key)
+				for child_key in my_drive._remote_attributes[key]._remote_attributes.keys():
+					if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key], fibre.remote_object.RemoteObject):
+						sub1_child = QtGui.QStandardItem(child_key)
+					# else:
+					# 	sub1_child = QtGui.QStandardItem(child_key)
+						child.appendRow(sub1_child)
+				item.appendRow(child)
+			# else:
+			# 	# if key not in version_ignore_list:
+			# 	child = QtGui.QStandardItem(key)
+			# 	item.appendRow(child)
+				# item.appendRow(child)
+		# for key in my_drive._remote_attributes.keys():
+		# 	# if key not in ignore_list:
+		# 	if isinstance(my_drive._remote_attributes[key], fibre.remote_object.RemoteObject):
+		# 		child = QtGui.QStandardItem(key)
+		# 		for child_key in my_drive._remote_attributes[key]._remote_attributes.keys():
+		# 			if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key], fibre.remote_object.RemoteObject):
+		# 				sub1_child = QtGui.QStandardItem(child_key)
+		# 				for sub1_child_key in my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes.keys():
+		# 					if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key], fibre.remote_object.RemoteObject):
+		# 						sub2_child = QtGui.QStandardItem(sub1_child_key)
+		# 						for sub2_child_key in my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key]._remote_attributes.keys():
+		# 							if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key]._remote_attributes[sub2_child_key], fibre.remote_object.RemoteObject):
+		# 								sub3_child = QtGui.QStandardItem(sub2_child_key)
+		# 								sub2_child.appendRow(sub3_child)
+		# 							else:
+		# 								sub3_child = QtGui.QStandardItem(sub2_child_key)
+		# 								sub2_child.appendRow(sub3_child)
+		# 						sub1_child.appendRow(sub2_child)
+		# 					else:
+		# 						sub2_child = QtGui.QStandardItem(sub1_child_key)
+		# 						sub1_child.appendRow(sub2_child)
+		# 				child.appendRow(sub1_child)
+		# 			else:
+		# 				sub1_child = QtGui.QStandardItem(child_key)
+		# 				child.appendRow(sub1_child)
+		# 			# elif
+		# 		item.appendRow(child)
+		# 	else:
+		# 		if key not in version_ignore_list:
+		# 			child = QtGui.QStandardItem(key)
+		# 			item.appendRow(child)
+
+		# child = QtGui.QStandardItem("fw_version")
+		# item.appendRow(child)
+		# child = QtGui.QStandardItem("hw_version")
+		# item.appendRow(child)
+
+		model.setItem(0,0,item)
+		# self.testmdi.show()
+		return model
 
 def main():
 	app = QtWidgets.QApplication(sys.argv)  # A new instance of QApplication
 	form = ExampleApp()                 # We set the form to be our (design)
 	form.show()                         # Show the form
 	app.exec_()                         # and execute the app
-
-
 
 if __name__ == '__main__':              # if we're running file directly and not importing it
 	main()                              # run the main function

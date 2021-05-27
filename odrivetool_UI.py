@@ -311,7 +311,37 @@ class ControllerWindow(QtWidgets.QWidget, ):
 				upper_limit = self.ad[axis]["time_array"][-1]
 				lower_limit = self.ad[axis]["time_array"][0]
 
+	def update_statuses(self):
+		pass
+		# self.update_voltage()
+		# try:
+		# 	self.update_machine_state()
+		# 	self.update_controller_mode()
+		# 	self.error_checks()
+		# except Exception as e:
+		# 	print(e)
+		# 	self.odrive_disconnected_exception()
+
 		# print(self.my_drive.vbus_voltage)
+	def update_graphs(self):
+		delta = pg.ptime.time() - self.ad["start_time"]
+		try:
+			if self.showAxis0_checkBox.isChecked():
+				self.ad["axis0"]["time_array"].append(delta)
+				self.update_velocity_graph("axis0", self.my_drive.axis0)
+				self.update_position_graph("axis0", self.my_drive.axis0)
+				self.update_current_graph("axis0", self.my_drive.axis0)
+				self.update_X_range("axis0")
+			if self.showAxis1_checkBox.isChecked():
+				self.ad["axis1"]["time_array"].append(delta)
+				self.update_velocity_graph("axis1", self.my_drive.axis1)
+				self.update_position_graph("axis1", self.my_drive.axis1)
+				self.update_current_graph("axis1", self.my_drive.axis1)
+				self.update_X_range("axis1")
+
+		except Exception as e:
+			print(e)
+			# self.odrive_disconnected_exception()
 
 		# self.centralWidget = QtWidgets.QWidget(MainWindow)
 		# self.centralWidget.setObjectName("centralWidget")

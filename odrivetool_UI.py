@@ -126,6 +126,11 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		
 
 		self.verticalLayout = QtWidgets.QVBoxLayout()
+
+
+
+
+		
 		self.plotWidget_velocity = PlotWidget()
 		self.plotWidget_velocity.setStyleSheet("")
 		self.plotWidget_velocity.setObjectName("plotWidget_velocity")
@@ -144,15 +149,52 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.showAxis0_checkBox.setObjectName("showAxis0_checkBox")
 		self.verticalLayout.addWidget(self.showAxis0_checkBox)
 
+		# self.showAxis1_checkBox = QtWidgets.QCheckBox()
+		# self.showAxis1_checkBox.setEnabled(True)
+		# self.showAxis1_checkBox.setChecked(True)
+		# self.showAxis1_checkBox.setObjectName("showAxis1_checkBox")
+		# self.verticalLayout.addWidget(self.showAxis1_checkBox)
+
+		self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+		self.horizontalLayout_3.setContentsMargins(11, 11, 11, 11)
+		self.horizontalLayout_3.setSpacing(6)
+		self.horizontalLayout_3.setObjectName("horizontalLayout_3")
 		self.showAxis1_checkBox = QtWidgets.QCheckBox()
 		self.showAxis1_checkBox.setEnabled(True)
 		self.showAxis1_checkBox.setChecked(True)
 		self.showAxis1_checkBox.setObjectName("showAxis1_checkBox")
-		self.verticalLayout.addWidget(self.showAxis1_checkBox)
+		self.horizontalLayout_3.addWidget(self.showAxis1_checkBox)
+		self.label_13 = QtWidgets.QLabel()
+		self.label_13.setObjectName("label_13")
+		self.horizontalLayout_3.addWidget(self.label_13)
+		self.label_14 = QtWidgets.QLabel()
+		self.label_14.setText("")
+		self.label_14.setPixmap(QtGui.QPixmap("Icons/legendLines/legendLines_Orange.png"))
+		self.label_14.setObjectName("label_14")
+		self.horizontalLayout_3.addWidget(self.label_14)
+		self.label_8 = QtWidgets.QLabel()
+		self.label_8.setObjectName("label_8")
+		self.horizontalLayout_3.addWidget(self.label_8)
+		self.label_9 = QtWidgets.QLabel()
+		self.label_9.setText("")
+		self.label_9.setPixmap(QtGui.QPixmap("Icons/legendLines/legendLines_Yellow.png"))
+		self.label_9.setObjectName("label_9")
+		self.label_13.setText("Setpoint")
+		self.label_8.setText("Estimate")
+		self.horizontalLayout_3.addWidget(self.label_9)
+
+		self.verticalLayout.addLayout(self.horizontalLayout_3)
 
 		self.clearGraph_pushButton = QtWidgets.QPushButton()
 		self.clearGraph_pushButton.setObjectName("clearGraph_pushButton")
 		self.verticalLayout.addWidget(self.clearGraph_pushButton)
+
+		self.spinBox_graphTime = QtWidgets.QSpinBox()
+		self.spinBox_graphTime.setMinimum(1)
+		self.spinBox_graphTime.setMaximum(600)
+		self.spinBox_graphTime.setProperty("value", 20)
+		self.spinBox_graphTime.setObjectName("spinBox_graphTime")
+		self.verticalLayout.addWidget(self.spinBox_graphTime)
 
 		self.showAxis0_checkBox.stateChanged.connect(self.axis0_graph_state_changed)
 		self.showAxis1_checkBox.stateChanged.connect(self.axis1_graph_state_changed)

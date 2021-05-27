@@ -347,7 +347,17 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			print("exception deleting: {}".format(e))
 
 	def odrive_reboot(self):
-		self.my_drive.reboot()
+		try:
+			self.my_drive.reboot()
+		except:
+			print("did we reboot?")
+
+		try:
+			self.odrive_worker.stop()
+		except Exception as e:
+			print("exception stopping, closing: {}".format(e))
+		self.deleteItems(self.sb_layout)
+		self.odrive_connect()
 
 	def odrive_save_configuration(self):
 		self.my_drive.save_configuration()

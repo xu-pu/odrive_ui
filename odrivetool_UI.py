@@ -397,13 +397,15 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 	def setup_non_members(self):
 		pass
 
-	def function_button_pressed(self, button):
-		pass
+	def function_button_pressed(self):
+		print(self.sender().objectName())
 
 	def add_function(self, item, my_drive):
 		hbox = QtWidgets.QHBoxLayout()
 		function_button = QtWidgets.QPushButton()
 		function_button.setText(item["name"])
+		function_button.setObjectName(item["name"])
+		function_button.pressed.connect(self.function_button_pressed)
 		hbox.addWidget(function_button)
 		# print(item)
 		if item["inputs"]:

@@ -273,12 +273,21 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		path_list = self.clean_up_path(path_list)
 		index = self.treeView.selectedIndexes()[0]
 		tree_selection = index.model().itemFromIndex(index).text()
-		if tree_selection == "General":
-			pass
-		else:
-			path_list.append(tree_selection)
-		odrive_parent = index.parent()
-		path_list.append(odrive_parent.model().itemFromIndex(odrive_parent).text())
+		# if tree_selection == "odrv0":
+		# 	pass
+		# else:
+
+		path_list2 = []
+		path_list2 = self.find_tree_parents(self.treeView.selectedIndexes()[0], path_list2)
+		if len(path_list2) == 3:
+			path_list2.pop(0)
+		path_list.extend(path_list2)
+		# path_list.append(tree_selection)
+
+		# if tree_selection != "odrv0":
+		# 	odrive_parent = index.parent()
+			
+		# 	path_list.append(odrive_parent.model().itemFromIndex(odrive_parent).text())
 		# print(path_list)
 		# QPalette pal = widget.palette();
 		pal = QtGui.QPalette()
@@ -288,6 +297,8 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		pal = QtGui.QPalette()
 		pal.setColor(QtGui.QPalette.Button, QtCore.Qt.yellow)
 		self.pb_apply.setPalette(pal)
+
+		print(path_list)
 
 		if str(path_list) in self.changed_settings:
 			# print("FOUND ITEM")

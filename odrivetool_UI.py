@@ -34,6 +34,8 @@ version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_mi
 
 
 
+
+
 class odrive_MainWindow(object):
 	def setupUi(self, MainWindow):
 		MainWindow.setObjectName("MainWindow")
@@ -99,6 +101,31 @@ class odrive_MainWindow(object):
 		_translate = QtCore.QCoreApplication.translate
 		MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
+class SettingsWindow(QtWidgets.QMainWindow):
+	app_name = "Controller"
+	def __init__(self):
+		# Simple reason why we use it here is that it allows us to
+		# access variables, methods etc in the design.py file
+		super(self.__class__, self).__init__()
+		# self.setupUi(self)  # This is defined in design.py file automatically
+							# It sets up layout and widgets that are defined
+		self.setWindowTitle(self.app_name)
+		self.resize(1280, 720)
+
+		self.mainToolBar = QtWidgets.QToolBar(self)
+		self.mainToolBar.setObjectName("mainToolBar")
+		self.addToolBar(QtCore.Qt.TopToolBarArea, self.mainToolBar)
+
+		self.save_action = self.mainToolBar.addAction("Save settings")
+		self.save_icon = QtGui.QIcon()
+		self.save_icon.addPixmap(QtGui.QPixmap(ICON_SAVE_PATH))
+		self.save_action.setIcon(self.save_icon)
+
+		self.restoreDefault_action = self.mainToolBar.addAction("Restore to default settings")
+		self.restore_icon = QtGui.QIcon()
+		self.restore_icon.addPixmap(QtGui.QPixmap(ICON_OPEN_PATH))
+		self.restoreDefault_action.setIcon(self.restore_icon)
+
 class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 	app_name = "Odrive Tester"
 	def __init__(self):
@@ -123,6 +150,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		self.open_controller_icon = QtGui.QIcon()
 		self.open_controller_icon.addPixmap(QtGui.QPixmap(ICON_OPEN_CONTROLLER_PATH))
 		self.open_controller.setIcon(self.open_controller_icon)
+		self.open_controller.triggered.connect(self.open_controller_window)
 
 		# self.open_action = self.mainToolBar.addAction("Open")
 		# self.open_icon = QtGui.QIcon()
@@ -162,6 +190,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		self.treeView.clicked.connect(self.tree_item_selected)
 
 		self.odrive_connect()
+
+	def open_controller_window(self):
+		self.settings_window = SettingsWindow()
+		self.settings_window.show()
 
 	def tree_item_selected(self):
 		self.changed_settings = {}

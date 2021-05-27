@@ -346,6 +346,15 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		except Exception as e:
 			print("exception deleting: {}".format(e))
 
+	def odrive_reboot(self):
+		self.my_drive.reboot()
+
+	def odrive_save_configuration(self):
+		self.my_drive.save_configuration()
+
+	def odrive_erase_configuration(self):
+		self.my_drive.erase_configuration()
+
 	def add_action_buttons(self):
 		self.button_layout = QtWidgets.QGridLayout()
 
@@ -356,15 +365,18 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 
 		self.pb_save = QtWidgets.QPushButton()
 		self.pb_save.setText("Save Configuration")
+		self.pb_save.pressed.connect(self.odrive_save_configuration)
 		self.button_layout.addWidget(self.pb_save,0,1,1,1)
 
-		pb_apply = QtWidgets.QPushButton()
-		pb_apply.setText("Erase Configuration")
-		self.button_layout.addWidget(pb_apply,0,2,1,1)
+		self.pb_erase = QtWidgets.QPushButton()
+		self.pb_erase.setText("Erase Configuration")
+		self.pb_erase.pressed.connect(self.odrive_erase_configuration)
+		self.button_layout.addWidget(self.pb_erase,0,2,1,1)
 
-		pb_apply = QtWidgets.QPushButton()
-		pb_apply.setText("Reboot")
-		self.button_layout.addWidget(pb_apply,0,3,1,1)
+		self.pb_reboot = QtWidgets.QPushButton()
+		self.pb_reboot.setText("Reboot")
+		self.pb_reboot.pressed.connect(self.odrive_reboot)
+		self.button_layout.addWidget(self.pb_reboot,0,3,1,1)
 
 		spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 		self.button_layout.addItem(spacerItem, 0, 4, 1, 1)

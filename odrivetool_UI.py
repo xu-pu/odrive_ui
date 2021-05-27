@@ -28,7 +28,7 @@ ICON_READ_CONFIG_PATH = "Icons/odrive_icons/odrive_icons_ReadConfig.png"
 ICON_SAVE_PATH = "Icons/odrive_icons/odrive_icons_Save.png"
 ICON_SETTINGS_PATH = "Icons/odrive_icons/odrive_icons_Settings.png"
 ICON_WRITE_CONFIG_PATH = "Icons/odrive_icons/odrive_icons_WriteConfig.png"
-
+ICON_OPEN_CONTROLLER_PATH = "Icons/odrive_icons/odrive_icons_OpenController.png"
 version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_minor","hw_version_major", "hw_version_minor", "fw_version_unreleased","hw_version_variant"]
 
 
@@ -118,10 +118,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		self.connect_to_odrive_action.setIcon(self.connect_icon)
 		self.connect_to_odrive_action.triggered.connect(self.odrive_connect)
 
-		# self.save_action = self.mainToolBar.addAction("Save")
-		# self.save_icon = QtGui.QIcon()
-		# self.save_icon.addPixmap(QtGui.QPixmap(ICON_SAVE_PATH))
-		# self.save_action.setIcon(self.save_icon)
+		self.open_controller = self.mainToolBar.addAction("Open Controller")
+		self.open_controller_icon = QtGui.QIcon()
+		self.open_controller_icon.addPixmap(QtGui.QPixmap(ICON_OPEN_CONTROLLER_PATH))
+		self.open_controller.setIcon(self.open_controller_icon)
 
 		# self.open_action = self.mainToolBar.addAction("Open")
 		# self.open_icon = QtGui.QIcon()
@@ -166,16 +166,35 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		self.changed_settings = {}
 		index = self.treeView.selectedIndexes()[0]
 		tree_selection = index.model().itemFromIndex(index).text()
-		print(tree_selection)
+		# print(tree_selection)
 		self.add_action_buttons()
-		if tree_selection == "General":
-			self.setup_general()
-		elif tree_selection == "Control Test":
-			pass
-		else:
-			self.setup_config(tree_selection)
+
+		self.setup_config_window()
+
+		# if tree_selection == "General":
+		# 	self.setup_general()
+		# elif tree_selection == "Control Test":
+		# 	pass
+		# else:
+		# 	self.setup_config(tree_selection)
 			# self.setup()
-		# print(self.treeView.selectedIndexes()[0].text())
+		# print(self.treeView.selectedIndexes()[0].text()).
+	def find_tree_parents(self, index, path_list):
+		if index.model() == None:
+			return path_list
+		else:
+			path_list.append(index.model().itemFromIndex(index).text())
+			path_list = self.find_tree_parents(index.parent(), path_list)
+		return path_list
+
+
+	def setup_config_window(self):
+		# print("setting up config")
+		path_list = []
+
+		path_list = self.find_tree_parents(self.treeView.selectedIndexes()[0], path_list)
+		print(path_list)
+
 
 
 	def find_parent_path(self, object, path_list):

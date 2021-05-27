@@ -397,6 +397,115 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 	def setup_non_members(self):
 		pass
 
+	def function_button_pressed(self, button):
+		pass
+
+	def add_function(self, item, my_drive):
+		hbox = QtWidgets.QHBoxLayout()
+		function_button = QtWidgets.QPushButton()
+		function_button.setText(item["name"])
+		hbox.addWidget(function_button)
+		# print(item)
+		if item["inputs"]:
+			# print("has inputs")
+			for input in item["inputs"]:
+				# print("input name {} type {}".format(input["name"], input["type"]))
+				if input["type"] == "int32":
+					hbox.addLayout(self.add_input_int32(input))
+				elif input["type"] == "uint32":
+					hbox.addLayout(self.add_input_uint32(input))
+				elif input["type"] == "float":
+					hbox.addLayout(self.add_input_float(input))
+				elif input["type"] == "bool":
+					hbox.addLayout(self.add_input_bool(input))
+				else:
+					print("MISSING INPUT TYPE: {}".format(input["type"]))
+		else:
+			# print("no input")
+			pass
+		# function_button.pressed.connect(self.odrive_save_configuration)
+		
+		return hbox
+
+	def add_input_bool(self, item):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "rw":
+			rb_t = QtWidgets.QRadioButton()
+			rb_t.setObjectName("True")
+			rb_f = QtWidgets.QRadioButton()
+			rb_f.setObjectName("False")
+			icon_false = QtGui.QIcon()
+			icon_false.addPixmap(self.PIXMAP_FALSE, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+			icon_true = QtGui.QIcon()
+			icon_true.addPixmap(self.PIXMAP_TRUE, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+			rb_t.setIcon(icon_true)
+			rb_f.setIcon(icon_false)
+			bgroup = QtWidgets.QButtonGroup(hbox) #
+			bgroup.setObjectName(item["name"])
+			# bgroup.buttonClicked.connect(self.radio_button_changed)
+			bgroup.addButton(rb_t)
+			bgroup.addButton(rb_f)
+			# if my_drive._remote_attributes[item["name"]].get_value():
+			# 	rb_t.setChecked(True)
+			# else:
+			# 	rb_f.setChecked(True)
+			hbox2 = QtWidgets.QHBoxLayout()
+			hbox2.addWidget(rb_t)
+			hbox2.addWidget(rb_f)
+			hbox.addLayout(hbox2)
+		return hbox
+
+	def add_input_float(self, item):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "rw":
+			val_label = QtWidgets.QDoubleSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(2147483647)
+			val_label.setMinimum(-2147483647)
+			val_label.setDecimals(8)
+			# val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			# val_label.valueChanged.connect(self.value_changed_test)
+			# if "torque" in item["name"]:
+				# print(item["name"])
+				# print(my_drive._remote_attributes[item["name"]].get_value())
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_input_uint32(self, item):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(2147483647)
+			# val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			# val_label.valueChanged.connect(self.value_changed_test)
+		hbox.addWidget(val_label)
+		return hbox
+
+	def add_input_int32(self, item):
+		hbox = QtWidgets.QHBoxLayout()
+		label = QtWidgets.QLabel()
+		label.setText(item["name"])
+		hbox.addWidget(label)
+		if item["access"] == "rw":
+			val_label = QtWidgets.QSpinBox()
+			val_label.setObjectName(item["name"])
+			val_label.setMaximum(32768)
+			val_label.setMinimum(-32768)
+			# val_label.setValue(my_drive._remote_attributes[item["name"]].get_value())
+			# val_label.valueChanged.connect(self.value_changed_test)
+		hbox.addWidget(val_label)
+		return hbox
+
 	def add_bool(self, item, my_drive):
 		hbox = QtWidgets.QHBoxLayout()
 		label = QtWidgets.QLabel()
@@ -562,14 +671,17 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			elif item["type"] == "int32":
 				line_layout.addLayout(self.add_int32(item, my_drive),0,0,1,1)
 			else:
-				print("MISSING implementation")
+				print("MISSING implementation {")
 				print(item["type"])
 				print(item)
 		else:
-			pass
-			# print("MISSING implementation without access")
-			# print(item["type"])
-			# print(item)
+			if item["type"] == "function":
+				line_layout.addLayout(self.add_function(item, my_drive),0,0,1,1)
+			else:
+			# pass
+				print("MISSING implementation without access")
+				print(item["type"])
+				print(item)
 		return line_layout
 	
 
@@ -602,7 +714,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		# print("setting up config")
 		path_list = []
 		path_list = self.find_tree_parents(self.treeView.selectedIndexes()[0], path_list)
-		print("setting up config")
+		# print("setting up config")
 		row_index = 0
 		col_index = 1
 		first_gpio = True
@@ -616,13 +728,13 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 
 		path_len = len(path_list)
 		path_list.reverse()
-		print(path_list)
+		# print(path_list)
 
 		if path_len == 1:
 			self.setup_general()
-			print("setup general") # Only high level
+			# print("setup general") # Only high level
 		elif path_len == 2:
-			print("first row findings") # setup only high level
+			# print("first row findings") # setup only high level
 			for item in self.my_drive._json_data:
 				if item["name"] == path_list[1]:
 					if "members" in item.keys():
@@ -640,8 +752,8 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			spacerItem = QtWidgets.QSpacerItem(1, 1, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
 			self.general_layout.addItem(spacerItem,row_index,0,1,1)
 		elif path_len == 3:
-			print("Setting up fully")
-			print("first row findings") # setup only high level
+			# print("Setting up fully")
+			# print("first row findings") # setup only high level
 			for item in self.my_drive._json_data:
 				if item["name"] == path_list[1]:
 					if "members" in item.keys():
@@ -750,7 +862,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			self.general_layout.addItem(spacerItem,row_index,0,1,1)
 
 	def setup_config(self, tree_selection):
-		print("setting up config")
+		# print("setting up config")
 		row_index = 0
 		col_index = 1
 		first_gpio = True

@@ -13,28 +13,62 @@ class ControllerWindow(QtWidgets.QWidget, ):
 							# It sets up layout and widgets that are defined
 		self.setWindowTitle(self.app_name)
 		self.resize(1280, 720)
-		pushButton = QtWidgets.QPushButton()
 		# self.setCentralWidget(self.pushButton)
-		self.layout = QtWidgets.QGridLayout()
-		self.setLayout(self.layout)
+		self.new_layout = QtWidgets.QGridLayout()
+		self.setLayout(self.new_layout)
 		# self.layout.addWidget(pushButton)
 
 		self.hbox = QtWidgets.QHBoxLayout()
-		self.layout.addLayout(self.hbox,0,0,1,1)
+		self.new_layout.addLayout(self.hbox,0,0,1,1)
 
-		groupbox =  QtWidgets.QGroupBox()
-		groupbox.setTitle("test")
-		groupbox.setObjectName("test")
-		groupbox.setMaximumSize(200, 100)
+		self.axis0_control_box =  QtWidgets.QGroupBox()
+		self.axis0_control_box.setTitle("Axis0")
+		self.axis0_control_box_layout = QtWidgets.QVBoxLayout(self.axis0_control_box)
+		self.axis0_state_buttons_layout = QtWidgets.QGridLayout()
+		self.axis0_control_box_layout.addLayout(self.axis0_state_buttons_layout)
+		self.axis0_state_idle_pb = QtWidgets.QPushButton()
+		self.axis0_state_idle_pb.setText("Idle")
+		self.axis0_state_buttons_layout.addWidget(self.axis0_state_idle_pb, 0, 0, 1, 1)
+		self.axis0_state_start_up_sequece_pb = QtWidgets.QPushButton()
+		self.axis0_state_start_up_sequece_pb.setText("Startup\nSequence")
+		self.axis0_state_buttons_layout.addWidget(self.axis0_state_start_up_sequece_pb, 0, 1, 1, 1)
+		self.axis0_state_full_calibration_sequence_pb = QtWidgets.QPushButton()
+		self.axis0_state_full_calibration_sequence_pb.setText("Full\nCalibration\nSeqience")
+		self.axis0_state_buttons_layout.addWidget(self.axis0_state_full_calibration_sequence_pb, 0, 2, 1, 1)
+		self.axis0_state_motor_calibration_pb = QtWidgets.QPushButton()
+		self.axis0_state_motor_calibration_pb.setText("Motor\nCalibration")
+		self.axis0_state_buttons_layout.addWidget(self.axis0_state_motor_calibration_pb, 0, 3, 1, 1)
+		self.axis0_state_sensorless_control_pb = QtWidgets.QPushButton()
+		self.axis0_state_sensorless_control_pb.setText("Sensorless\nControl")
+		self.axis0_state_buttons_layout.addWidget(self.axis0_state_sensorless_control_pb, 1, 0, 1, 1)
+		self.axis0_state_encoder_index_search_pb = QtWidgets.QPushButton()
+		self.axis0_state_encoder_index_search_pb.setText("Encoder\nIndex\nSearch")
+		self.axis0_state_buttons_layout.addWidget(self.axis0_state_encoder_index_search_pb, 1, 1, 1, 1)
+		self.axis0_state_encoder_offset_calibration_pb = QtWidgets.QPushButton()
+		self.axis0_state_encoder_offset_calibration_pb.setText("Encoder\nOffset\nCalibration")
+		self.axis0_state_buttons_layout.addWidget(self.axis0_state_encoder_offset_calibration_pb, 1, 2, 1, 1)
+		self.axis0_state_closed_loop_control_pb = QtWidgets.QPushButton()
+		self.axis0_state_closed_loop_control_pb.setText("Closed\nLoop\nControl")
+		self.axis0_state_buttons_layout.addWidget(self.axis0_state_closed_loop_control_pb, 1, 3, 1, 1)
+		# self.axis0_control_box.addLayout
+		# self.axis0_control_box.setObjectName("test")
+		# self.axis0_control_box.setMaximumWidth(300)
+
+		self.axis1_control_box =  QtWidgets.QGroupBox()
+		self.axis1_control_box.setTitle("Axis1")
+		# self.axis0_control_box.setObjectName("test")
+		# self.axis1_control_box.setMaximumWidth(300)
 
 		self.control_vertical_layout = QtWidgets.QVBoxLayout()
+		self.control_vertical_layout.addWidget(self.axis0_control_box)
+		self.control_vertical_layout.addWidget(self.axis1_control_box)
 		self.hbox.addLayout(self.control_vertical_layout)
 		# self.hbox.addWidget(groupbox)
 
 		
 
 		self.verticalLayout = QtWidgets.QVBoxLayout()
-
+		self.hbox.addLayout(self.verticalLayout)
 
 
 
@@ -50,7 +84,7 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.plotWidget_position = PlotWidget()
 		self.plotWidget_position.setObjectName("plotWidget_position")
 		self.verticalLayout.addWidget(self.plotWidget_position)
-		self.hbox.addLayout(self.verticalLayout)
+		
 
 		self.showAxis0_checkBox = QtWidgets.QCheckBox()
 		self.showAxis0_checkBox.setChecked(True)
@@ -64,12 +98,14 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		# self.verticalLayout.addWidget(self.showAxis1_checkBox)
 
 		self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-		self.horizontalLayout_3.setContentsMargins(11, 11, 11, 11)
-		self.horizontalLayout_3.setSpacing(6)
+		# self.horizontalLayout_3.setContentsMargins(11, 11, 11, 11)
+		# self.horizontalLayout_3.setSpacing(6)
 		self.horizontalLayout_3.setObjectName("horizontalLayout_3")
 		self.showAxis1_checkBox = QtWidgets.QCheckBox()
 		self.showAxis1_checkBox.setEnabled(True)
 		self.showAxis1_checkBox.setChecked(True)
+		self.showAxis1_checkBox.setText("Axis1")
+		self.showAxis1_checkBox.setLayoutDirection(QtCore.Qt.RightToLeft)
 		self.showAxis1_checkBox.setObjectName("showAxis1_checkBox")
 		self.horizontalLayout_3.addWidget(self.showAxis1_checkBox)
 		self.label_13 = QtWidgets.QLabel()

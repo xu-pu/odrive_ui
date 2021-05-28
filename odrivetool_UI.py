@@ -411,11 +411,24 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
 		self.quit_shortcut.activated.connect(self.close_application)
 
+		self.odrive_number_label = QtWidgets.QLabel()
+		self.odrive_number_label.setText("Set Odrive number to detect")
+		self.mainToolBar.addWidget(self.odrive_number_label)
+
+		self.odrive_number_sbox = QtWidgets.QSpinBox()
+		self.odrive_number_sbox.setValue(1)
+		self.odrive_number_sbox.setMinimum(1)
+		self.odrive_number_sbox.setMaximum(10)
+		self.odrive_number_sbox.setToolTip("Don't set more than you have connected or it will FREEZE")
+		self.mainToolBar.addWidget(self.odrive_number_sbox)
+
 		self.connect_to_odrive_action = self.mainToolBar.addAction("Connect to Odrive")
 		self.connect_icon = QtGui.QIcon()
 		self.connect_icon.addPixmap(QtGui.QPixmap(ICON_CONNECT_PATH), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 		self.connect_to_odrive_action.setIcon(self.connect_icon)
 		self.connect_to_odrive_action.triggered.connect(self.odrive_connect)
+
+		
 
 		self.open_controller = self.mainToolBar.addAction("Open Controller")
 		self.open_controller_icon = QtGui.QIcon()
@@ -460,7 +473,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 
 		self.treeView.clicked.connect(self.tree_item_selected)
 
-		self.odrive_connect()
+		# self.odrive_connect()
 
 	def open_controller_window(self):
 		self.controller_window = ControllerWindow()
@@ -651,8 +664,18 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			print("exception deleting: {}".format(e))
 
 	def odrive_reboot(self):
+		path_list = []
+		path_list = self.find_tree_parents(self.treeView.selectedIndexes()[0], path_list)
+		path_list.reverse()
+		odrive_number = path_list[0][-1]
+		
+		# print(path_list)
+		# print(odrive_number)
+
+		my_drive = self.my_drive_list[odrive_number]
+
 		try:
-			self.my_drive.reboot()
+			my_drive.reboot()
 		except:
 			print("did we reboot?")
 
@@ -1377,82 +1400,90 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 
 	def odrive_connect(self):
 		# print("connecting")
-		self.statusBar.showMessage("Connecting...")
+		self.statusBar.showMessage("Connecting... \t This might take a while.")
 		self.odrive_worker = odriveWorker()
 		self.odrive_worker.odrive_found_sig.connect(self.odrive_connected)
+		self.odrive_worker.set_odrive_number(self.odrive_number_sbox.value())
 		self.odrive_worker.start()
 
 	def odrive_connected(self, my_drive):
 		self.statusBar.showMessage("Connected!", 5000)
-		self.my_drive = my_drive
+		self.my_drive_list = my_drive
+		# print(my_drive)
+		# print(len(my_drive))
+		# print(type(my_drive))
+		# print(type(my_drive[0]))
 		# self.testmdi.add_odrive(self.my_drive)
-		self.treeView.setModel(self.setup_odrive_model(my_drive))
+		self.treeView.setModel(self.setup_odrive_model(self.my_drive_list))
 
-	def setup_odrive_model(self, my_drive):
-		print("Odrive found. Setting up model.")
+	def setup_odrive_model(self, my_drive_list):
+		print("Found odrives {}. Setting up model.".format(len(my_drive_list)))
 		model = QtGui.QStandardItemModel(0, 1, self)
 		model.setHeaderData(0, QtCore.Qt.Horizontal, "Odrive")
-		# model.setHeaderData(1, QtCore.Qt.Horizontal, "Type")
-		 # isinstance(odrv0._remote_attributes["reboot"], fibre.remote_object.RemoteFunction)
-		item = QtGui.QStandardItem("odrv0")
-		# child = QtGui.QStandardItem("General")
-		# item.appendRow(child)
-		# child = QtGui.QStandardItem("Control Test")
-		# item.appendRow(child)
-		for key in my_drive._remote_attributes.keys():
-			if isinstance(my_drive._remote_attributes[key], fibre.remote_object.RemoteObject):
-				child = QtGui.QStandardItem(key)
-				for child_key in my_drive._remote_attributes[key]._remote_attributes.keys():
-					if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key], fibre.remote_object.RemoteObject):
-						sub1_child = QtGui.QStandardItem(child_key)
-					# else:
-					# 	sub1_child = QtGui.QStandardItem(child_key)
-						child.appendRow(sub1_child)
-				item.appendRow(child)
-			# else:
-			# 	# if key not in version_ignore_list:
-			# 	child = QtGui.QStandardItem(key)
-			# 	item.appendRow(child)
-				# item.appendRow(child)
-		# for key in my_drive._remote_attributes.keys():
-		# 	# if key not in ignore_list:
-		# 	if isinstance(my_drive._remote_attributes[key], fibre.remote_object.RemoteObject):
-		# 		child = QtGui.QStandardItem(key)
-		# 		for child_key in my_drive._remote_attributes[key]._remote_attributes.keys():
-		# 			if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key], fibre.remote_object.RemoteObject):
-		# 				sub1_child = QtGui.QStandardItem(child_key)
-		# 				for sub1_child_key in my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes.keys():
-		# 					if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key], fibre.remote_object.RemoteObject):
-		# 						sub2_child = QtGui.QStandardItem(sub1_child_key)
-		# 						for sub2_child_key in my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key]._remote_attributes.keys():
-		# 							if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key]._remote_attributes[sub2_child_key], fibre.remote_object.RemoteObject):
-		# 								sub3_child = QtGui.QStandardItem(sub2_child_key)
-		# 								sub2_child.appendRow(sub3_child)
-		# 							else:
-		# 								sub3_child = QtGui.QStandardItem(sub2_child_key)
-		# 								sub2_child.appendRow(sub3_child)
-		# 						sub1_child.appendRow(sub2_child)
-		# 					else:
-		# 						sub2_child = QtGui.QStandardItem(sub1_child_key)
-		# 						sub1_child.appendRow(sub2_child)
-		# 				child.appendRow(sub1_child)
-		# 			else:
-		# 				sub1_child = QtGui.QStandardItem(child_key)
-		# 				child.appendRow(sub1_child)
-		# 			# elif
-		# 		item.appendRow(child)
-		# 	else:
-		# 		if key not in version_ignore_list:
-		# 			child = QtGui.QStandardItem(key)
-		# 			item.appendRow(child)
+		odrive_number = 0
+		for my_drive in my_drive_list:
+			# model.setHeaderData(1, QtCore.Qt.Horizontal, "Type")
+			# isinstance(odrv0._remote_attributes["reboot"], fibre.remote_object.RemoteFunction)
+			item = QtGui.QStandardItem("odrv{}".format(odrive_number))
+			# child = QtGui.QStandardItem("General")
+			# item.appendRow(child)
+			# child = QtGui.QStandardItem("Control Test")
+			# item.appendRow(child)
+			for key in my_drive._remote_attributes.keys():
+				if isinstance(my_drive._remote_attributes[key], fibre.remote_object.RemoteObject):
+					child = QtGui.QStandardItem(key)
+					for child_key in my_drive._remote_attributes[key]._remote_attributes.keys():
+						if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key], fibre.remote_object.RemoteObject):
+							sub1_child = QtGui.QStandardItem(child_key)
+						# else:
+						# 	sub1_child = QtGui.QStandardItem(child_key)
+							child.appendRow(sub1_child)
+					item.appendRow(child)
+				# else:
+				# 	# if key not in version_ignore_list:
+				# 	child = QtGui.QStandardItem(key)
+				# 	item.appendRow(child)
+					# item.appendRow(child)
+			# for key in my_drive._remote_attributes.keys():
+			# 	# if key not in ignore_list:
+			# 	if isinstance(my_drive._remote_attributes[key], fibre.remote_object.RemoteObject):
+			# 		child = QtGui.QStandardItem(key)
+			# 		for child_key in my_drive._remote_attributes[key]._remote_attributes.keys():
+			# 			if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key], fibre.remote_object.RemoteObject):
+			# 				sub1_child = QtGui.QStandardItem(child_key)
+			# 				for sub1_child_key in my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes.keys():
+			# 					if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key], fibre.remote_object.RemoteObject):
+			# 						sub2_child = QtGui.QStandardItem(sub1_child_key)
+			# 						for sub2_child_key in my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key]._remote_attributes.keys():
+			# 							if isinstance(my_drive._remote_attributes[key]._remote_attributes[child_key]._remote_attributes[sub1_child_key]._remote_attributes[sub2_child_key], fibre.remote_object.RemoteObject):
+			# 								sub3_child = QtGui.QStandardItem(sub2_child_key)
+			# 								sub2_child.appendRow(sub3_child)
+			# 							else:
+			# 								sub3_child = QtGui.QStandardItem(sub2_child_key)
+			# 								sub2_child.appendRow(sub3_child)
+			# 						sub1_child.appendRow(sub2_child)
+			# 					else:
+			# 						sub2_child = QtGui.QStandardItem(sub1_child_key)
+			# 						sub1_child.appendRow(sub2_child)
+			# 				child.appendRow(sub1_child)
+			# 			else:
+			# 				sub1_child = QtGui.QStandardItem(child_key)
+			# 				child.appendRow(sub1_child)
+			# 			# elif
+			# 		item.appendRow(child)
+			# 	else:
+			# 		if key not in version_ignore_list:
+			# 			child = QtGui.QStandardItem(key)
+			# 			item.appendRow(child)
 
-		# child = QtGui.QStandardItem("fw_version")
-		# item.appendRow(child)
-		# child = QtGui.QStandardItem("hw_version")
-		# item.appendRow(child)
+			# child = QtGui.QStandardItem("fw_version")
+			# item.appendRow(child)
+			# child = QtGui.QStandardItem("hw_version")
+			# item.appendRow(child)
 
-		model.setItem(0,0,item)
-		# self.testmdi.show()
+			model.setItem(odrive_number,0,item)
+			odrive_number += 1
+			# self.testmdi.show()
 		return model
 
 def main():

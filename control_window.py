@@ -231,34 +231,50 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.ct[axis]["state_buttons_layout"] = QtWidgets.QGridLayout()
 		self.ct[axis]["control_box_layout"].addLayout(self.ct[axis]["state_buttons_layout"])
 		self.ct[axis]["state_idle_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_idle_pb"].clicked.connect(self.machine_state_clicked)
+		self.ct[axis]["state_idle_pb"].setObjectName("state_idle_pb_{}".format(axis))
 		self.ct[axis]["state_idle_pb"].setMinimumSize(size_width,size_height)
 		self.ct[axis]["state_idle_pb"].setText("Idle")
 		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_idle_pb"], 0, 0, 1, 1)
 		self.ct[axis]["state_start_up_sequece_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_start_up_sequece_pb"].clicked.connect(self.machine_state_clicked)
+		self.ct[axis]["state_start_up_sequece_pb"].setObjectName("state_start_up_sequece_pb_{}".format(axis))
 		self.ct[axis]["state_start_up_sequece_pb"].setMinimumSize(size_width,size_height)#setMinimumSize(50,50)
 		self.ct[axis]["state_start_up_sequece_pb"].setText("Startup\nSequence")
 		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_start_up_sequece_pb"], 0, 1, 1, 1)
 		self.ct[axis]["state_full_calibration_sequence_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_full_calibration_sequence_pb"].clicked.connect(self.machine_state_clicked)
+		self.ct[axis]["state_full_calibration_sequence_pb"].setObjectName("state_full_calibration_sequence_pb_{}".format(axis))
 		self.ct[axis]["state_full_calibration_sequence_pb"].setMinimumSize(size_width,size_height)
 		self.ct[axis]["state_full_calibration_sequence_pb"].setText("Full\nCalibration\nSeqience")
 		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_full_calibration_sequence_pb"], 0, 2, 1, 1)
 		self.ct[axis]["state_motor_calibration_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_motor_calibration_pb"].clicked.connect(self.machine_state_clicked)
+		self.ct[axis]["state_motor_calibration_pb"].setObjectName("state_motor_calibration_pb_{}".format(axis))
 		self.ct[axis]["state_motor_calibration_pb"].setMinimumSize(size_width,size_height)
 		self.ct[axis]["state_motor_calibration_pb"].setText("Motor\nCalibration")
 		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_motor_calibration_pb"], 0, 3, 1, 1)
 		self.ct[axis]["state_sensorless_control_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_sensorless_control_pb"].clicked.connect(self.machine_state_clicked)
+		self.ct[axis]["state_sensorless_control_pb"].setObjectName("state_sensorless_control_pb_{}".format(axis))
 		self.ct[axis]["state_sensorless_control_pb"].setMinimumSize(size_width,size_height)
 		self.ct[axis]["state_sensorless_control_pb"].setText("Sensorless\nControl")
 		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_sensorless_control_pb"], 1, 0, 1, 1)
 		self.ct[axis]["state_encoder_index_search_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_encoder_index_search_pb"].clicked.connect(self.machine_state_clicked)
+		self.ct[axis]["state_encoder_index_search_pb"].setObjectName("state_encoder_index_search_pb_{}".format(axis))
 		self.ct[axis]["state_encoder_index_search_pb"].setMinimumSize(size_width,size_height)
 		self.ct[axis]["state_encoder_index_search_pb"].setText("Encoder\nIndex\nSearch")
 		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_encoder_index_search_pb"], 1, 1, 1, 1)
 		self.ct[axis]["state_encoder_offset_calibration_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_encoder_offset_calibration_pb"].clicked.connect(self.machine_state_clicked)
+		self.ct[axis]["state_encoder_offset_calibration_pb"].setObjectName("state_encoder_offset_calibration_pb_{}".format(axis))
 		self.ct[axis]["state_encoder_offset_calibration_pb"].setMinimumSize(size_width,size_height)
 		self.ct[axis]["state_encoder_offset_calibration_pb"].setText("Encoder\nOffset\nCalibration")
 		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_encoder_offset_calibration_pb"], 1, 2, 1, 1)
 		self.ct[axis]["state_closed_loop_control_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_closed_loop_control_pb"].clicked.connect(self.machine_state_clicked)
+		self.ct[axis]["state_closed_loop_control_pb"].setObjectName("state_closed_loop_control_pb_{}".format(axis))
 		self.ct[axis]["state_closed_loop_control_pb"].setMinimumSize(size_width,size_height)
 		self.ct[axis]["state_closed_loop_control_pb"].setText("Closed\nLoop\nControl")
 		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_closed_loop_control_pb"], 1, 3, 1, 1)
@@ -314,7 +330,7 @@ class ControllerWindow(QtWidgets.QWidget, ):
 
 		self.timer = pg.QtCore.QTimer()
 		self.timer.timeout.connect(self.update_statuses)
-		self.timer.start(500)
+		self.timer.start(250)
 
 		self.ad["start_time"] = pg.ptime.time()
 		self.timer_graphUpdate = pg.QtCore.QTimer()
@@ -405,12 +421,40 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		# self.update_voltage()
 		try:
 			self.update_machine_state()
-			self.update_controller_mode()
-			self.error_checks()
+			# self.update_controller_mode()
+			# self.error_checks()
 		except Exception as e:
 			print(e)
-			self.odrive_disconnected_exception()
+			# self.odrive_disconnected_exception()
 
+	def machine_state_clicked(self):
+		button_name = self.sender().objectName()
+		axis_name = button_name[-5:]
+		m_state_name = button_name[:-6]
+		print(axis_name)
+		print(m_state_name)
+
+		if axis_name == "axis0":
+			axis = self.my_drive.axis0
+		elif axis_name == "axis1":
+			axis = self.my_drive.axis1
+
+		if m_state_name == "state_idle_pb":
+			axis.requested_state = AXIS_STATE_IDLE
+		elif m_state_name == "state_start_up_sequece_pb":
+			axis.requested_state = AXIS_STATE_STARTUP_SEQUENCE
+		elif m_state_name == "state_full_calibration_sequence_pb":
+			axis.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
+		elif m_state_name == "state_motor_calibration_pb":
+			axis.requested_state = AXIS_STATE_MOTOR_CALIBRATION
+		elif m_state_name == "state_sensorless_control_pb":
+			axis.requested_state = AXIS_STATE_SENSORLESS_CONTROL
+		elif m_state_name == "state_encoder_index_search_pb":
+			axis.requested_state = AXIS_STATE_ENCODER_INDEX_SEARCH
+		elif m_state_name == "state_encoder_offset_calibration_pb":
+			axis.requested_state = AXIS_STATE_ENCODER_OFFSET_CALIBRATION
+		elif m_state_name == "state_closed_loop_control_pb":
+			axis.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
 
 	def update_machine_state(self):
 		current_state = self.my_drive.axis0.current_state

@@ -24,104 +24,35 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.ct = {}
 
 		self.ct["axis0"] = {}
-
-		self.ct["axis0"]["control_box"] =  QtWidgets.QGroupBox()
-		self.ct["axis0"]["control_box"].setTitle("Axis0")
-		self.ct["axis0"]["control_box_layout"] = QtWidgets.QVBoxLayout(self.ct["axis0"]["control_box"])
-		self.ct["axis0"]["state_buttons_layout"] = QtWidgets.QGridLayout()
-		self.ct["axis0"]["control_box_layout"].addLayout(self.ct["axis0"]["state_buttons_layout"])
-		self.ct["axis0"]["state_idle_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["state_idle_pb"].setText("Idle")
-		self.ct["axis0"]["state_buttons_layout"].addWidget(self.ct["axis0"]["state_idle_pb"], 0, 0, 1, 1)
-		self.ct["axis0"]["state_start_up_sequece_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["state_start_up_sequece_pb"].setText("Startup\nSequence")
-		self.ct["axis0"]["state_buttons_layout"].addWidget(self.ct["axis0"]["state_start_up_sequece_pb"], 0, 1, 1, 1)
-		self.ct["axis0"]["state_full_calibration_sequence_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["state_full_calibration_sequence_pb"].setText("Full\nCalibration\nSeqience")
-		self.ct["axis0"]["state_buttons_layout"].addWidget(self.ct["axis0"]["state_full_calibration_sequence_pb"], 0, 2, 1, 1)
-		self.ct["axis0"]["state_motor_calibration_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["state_motor_calibration_pb"].setText("Motor\nCalibration")
-		self.ct["axis0"]["state_buttons_layout"].addWidget(self.ct["axis0"]["state_motor_calibration_pb"], 0, 3, 1, 1)
-		self.ct["axis0"]["state_sensorless_control_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["state_sensorless_control_pb"].setText("Sensorless\nControl")
-		self.ct["axis0"]["state_buttons_layout"].addWidget(self.ct["axis0"]["state_sensorless_control_pb"], 1, 0, 1, 1)
-		self.ct["axis0"]["state_encoder_index_search_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["state_encoder_index_search_pb"].setText("Encoder\nIndex\nSearch")
-		self.ct["axis0"]["state_buttons_layout"].addWidget(self.ct["axis0"]["state_encoder_index_search_pb"], 1, 1, 1, 1)
-		self.ct["axis0"]["state_encoder_offset_calibration_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["state_encoder_offset_calibration_pb"].setText("Encoder\nOffset\nCalibration")
-		self.ct["axis0"]["state_buttons_layout"].addWidget(self.ct["axis0"]["state_encoder_offset_calibration_pb"], 1, 2, 1, 1)
-		self.ct["axis0"]["state_closed_loop_control_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["state_closed_loop_control_pb"].setText("Closed\nLoop\nControl")
-		self.ct["axis0"]["state_buttons_layout"].addWidget(self.ct["axis0"]["state_closed_loop_control_pb"], 1, 3, 1, 1)
-
-		self.ct["axis0"]["control_buttons_layout"] = QtWidgets.QGridLayout()
-		self.ct["axis0"]["control_box_layout"].addLayout(self.ct["axis0"]["control_buttons_layout"])
-		self.ct["axis0"]["torque_label"] = QtWidgets.QRadioButton()
-		self.ct["axis0"]["torque_label"].setText("Torque (Nm)")
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["torque_label"], 0, 0, 1, 1)
-		self.ct["axis0"]["torque_sb"] = QtWidgets.QSpinBox()
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["torque_sb"], 0, 1, 1, 1)
-		self.ct["axis0"]["torque_cw_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["torque_ccw_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["torque_stop_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["torque_cw_pb"], 0, 2, 1, 1)
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["torque_ccw_pb"], 0, 4, 1, 1)
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["torque_stop_pb"], 0, 3, 1, 1)
-
-		self.ct["axis0"]["velocity_label"] = QtWidgets.QRadioButton()
-		self.ct["axis0"]["velocity_label"].setText("Velocity (Turns/s)")
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["velocity_label"], 1, 0, 1, 1)
-		self.ct["axis0"]["velocity_sb"] = QtWidgets.QSpinBox()
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["velocity_sb"], 1, 1, 1, 1)
-		self.ct["axis0"]["velocity_cw_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["velocity_ccw_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["velocity_stop_pb"] = QtWidgets.QPushButton()
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["velocity_cw_pb"], 1, 2, 1, 1)
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["velocity_ccw_pb"], 1, 4, 1, 1)
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["velocity_stop_pb"], 1, 3, 1, 1)
-
-		self.ct["axis0"]["position_label"] = QtWidgets.QRadioButton()
-		self.ct["axis0"]["position_label"].setText("Position (Turns)")
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["position_label"], 2, 0, 1, 1)
-		self.ct["axis0"]["position_sb"] = QtWidgets.QSpinBox()
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["position_sb"], 2, 1, 1, 1)
-		self.ct["axis0"]["position_go_pb"] = QtWidgets.QPushButton("GO")
-		# self.ct["axis0"]position_go_zero_pb = QtWidgets.QPushButton("Go to Zero")
-		# self.ct["axis0"]position_stop_pb = QtWidgets.QPushButton()
-		# self.ct["axis0"]control_buttons_layout.addWidget(self.ct["axis0"]position_go_zero_pb, 2, 2, 1, 1)
-		self.ct["axis0"]["control_buttons_layout"].addWidget(self.ct["axis0"]["position_go_pb"], 2, 2, 1, 3)
-		# self.ct["axis0"]control_buttons_layout.addWidget(self.ct["axis0"]position_stop_pb, 1, 3, 1, 1)
-
-		self.ct["axis0"]["rb_group"] = QtWidgets.QButtonGroup(self.ct["axis0"]["control_buttons_layout"]) #
-		# self.ct["axis0"]rb_group.setObjectName(item["name"])
-		# bgroup.buttonClicked.connect(self.radio_button_changed)
-		self.ct["axis0"]["rb_group"].addButton(self.ct["axis0"]["torque_label"])
-		self.ct["axis0"]["rb_group"].addButton(self.ct["axis0"]["velocity_label"])
-		self.ct["axis0"]["rb_group"].addButton(self.ct["axis0"]["position_label"])
+		self.ct["axis1"] = {}
+		
 		# self.ct["axis0"]velocity_label = QtWidgets.QLabel()
 		# self.ct["axis0"]velocity_label.setText("Velocity (Turns/s)")
 		# self.ct["axis0"]control_buttons_layout.addWidget(self.ct["axis0"]velocity_label, 1, 0, 1, 1)
-
+		self.setup_control_axis("axis0")
+		self.setup_control_axis("axis1")
 
 		# self.ct["axis0"]control_box.addLayout
 		# self.ct["axis0"]control_box.setObjectName("test")
 		# self.ct["axis0"]control_box.setMaximumWidth(300)
 
-		self.axis1_control_box =  QtWidgets.QGroupBox()
-		self.axis1_control_box.setTitle("Axis1")
+		# self.axis1_control_box =  QtWidgets.QGroupBox()
+		# self.axis1_control_box.setTitle("Axis1")
 		# self.ct["axis0"]control_box.setObjectName("test")
 		# self.axis1_control_box.setMaximumWidth(300)
 
 		self.control_vertical_layout = QtWidgets.QVBoxLayout()
 		self.control_vertical_layout.addWidget(self.ct["axis0"]["control_box"])
-		self.control_vertical_layout.addWidget(self.axis1_control_box)
+		self.control_vertical_layout.addWidget(self.ct["axis1"]["control_box"])
 		self.hbox.addLayout(self.control_vertical_layout)
 		# self.hbox.addWidget(groupbox)
 
 		
 
 		self.verticalLayout = QtWidgets.QVBoxLayout()
+		self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+		self.verticalLayout.addLayout(self.horizontalLayout_3)
+
 		self.hbox.addLayout(self.verticalLayout)
 
 
@@ -140,10 +71,7 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.verticalLayout.addWidget(self.plotWidget_position)
 		
 
-		self.showAxis0_checkBox = QtWidgets.QCheckBox()
-		self.showAxis0_checkBox.setChecked(True)
-		self.showAxis0_checkBox.setObjectName("showAxis0_checkBox")
-		self.verticalLayout.addWidget(self.showAxis0_checkBox)
+		
 
 		# self.showAxis1_checkBox = QtWidgets.QCheckBox()
 		# self.showAxis1_checkBox.setEnabled(True)
@@ -151,7 +79,32 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		# self.showAxis1_checkBox.setObjectName("showAxis1_checkBox")
 		# self.verticalLayout.addWidget(self.showAxis1_checkBox)
 
-		self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+		
+
+		self.showAxis0_checkBox = QtWidgets.QCheckBox()
+		self.showAxis0_checkBox.setText("Axis0")
+		self.showAxis0_checkBox.setChecked(True)
+		self.showAxis0_checkBox.setObjectName("showAxis0_checkBox")
+		self.horizontalLayout_3.addWidget(self.showAxis0_checkBox)
+
+		self.label_2 = QtWidgets.QLabel("Estimate")
+		self.label_2.setObjectName("label_2")
+		self.horizontalLayout_3.addWidget(self.label_2)
+		self.label_6 = QtWidgets.QLabel()
+		self.label_6 = QtWidgets.QLabel()
+		self.label_6.setText("")
+		self.label_6.setPixmap(QtGui.QPixmap("Icons/legendLines/legendLines_Blue.png"))
+		self.label_6.setObjectName("label_6")
+		self.horizontalLayout_3.addWidget(self.label_6)
+		self.label = QtWidgets.QLabel("Estimate")
+		self.label.setObjectName("label")
+		self.horizontalLayout_3.addWidget(self.label)
+		self.label_7 = QtWidgets.QLabel()
+		self.label_7.setText("")
+		self.label_7.setPixmap(QtGui.QPixmap("Icons/legendLines/legendLines_Purple.png"))
+		self.label_7.setObjectName("label_7")
+		self.horizontalLayout_3.addWidget(self.label_7)
+
 		# self.horizontalLayout_3.setContentsMargins(11, 11, 11, 11)
 		# self.horizontalLayout_3.setSpacing(6)
 		self.horizontalLayout_3.setObjectName("horizontalLayout_3")
@@ -159,7 +112,7 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.showAxis1_checkBox.setEnabled(True)
 		self.showAxis1_checkBox.setChecked(True)
 		self.showAxis1_checkBox.setText("Axis1")
-		self.showAxis1_checkBox.setLayoutDirection(QtCore.Qt.RightToLeft)
+		# self.showAxis1_checkBox.setLayoutDirection(QtCore.Qt.RightToLeft)
 		self.showAxis1_checkBox.setObjectName("showAxis1_checkBox")
 		self.horizontalLayout_3.addWidget(self.showAxis1_checkBox)
 		self.label_13 = QtWidgets.QLabel()
@@ -181,18 +134,25 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.label_8.setText("Estimate")
 		self.horizontalLayout_3.addWidget(self.label_9)
 
-		self.verticalLayout.addLayout(self.horizontalLayout_3)
+		
 
-		self.clearGraph_pushButton = QtWidgets.QPushButton()
-		self.clearGraph_pushButton.setObjectName("clearGraph_pushButton")
-		self.verticalLayout.addWidget(self.clearGraph_pushButton)
-
+		
+		self.label_graph_time = QtWidgets.QLabel()
+		self.label_graph_time.setText("Time Window (sec)")
+		self.horizontalLayout_3.addWidget(self.label_graph_time)
 		self.spinBox_graphTime = QtWidgets.QSpinBox()
+		
+		# self.spinBox_graphTime.setT
 		self.spinBox_graphTime.setMinimum(1)
 		self.spinBox_graphTime.setMaximum(600)
 		self.spinBox_graphTime.setProperty("value", 20)
 		self.spinBox_graphTime.setObjectName("spinBox_graphTime")
-		self.verticalLayout.addWidget(self.spinBox_graphTime)
+		self.horizontalLayout_3.addWidget(self.spinBox_graphTime)
+
+		self.clearGraph_pushButton = QtWidgets.QPushButton()
+		self.clearGraph_pushButton.setText("Clear Graph")
+		self.clearGraph_pushButton.setObjectName("clearGraph_pushButton")
+		self.horizontalLayout_3.addWidget(self.clearGraph_pushButton)
 
 		self.showAxis0_checkBox.stateChanged.connect(self.axis0_graph_state_changed)
 		self.showAxis1_checkBox.stateChanged.connect(self.axis1_graph_state_changed)
@@ -258,6 +218,93 @@ class ControllerWindow(QtWidgets.QWidget, ):
 
 		self.axis0_state = None
 		self.axis1_state = None
+
+	def setup_control_axis(self, axis):
+		size_width = 50
+		size_height = 70
+
+		self.ct[axis]["control_box"] =  QtWidgets.QGroupBox()
+		self.ct[axis]["control_box"].setTitle(axis)
+		self.ct[axis]["control_box_layout"] = QtWidgets.QVBoxLayout(self.ct[axis]["control_box"])
+		self.ct[axis]["state_buttons_layout"] = QtWidgets.QGridLayout()
+		self.ct[axis]["control_box_layout"].addLayout(self.ct[axis]["state_buttons_layout"])
+		self.ct[axis]["state_idle_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_idle_pb"].setMinimumSize(size_width,size_height)
+		self.ct[axis]["state_idle_pb"].setText("Idle")
+		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_idle_pb"], 0, 0, 1, 1)
+		self.ct[axis]["state_start_up_sequece_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_start_up_sequece_pb"].setMinimumSize(size_width,size_height)#setMinimumSize(50,50)
+		self.ct[axis]["state_start_up_sequece_pb"].setText("Startup\nSequence")
+		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_start_up_sequece_pb"], 0, 1, 1, 1)
+		self.ct[axis]["state_full_calibration_sequence_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_full_calibration_sequence_pb"].setMinimumSize(size_width,size_height)
+		self.ct[axis]["state_full_calibration_sequence_pb"].setText("Full\nCalibration\nSeqience")
+		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_full_calibration_sequence_pb"], 0, 2, 1, 1)
+		self.ct[axis]["state_motor_calibration_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_motor_calibration_pb"].setMinimumSize(size_width,size_height)
+		self.ct[axis]["state_motor_calibration_pb"].setText("Motor\nCalibration")
+		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_motor_calibration_pb"], 0, 3, 1, 1)
+		self.ct[axis]["state_sensorless_control_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_sensorless_control_pb"].setMinimumSize(size_width,size_height)
+		self.ct[axis]["state_sensorless_control_pb"].setText("Sensorless\nControl")
+		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_sensorless_control_pb"], 1, 0, 1, 1)
+		self.ct[axis]["state_encoder_index_search_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_encoder_index_search_pb"].setMinimumSize(size_width,size_height)
+		self.ct[axis]["state_encoder_index_search_pb"].setText("Encoder\nIndex\nSearch")
+		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_encoder_index_search_pb"], 1, 1, 1, 1)
+		self.ct[axis]["state_encoder_offset_calibration_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_encoder_offset_calibration_pb"].setMinimumSize(size_width,size_height)
+		self.ct[axis]["state_encoder_offset_calibration_pb"].setText("Encoder\nOffset\nCalibration")
+		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_encoder_offset_calibration_pb"], 1, 2, 1, 1)
+		self.ct[axis]["state_closed_loop_control_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["state_closed_loop_control_pb"].setMinimumSize(size_width,size_height)
+		self.ct[axis]["state_closed_loop_control_pb"].setText("Closed\nLoop\nControl")
+		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_closed_loop_control_pb"], 1, 3, 1, 1)
+
+		self.ct[axis]["control_buttons_layout"] = QtWidgets.QGridLayout()
+		self.ct[axis]["control_box_layout"].addLayout(self.ct[axis]["control_buttons_layout"])
+		self.ct[axis]["torque_label"] = QtWidgets.QRadioButton()
+		self.ct[axis]["torque_label"].setText("Torque (Nm)")
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_label"], 0, 0, 1, 1)
+		self.ct[axis]["torque_sb"] = QtWidgets.QSpinBox()
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_sb"], 0, 1, 1, 1)
+		self.ct[axis]["torque_cw_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["torque_ccw_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["torque_stop_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_cw_pb"], 0, 2, 1, 1)
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_ccw_pb"], 0, 4, 1, 1)
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_stop_pb"], 0, 3, 1, 1)
+
+		self.ct[axis]["velocity_label"] = QtWidgets.QRadioButton()
+		self.ct[axis]["velocity_label"].setText("Velocity (Turns/s)")
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_label"], 1, 0, 1, 1)
+		self.ct[axis]["velocity_sb"] = QtWidgets.QSpinBox()
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_sb"], 1, 1, 1, 1)
+		self.ct[axis]["velocity_cw_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["velocity_ccw_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["velocity_stop_pb"] = QtWidgets.QPushButton()
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_cw_pb"], 1, 2, 1, 1)
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_ccw_pb"], 1, 4, 1, 1)
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_stop_pb"], 1, 3, 1, 1)
+
+		self.ct[axis]["position_label"] = QtWidgets.QRadioButton()
+		self.ct[axis]["position_label"].setText("Position (Turns)")
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["position_label"], 2, 0, 1, 1)
+		self.ct[axis]["position_sb"] = QtWidgets.QSpinBox()
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["position_sb"], 2, 1, 1, 1)
+		self.ct[axis]["position_go_pb"] = QtWidgets.QPushButton("GO")
+		# self.ct[axis]position_go_zero_pb = QtWidgets.QPushButton("Go to Zero")
+		# self.ct[axis]position_stop_pb = QtWidgets.QPushButton()
+		# self.ct[axis]control_buttons_layout.addWidget(self.ct[axis]position_go_zero_pb, 2, 2, 1, 1)
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["position_go_pb"], 2, 2, 1, 3)
+		# self.ct[axis]control_buttons_layout.addWidget(self.ct[axis]position_stop_pb, 1, 3, 1, 1)
+
+		self.ct[axis]["rb_group"] = QtWidgets.QButtonGroup(self.ct[axis]["control_buttons_layout"]) #
+		# self.ct[axis]rb_group.setObjectName(item["name"])
+		# bgroup.buttonClicked.connect(self.radio_button_changed)
+		self.ct[axis]["rb_group"].addButton(self.ct[axis]["torque_label"])
+		self.ct[axis]["rb_group"].addButton(self.ct[axis]["velocity_label"])
+		self.ct[axis]["rb_group"].addButton(self.ct[axis]["position_label"])
 
 		# print(self.my_drive)
 	def give_odrive(self, my_drive):

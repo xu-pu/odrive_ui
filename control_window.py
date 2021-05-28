@@ -27,7 +27,9 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		groupbox.setObjectName("test")
 		groupbox.setMaximumSize(200, 100)
 
-		self.hbox.addWidget(groupbox)
+		self.control_vertical_layout = QtWidgets.QVBoxLayout()
+		self.hbox.addLayout(self.control_vertical_layout)
+		# self.hbox.addWidget(groupbox)
 
 		
 

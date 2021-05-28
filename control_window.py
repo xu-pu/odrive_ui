@@ -2,6 +2,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqtgraph import PlotWidget
 import pyqtgraph as pg
+# import odrive
+from odrive.enums import *
 
 class ControllerWindow(QtWidgets.QWidget, ):
 	app_name = "Controller"
@@ -399,15 +401,70 @@ class ControllerWindow(QtWidgets.QWidget, ):
 				lower_limit = self.ad[axis]["time_array"][0]
 
 	def update_statuses(self):
-		pass
+		# pass
 		# self.update_voltage()
-		# try:
-		# 	self.update_machine_state()
-		# 	self.update_controller_mode()
-		# 	self.error_checks()
-		# except Exception as e:
-		# 	print(e)
-		# 	self.odrive_disconnected_exception()
+		try:
+			self.update_machine_state()
+			self.update_controller_mode()
+			self.error_checks()
+		except Exception as e:
+			print(e)
+			self.odrive_disconnected_exception()
+
+
+	def update_machine_state(self):
+		current_state = self.my_drive.axis0.current_state
+		if self.axis0_state != current_state:
+			self.axis0_state = current_state
+			print("New state axis0: {}".format(self.axis0_state))
+			self.update_machine_state_color(current_state, 0)
+
+		current_state = self.my_drive.axis1.current_state
+		if self.axis1_state != current_state:
+			self.axis1_state = current_state
+			print("New state axis1: {}".format(self.axis1_state))
+			self.update_machine_state_color(current_state, 1)
+
+	def update_machine_state_color(self, current_state, axis):
+			self.clear_state_buttons(axis)
+			if current_state == AXIS_STATE_IDLE:
+				self.set_state_button_color(axis, "state_idle_pb")
+			elif current_state == AXIS_STATE_STARTUP_SEQUENCE:
+				self.set_state_button_color(axis, "state_start_up_sequece_pb")
+			elif current_state == AXIS_STATE_FULL_CALIBRATION_SEQUENCE:
+				self.set_state_button_color(axis, "state_full_calibration_sequence_pb")
+			elif current_state == AXIS_STATE_MOTOR_CALIBRATION:
+				self.set_state_button_color(axis, "state_motor_calibration_pb")
+			elif current_state == AXIS_STATE_SENSORLESS_CONTROL:
+				self.set_state_button_color(axis, "state_sensorless_control_pb")
+			elif current_state == AXIS_STATE_ENCODER_INDEX_SEARCH:
+				self.set_state_button_color(axis, "state_encoder_index_search_pb")
+			elif current_state == AXIS_STATE_ENCODER_OFFSET_CALIBRATION:
+				self.set_state_button_color(axis, "state_encoder_offset_calibration_pb")
+			elif current_state == AXIS_STATE_CLOSED_LOOP_CONTROL:
+				self.set_state_button_color(axis, "state_closed_loop_control_pb")
+
+	def clear_state_buttons(self, axis_num):
+		if axis_num == 0:
+			axis = "axis0"
+		else:
+			axis = "axis1"
+		self.ct[axis]["state_idle_pb"].setStyleSheet("")
+		self.ct[axis]["state_start_up_sequece_pb"].setStyleSheet("")
+		self.ct[axis]["state_full_calibration_sequence_pb"].setStyleSheet("")
+		self.ct[axis]["state_motor_calibration_pb"].setStyleSheet("")
+		self.ct[axis]["state_sensorless_control_pb"].setStyleSheet("")
+		self.ct[axis]["state_encoder_index_search_pb"].setStyleSheet("")
+		self.ct[axis]["state_encoder_offset_calibration_pb"].setStyleSheet("")
+		self.ct[axis]["state_closed_loop_control_pb"].setStyleSheet("")
+
+	def set_state_button_color(self, axis_num, button):
+		if axis_num == 0:
+			axis = "axis0"
+		else:
+			axis = "axis1"
+		self.ct[axis][button].setStyleSheet("background-color: rgb(246, 224, 143);")
+
 
 		# print(self.my_drive.vbus_voltage)
 	def update_graphs(self):

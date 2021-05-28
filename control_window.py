@@ -21,6 +21,9 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.hbox = QtWidgets.QHBoxLayout()
 		self.new_layout.addLayout(self.hbox,0,0,1,1)
 
+		self.ct = {}
+
+		self.ct["axis0"] = {}
 		self.axis0_control_box =  QtWidgets.QGroupBox()
 		self.axis0_control_box.setTitle("Axis0")
 		self.axis0_control_box_layout = QtWidgets.QVBoxLayout(self.axis0_control_box)
@@ -53,17 +56,51 @@ class ControllerWindow(QtWidgets.QWidget, ):
 
 		self.axis0_control_buttons_layout = QtWidgets.QGridLayout()
 		self.axis0_control_box_layout.addLayout(self.axis0_control_buttons_layout)
-		self.axis0_torque_label = QtWidgets.QLabel()
-		self.axis0_torque_label.setText("Torque (Amps)")
+		self.axis0_torque_label = QtWidgets.QRadioButton()
+		self.axis0_torque_label.setText("Torque (Nm)")
 		self.axis0_control_buttons_layout.addWidget(self.axis0_torque_label, 0, 0, 1, 1)
+		self.axis0_torque_sb = QtWidgets.QSpinBox()
+		self.axis0_control_buttons_layout.addWidget(self.axis0_torque_sb, 0, 1, 1, 1)
+		self.axis0_torque_cw_pb = QtWidgets.QPushButton()
+		self.axis0_torque_ccw_pb = QtWidgets.QPushButton()
+		self.axis0_torque_stop_pb = QtWidgets.QPushButton()
+		self.axis0_control_buttons_layout.addWidget(self.axis0_torque_cw_pb, 0, 2, 1, 1)
+		self.axis0_control_buttons_layout.addWidget(self.axis0_torque_ccw_pb, 0, 4, 1, 1)
+		self.axis0_control_buttons_layout.addWidget(self.axis0_torque_stop_pb, 0, 3, 1, 1)
 
-		self.axis0_velocity_label = QtWidgets.QLabel()
+		self.axis0_velocity_label = QtWidgets.QRadioButton()
 		self.axis0_velocity_label.setText("Velocity (Turns/s)")
 		self.axis0_control_buttons_layout.addWidget(self.axis0_velocity_label, 1, 0, 1, 1)
+		self.axis0_velocity_sb = QtWidgets.QSpinBox()
+		self.axis0_control_buttons_layout.addWidget(self.axis0_velocity_sb, 1, 1, 1, 1)
+		self.axis0_velocity_cw_pb = QtWidgets.QPushButton()
+		self.axis0_velocity_ccw_pb = QtWidgets.QPushButton()
+		self.axis0_velocity_stop_pb = QtWidgets.QPushButton()
+		self.axis0_control_buttons_layout.addWidget(self.axis0_velocity_cw_pb, 1, 2, 1, 1)
+		self.axis0_control_buttons_layout.addWidget(self.axis0_velocity_ccw_pb, 1, 4, 1, 1)
+		self.axis0_control_buttons_layout.addWidget(self.axis0_velocity_stop_pb, 1, 3, 1, 1)
 
-		self.axis0_velocity_label = QtWidgets.QLabel()
-		self.axis0_velocity_label.setText("Velocity (Turns/s)")
-		self.axis0_control_buttons_layout.addWidget(self.axis0_velocity_label, 1, 0, 1, 1)
+		self.axis0_position_label = QtWidgets.QRadioButton()
+		self.axis0_position_label.setText("Position (Turns)")
+		self.axis0_control_buttons_layout.addWidget(self.axis0_position_label, 2, 0, 1, 1)
+		self.axis0_position_sb = QtWidgets.QSpinBox()
+		self.axis0_control_buttons_layout.addWidget(self.axis0_position_sb, 2, 1, 1, 1)
+		self.axis0_position_go_pb = QtWidgets.QPushButton("GO")
+		# self.axis0_position_go_zero_pb = QtWidgets.QPushButton("Go to Zero")
+		# self.axis0_position_stop_pb = QtWidgets.QPushButton()
+		# self.axis0_control_buttons_layout.addWidget(self.axis0_position_go_zero_pb, 2, 2, 1, 1)
+		self.axis0_control_buttons_layout.addWidget(self.axis0_position_go_pb, 2, 2, 1, 3)
+		# self.axis0_control_buttons_layout.addWidget(self.axis0_position_stop_pb, 1, 3, 1, 1)
+
+		self.axis0_rb_group = QtWidgets.QButtonGroup(self.axis0_control_buttons_layout) #
+		# self.axis0_rb_group.setObjectName(item["name"])
+		# bgroup.buttonClicked.connect(self.radio_button_changed)
+		self.axis0_rb_group.addButton(self.axis0_torque_label)
+		self.axis0_rb_group.addButton(self.axis0_velocity_label)
+		self.axis0_rb_group.addButton(self.axis0_position_label)
+		# self.axis0_velocity_label = QtWidgets.QLabel()
+		# self.axis0_velocity_label.setText("Velocity (Turns/s)")
+		# self.axis0_control_buttons_layout.addWidget(self.axis0_velocity_label, 1, 0, 1, 1)
 
 
 		# self.axis0_control_box.addLayout

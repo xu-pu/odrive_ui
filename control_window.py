@@ -50,6 +50,22 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.axis0_state_closed_loop_control_pb = QtWidgets.QPushButton()
 		self.axis0_state_closed_loop_control_pb.setText("Closed\nLoop\nControl")
 		self.axis0_state_buttons_layout.addWidget(self.axis0_state_closed_loop_control_pb, 1, 3, 1, 1)
+
+		self.axis0_control_buttons_layout = QtWidgets.QGridLayout()
+		self.axis0_control_box_layout.addLayout(self.axis0_control_buttons_layout)
+		self.axis0_torque_label = QtWidgets.QLabel()
+		self.axis0_torque_label.setText("Torque (Amps)")
+		self.axis0_control_buttons_layout.addWidget(self.axis0_torque_label, 0, 0, 1, 1)
+
+		self.axis0_velocity_label = QtWidgets.QLabel()
+		self.axis0_velocity_label.setText("Velocity (Turns/s)")
+		self.axis0_control_buttons_layout.addWidget(self.axis0_velocity_label, 1, 0, 1, 1)
+
+		self.axis0_velocity_label = QtWidgets.QLabel()
+		self.axis0_velocity_label.setText("Velocity (Turns/s)")
+		self.axis0_control_buttons_layout.addWidget(self.axis0_velocity_label, 1, 0, 1, 1)
+
+
 		# self.axis0_control_box.addLayout
 		# self.axis0_control_box.setObjectName("test")
 		# self.axis0_control_box.setMaximumWidth(300)

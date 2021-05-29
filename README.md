@@ -1,6 +1,6 @@
 # UI_odrivetool
 
-Tested on Ubuntu 16.04 - Python 3.5.2
+Tested on Ubuntu 18.04 - Python 3.7.7
 
 Make sure you can run odrivetool and it can find odrive board connected.
 
@@ -28,10 +28,6 @@ pip install --upgrade pip
 pip install odrive
 pip install pyqtgraph
 pip install pyqt5
-```
-##### Or just from requirements (Possible Errors)
-```
-pip install -r requirements.txt
 ```
 
 #### 5. Run Python from terminal

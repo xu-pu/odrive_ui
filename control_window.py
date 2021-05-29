@@ -279,6 +279,16 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.ct[axis]["state_closed_loop_control_pb"].setText("Closed\nLoop\nControl")
 		self.ct[axis]["state_buttons_layout"].addWidget(self.ct[axis]["state_closed_loop_control_pb"], 1, 3, 1, 1)
 
+		self.PIXMAP_FORWARD = QtGui.QPixmap("Icons/Right.png")
+		self.PIXMAP_BACKWARD = QtGui.QPixmap("Icons/Left.png")
+		self.PIXMAP_STOP = QtGui.QPixmap("Icons/odrive_icons_stop4.png")
+		icon_forward = QtGui.QIcon()
+		icon_forward.addPixmap(self.PIXMAP_FORWARD, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+		icon_backward = QtGui.QIcon()
+		icon_backward.addPixmap(self.PIXMAP_BACKWARD, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+		icon_stop = QtGui.QIcon()
+		icon_stop.addPixmap(self.PIXMAP_STOP, QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
 		self.ct[axis]["control_buttons_layout"] = QtWidgets.QGridLayout()
 		self.ct[axis]["control_box_layout"].addLayout(self.ct[axis]["control_buttons_layout"])
 		self.ct[axis]["torque_label"] = QtWidgets.QRadioButton()
@@ -289,8 +299,17 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.ct[axis]["torque_cw_pb"] = QtWidgets.QPushButton()
 		self.ct[axis]["torque_ccw_pb"] = QtWidgets.QPushButton()
 		self.ct[axis]["torque_stop_pb"] = QtWidgets.QPushButton()
-		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_cw_pb"], 0, 2, 1, 1)
-		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_ccw_pb"], 0, 4, 1, 1)
+		self.ct[axis]["torque_cw_pb"].setIcon(icon_forward)
+		self.ct[axis]["torque_ccw_pb"].setIcon(icon_backward)
+		self.ct[axis]["torque_stop_pb"].setIcon(icon_stop)
+		self.ct[axis]["torque_cw_pb"].setObjectName("torque_cw_pb_{}".format(axis))
+		self.ct[axis]["torque_ccw_pb"].setObjectName("torque_ccw_pb{}".format(axis))
+		self.ct[axis]["torque_stop_pb"].setObjectName("torque_stop_pb{}".format(axis))
+		self.ct[axis]["torque_cw_pb"].pressed.connect(self.torque_button_pressed)
+		self.ct[axis]["torque_ccw_pb"].pressed.connect(self.torque_button_pressed)
+		self.ct[axis]["torque_stop_pb"].pressed.connect(self.torque_button_pressed)
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_cw_pb"], 0, 4, 1, 1)
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_ccw_pb"], 0, 2, 1, 1)
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_stop_pb"], 0, 3, 1, 1)
 
 		self.ct[axis]["velocity_label"] = QtWidgets.QRadioButton()
@@ -301,8 +320,17 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.ct[axis]["velocity_cw_pb"] = QtWidgets.QPushButton()
 		self.ct[axis]["velocity_ccw_pb"] = QtWidgets.QPushButton()
 		self.ct[axis]["velocity_stop_pb"] = QtWidgets.QPushButton()
-		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_cw_pb"], 1, 2, 1, 1)
-		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_ccw_pb"], 1, 4, 1, 1)
+		self.ct[axis]["velocity_cw_pb"].setIcon(icon_forward)
+		self.ct[axis]["velocity_ccw_pb"].setIcon(icon_backward)
+		self.ct[axis]["velocity_stop_pb"].setIcon(icon_stop)
+		self.ct[axis]["velocity_cw_pb"].setObjectName("velocity_cw_pb{}".format(axis))
+		self.ct[axis]["velocity_ccw_pb"].setObjectName("velocity_ccw_pb{}".format(axis))
+		self.ct[axis]["velocity_stop_pb"].setObjectName("velocity_stop_pb{}".format(axis))
+		self.ct[axis]["velocity_cw_pb"].pressed.connect(self.velocity_button_pressed)
+		self.ct[axis]["velocity_ccw_pb"].pressed.connect(self.velocity_button_pressed)
+		self.ct[axis]["velocity_stop_pb"].pressed.connect(self.velocity_button_pressed)
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_cw_pb"], 1, 4, 1, 1)
+		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_ccw_pb"], 1, 2, 1, 1)
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_stop_pb"], 1, 3, 1, 1)
 
 		self.ct[axis]["position_label"] = QtWidgets.QRadioButton()
@@ -311,6 +339,9 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.ct[axis]["position_sb"] = QtWidgets.QSpinBox()
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["position_sb"], 2, 1, 1, 1)
 		self.ct[axis]["position_go_pb"] = QtWidgets.QPushButton("GO")
+		self.ct[axis]["position_go_pb"].setObjectName("position_go_pb{}".format(axis))
+		self.ct[axis]["position_go_pb"].pressed.connect(self.position_button_pressed)
+
 		# self.ct[axis]position_go_zero_pb = QtWidgets.QPushButton("Go to Zero")
 		# self.ct[axis]position_stop_pb = QtWidgets.QPushButton()
 		# self.ct[axis]control_buttons_layout.addWidget(self.ct[axis]position_go_zero_pb, 2, 2, 1, 1)
@@ -318,6 +349,8 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		# self.ct[axis]control_buttons_layout.addWidget(self.ct[axis]position_stop_pb, 1, 3, 1, 1)
 
 		self.ct[axis]["rb_group"] = QtWidgets.QButtonGroup(self.ct[axis]["control_buttons_layout"]) #
+		self.ct[axis]["rb_group"].setObjectName(axis)
+		self.ct[axis]["rb_group"].buttonClicked.connect(self.axis_controller_mode_changed)
 		# self.ct[axis]rb_group.setObjectName(item["name"])
 		# bgroup.buttonClicked.connect(self.radio_button_changed)
 		self.ct[axis]["rb_group"].addButton(self.ct[axis]["torque_label"])
@@ -416,12 +449,129 @@ class ControllerWindow(QtWidgets.QWidget, ):
 				upper_limit = self.ad[axis]["time_array"][-1]
 				lower_limit = self.ad[axis]["time_array"][0]
 
+	def axis_controller_mode_changed(self, id):
+		button_name = id.text()
+		group_name = id.sender().objectName()
+		print("button name {}".format(button_name))
+		print("group name {}".format(group_name))
+		if group_name == "axis0":
+			if button_name == "Position (Turns)":
+				self.axis_control_mode_changed(CONTROL_MODE_POSITION_CONTROL, 0)
+			elif button_name == "Torque (Nm)":
+				self.axis_control_mode_changed(CONTROL_MODE_TORQUE_CONTROL, 0)
+			elif button_name == "Velocity (Turns/s)":
+				self.axis_control_mode_changed(CONTROL_MODE_VELOCITY_CONTROL, 0)
+		elif group_name == "axis1":
+			if button_name == "Position (Turns)":
+				self.axis_control_mode_changed(CONTROL_MODE_POSITION_CONTROL, 1)
+			elif button_name == "Torque (Nm)":
+				self.axis_control_mode_changed(CONTROL_MODE_TORQUE_CONTROL, 1)
+			elif button_name == "Velocity (Turns/s)":
+				self.axis_control_mode_changed(CONTROL_MODE_VELOCITY_CONTROL, 1)
+
+
+	def axis_control_mode_changed(self, control_mode, axis):
+		print("changin stuff")
+		
+		if control_mode == CONTROL_MODE_POSITION_CONTROL:
+			self.axis_controller_fields_position_enabled(CONTROL_MODE_POSITION_CONTROL, axis)
+		elif control_mode == CONTROL_MODE_TORQUE_CONTROL:
+			self.axis_controller_fields_position_enabled(CONTROL_MODE_TORQUE_CONTROL, axis)
+		elif control_mode == CONTROL_MODE_VELOCITY_CONTROL:
+			self.axis_controller_fields_position_enabled(CONTROL_MODE_VELOCITY_CONTROL, axis)
+		# Updated mode inside odrive board
+		if axis == 0:
+			self.my_drive.axis0.controller.config.control_mode = control_mode
+		elif axis == 1:
+			self.my_drive.axis1.controller.config.control_mode = control_mode
+
+	def axis_controller_fields_position_enabled(self, control_mode, axis_num):
+		if axis_num == 0:
+			axis = "axis0"
+		else:
+			axis = "axis1"
+
+		self.ct[axis]["torque_sb"].setDisabled(True)
+		self.ct[axis]["torque_cw_pb"].setDisabled(True)
+		self.ct[axis]["torque_ccw_pb"].setDisabled(True)
+		self.ct[axis]["torque_stop_pb"].setDisabled(True)
+		self.ct[axis]["velocity_sb"].setDisabled(True)
+		self.ct[axis]["velocity_cw_pb"].setDisabled(True)
+		self.ct[axis]["velocity_ccw_pb"].setDisabled(True)
+		self.ct[axis]["velocity_stop_pb"].setDisabled(True)
+		self.ct[axis]["position_sb"].setDisabled(True)
+		self.ct[axis]["position_go_pb"].setDisabled(True)
+
+		if control_mode == CONTROL_MODE_POSITION_CONTROL:
+			self.ct[axis]["position_sb"].setDisabled(False)
+			self.ct[axis]["position_go_pb"].setDisabled(False)
+		elif control_mode == CONTROL_MODE_VELOCITY_CONTROL:
+			self.ct[axis]["velocity_sb"].setDisabled(False)
+			self.ct[axis]["velocity_cw_pb"].setDisabled(False)
+			self.ct[axis]["velocity_ccw_pb"].setDisabled(False)
+			self.ct[axis]["velocity_stop_pb"].setDisabled(False)
+		elif control_mode == CONTROL_MODE_TORQUE_CONTROL:
+			self.ct[axis]["torque_sb"].setDisabled(False)
+			self.ct[axis]["torque_cw_pb"].setDisabled(False)
+			self.ct[axis]["torque_ccw_pb"].setDisabled(False)
+			self.ct[axis]["torque_stop_pb"].setDisabled(False)
+
+
+	def torque_button_pressed(self):
+		button_name = self.sender().objectName()
+		axis = button_name[-5:]
+		# print("Button {}, Axis {}".format(button_name, axis))
+		exec("self.my_drive.{}.controller.input_torque = {}".format(axis, self.ct[axis]["torque_sb"].value()))
+
+	def velocity_button_pressed(self):
+		button_name = self.sender().objectName()
+		axis = button_name[-5:]
+		# print("Button {}, Axis {}".format(button_name, axis))
+		exec("self.my_drive.{}.controller.input_torque = {}".format(axis, self.ct[axis]["velocity_sb"].value()))
+
+	def position_button_pressed(self):
+		button_name = self.sender().objectName()
+		axis = button_name[-5:]
+		# print("Button {}, Axis {}".format(button_name, axis))
+		exec("self.my_drive.{}.controller.input_torque = {}".format(axis, self.ct[axis]["position_sb"].value()))
+
+	def update_controller_mode(self):
+		# print("Controller mode {}".format(self.my_drive.axis0.controller.config.control_mode))
+		
+		axis0_control_mode = self.my_drive.axis0.controller.config.control_mode
+		if axis0_control_mode == CONTROL_MODE_POSITION_CONTROL:
+			# self.axis0Position_radioButton.setChecked(True)
+			self.ct["axis0"]["position_label"].setChecked(True)
+			self.axis_controller_fields_position_enabled(CONTROL_MODE_POSITION_CONTROL, 0)
+		elif axis0_control_mode == CONTROL_MODE_VELOCITY_CONTROL:
+			self.ct["axis0"]["velocity_label"].setChecked(True)
+			# self.axis0Current_radioButton.setChecked(True)
+			self.axis_controller_fields_position_enabled(CONTROL_MODE_VELOCITY_CONTROL, 0)
+		elif axis0_control_mode == CONTROL_MODE_TORQUE_CONTROL:
+			# self.axis0Velocity_radioButton.setChecked(True)
+			self.ct["axis0"]["torque_label"].setChecked(True)
+			self.axis_controller_fields_position_enabled(CONTROL_MODE_TORQUE_CONTROL, 0)
+
+		axis1_control_mode = self.my_drive.axis1.controller.config.control_mode
+		if axis1_control_mode == CONTROL_MODE_POSITION_CONTROL:
+			# self.axis1Position_radioButton.setChecked(True)
+			self.ct["axis1"]["position_label"].setChecked(True)
+			self.axis_controller_fields_position_enabled(CONTROL_MODE_POSITION_CONTROL, 1)
+		elif axis1_control_mode == CONTROL_MODE_VELOCITY_CONTROL:
+			self.ct["axis1"]["velocity_label"].setChecked(True)
+			# self.axis1Current_radioButton.setChecked(True)
+			self.axis_controller_fields_position_enabled(CONTROL_MODE_VELOCITY_CONTROL, 1)
+		elif axis1_control_mode == CONTROL_MODE_TORQUE_CONTROL:
+			# self.axis1Velocity_radioButton.setChecked(True)
+			self.ct["axis1"]["torque_label"].setChecked(True)
+			self.axis_controller_fields_position_enabled(CONTROL_MODE_TORQUE_CONTROL, 1)
+
 	def update_statuses(self):
 		# pass
 		# self.update_voltage()
 		try:
 			self.update_machine_state()
-			# self.update_controller_mode()
+			self.update_controller_mode()
 			# self.error_checks()
 		except Exception as e:
 			print(e)

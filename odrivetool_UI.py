@@ -401,14 +401,25 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		my_drive = self.select_odrive()
 
 		try:
-			my_drive.reboot()
+			
+			# self.deleteItems(self.button_layout)
+			self.controller_window.odrive_stopped()
+			self.controller_window.close()
 		except:
-			print("did we reboot?")
+			pass
+
+
+		try:
+			my_drive.reboot()
+		except Exception as e:
+			print("exception rebooting,: {}".format(e))
+			# print("did we reboot?")
 
 		try:
 			self.odrive_worker.stop()
 		except Exception as e:
 			print("exception stopping, closing: {}".format(e))
+			
 		self.deleteItems(self.sb_layout)
 		self.deleteItems(self.button_layout)
 		self.odrive_connect()
@@ -780,7 +791,10 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 
 	def setup_config_window(self):
 		# print("setting up config")
-		my_drive = self.select_odrive()
+		try:
+			my_drive = self.select_odrive()
+		except:
+			return
 		path_list = []
 		path_list = self.find_tree_parents(self.treeView.selectedIndexes()[0], path_list)
 		# print("setting up config")

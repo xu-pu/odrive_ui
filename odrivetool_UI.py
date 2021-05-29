@@ -338,7 +338,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		pal.setColor(QtGui.QPalette.Button, QtCore.Qt.yellow)
 		self.pb_apply.setPalette(pal)
 
-		print(path_list)
+		# print(path_list)
 
 		if str(path_list) in self.changed_settings:
 			# print("FOUND ITEM")
@@ -352,11 +352,11 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		
 	def apply_changes(self):
 		my_drive = self.select_odrive()
-		print(self.changed_settings)
+		# print(self.changed_settings)
 		for key in self.changed_settings:
-			print(len(self.changed_settings[key]["path"]))
+			# print(len(self.changed_settings[key]["path"]))
 			path_length = len(self.changed_settings[key]["path"])
-			print(self.changed_settings[key]["value"])
+			# print(self.changed_settings[key]["value"])
 			path = self.changed_settings[key]["path"]
 			if path_length == 3:
 				exec("my_drive.{}.{} = {}".format(path[-2], path[-3], self.changed_settings[key]["value"]))
@@ -464,7 +464,7 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		pass
 
 	def function_button_pressed(self):
-		print(self.sender().objectName())
+		# print(self.sender().objectName())
 		button_name = self.sender().objectName()
 		
 		if button_name == "clear_errors":

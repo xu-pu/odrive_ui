@@ -308,6 +308,7 @@ class ControllerWindow(QtWidgets.QWidget):
 		self.ct[axis]["torque_label"].setText("Torque (Nm)")
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_label"], 0, 0, 1, 1)
 		self.ct[axis]["torque_sb"] = QtWidgets.QSpinBox()
+		self.ct[axis]["torque_sb"].setMaximum(100)
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["torque_sb"], 0, 1, 1, 1)
 		self.ct[axis]["torque_cw_pb"] = QtWidgets.QPushButton()
 		self.ct[axis]["torque_ccw_pb"] = QtWidgets.QPushButton()
@@ -329,6 +330,7 @@ class ControllerWindow(QtWidgets.QWidget):
 		self.ct[axis]["velocity_label"].setText("Velocity (Turns/s)")
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_label"], 1, 0, 1, 1)
 		self.ct[axis]["velocity_sb"] = QtWidgets.QSpinBox()
+		self.ct[axis]["velocity_sb"].setMaximum(1000)
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["velocity_sb"], 1, 1, 1, 1)
 		self.ct[axis]["velocity_cw_pb"] = QtWidgets.QPushButton()
 		self.ct[axis]["velocity_ccw_pb"] = QtWidgets.QPushButton()
@@ -350,6 +352,9 @@ class ControllerWindow(QtWidgets.QWidget):
 		self.ct[axis]["position_label"].setText("Position (Turns)")
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["position_label"], 2, 0, 1, 1)
 		self.ct[axis]["position_sb"] = QtWidgets.QSpinBox()
+		self.ct[axis]["position_sb"].setMaximum(10000)
+		self.ct[axis]["position_sb"].setMinimum(10000)
+		self.ct[axis]["position_sb"].setValue(0)
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["position_sb"], 2, 1, 1, 1)
 		self.ct[axis]["position_go_pb"] = QtWidgets.QPushButton("GO")
 		self.ct[axis]["position_go_pb"].setObjectName("position_go_pb{}".format(axis))
@@ -465,8 +470,8 @@ class ControllerWindow(QtWidgets.QWidget):
 	def axis_controller_mode_changed(self, id):
 		button_name = id.text()
 		group_name = id.sender().objectName()
-		print("button name {}".format(button_name))
-		print("group name {}".format(group_name))
+		# print("button name {}".format(button_name))
+		# print("group name {}".format(group_name))
 		if group_name == "axis0":
 			if button_name == "Position (Turns)":
 				self.axis_control_mode_changed(CONTROL_MODE_POSITION_CONTROL, 0)
@@ -484,7 +489,7 @@ class ControllerWindow(QtWidgets.QWidget):
 
 
 	def axis_control_mode_changed(self, control_mode, axis):
-		print("changin stuff")
+		# print("changin stuff")
 		
 		if control_mode == CONTROL_MODE_POSITION_CONTROL:
 			self.axis_controller_fields_position_enabled(CONTROL_MODE_POSITION_CONTROL, axis)
@@ -540,7 +545,7 @@ class ControllerWindow(QtWidgets.QWidget):
 			value = 0
 		# print("Button {}, Axis {}".format(button_name, axis))
 		exec_string = "self.my_drive.{}.controller.input_torque = {}".format(axis, value)
-		print(exec_string)
+		# print(exec_string)
 		exec(exec_string)
 
 	def velocity_button_pressed(self):
@@ -553,7 +558,7 @@ class ControllerWindow(QtWidgets.QWidget):
 			value = 0
 		# print("Button {}, Axis {}".format(button_name, axis))
 		exec_string = "self.my_drive.{}.controller.input_vel = {}".format(axis, value)
-		print(exec_string)
+		# print(exec_string)
 		exec(exec_string)
 		
 
@@ -793,8 +798,8 @@ class ControllerWindow(QtWidgets.QWidget):
 		button_name = self.sender().objectName()
 		axis_name = button_name[-5:]
 		m_state_name = button_name[:-6]
-		print(axis_name)
-		print(m_state_name)
+		# print(axis_name)
+		# print(m_state_name)
 
 		if axis_name == "axis0":
 			axis = self.my_drive.axis0
@@ -822,13 +827,13 @@ class ControllerWindow(QtWidgets.QWidget):
 		current_state = self.my_drive.axis0.current_state
 		if self.axis0_state != current_state:
 			self.axis0_state = current_state
-			print("New state axis0: {}".format(self.axis0_state))
+			# print("New state axis0: {}".format(self.axis0_state))
 			self.update_machine_state_color(current_state, 0)
 
 		current_state = self.my_drive.axis1.current_state
 		if self.axis1_state != current_state:
 			self.axis1_state = current_state
-			print("New state axis1: {}".format(self.axis1_state))
+			# print("New state axis1: {}".format(self.axis1_state))
 			self.update_machine_state_color(current_state, 1)
 
 	def update_machine_state_color(self, current_state, axis):

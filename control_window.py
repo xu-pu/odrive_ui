@@ -353,7 +353,7 @@ class ControllerWindow(QtWidgets.QWidget):
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["position_label"], 2, 0, 1, 1)
 		self.ct[axis]["position_sb"] = QtWidgets.QSpinBox()
 		self.ct[axis]["position_sb"].setMaximum(10000)
-		self.ct[axis]["position_sb"].setMinimum(10000)
+		self.ct[axis]["position_sb"].setMinimum(-10000)
 		self.ct[axis]["position_sb"].setValue(0)
 		self.ct[axis]["control_buttons_layout"].addWidget(self.ct[axis]["position_sb"], 2, 1, 1, 1)
 		self.ct[axis]["position_go_pb"] = QtWidgets.QPushButton("GO")
@@ -509,27 +509,27 @@ class ControllerWindow(QtWidgets.QWidget):
 		else:
 			axis = "axis1"
 
-		self.ct[axis]["torque_sb"].setDisabled(True)
+		# self.ct[axis]["torque_sb"].setDisabled(True)
 		self.ct[axis]["torque_cw_pb"].setDisabled(True)
 		self.ct[axis]["torque_ccw_pb"].setDisabled(True)
 		self.ct[axis]["torque_stop_pb"].setDisabled(True)
-		self.ct[axis]["velocity_sb"].setDisabled(True)
+		# self.ct[axis]["velocity_sb"].setDisabled(True)
 		self.ct[axis]["velocity_cw_pb"].setDisabled(True)
 		self.ct[axis]["velocity_ccw_pb"].setDisabled(True)
 		self.ct[axis]["velocity_stop_pb"].setDisabled(True)
-		self.ct[axis]["position_sb"].setDisabled(True)
+		# self.ct[axis]["position_sb"].setDisabled(True)
 		self.ct[axis]["position_go_pb"].setDisabled(True)
 
 		if control_mode == CONTROL_MODE_POSITION_CONTROL:
-			self.ct[axis]["position_sb"].setDisabled(False)
+			# self.ct[axis]["position_sb"].setDisabled(False)
 			self.ct[axis]["position_go_pb"].setDisabled(False)
 		elif control_mode == CONTROL_MODE_VELOCITY_CONTROL:
-			self.ct[axis]["velocity_sb"].setDisabled(False)
+			# self.ct[axis]["velocity_sb"].setDisabled(False)
 			self.ct[axis]["velocity_cw_pb"].setDisabled(False)
 			self.ct[axis]["velocity_ccw_pb"].setDisabled(False)
 			self.ct[axis]["velocity_stop_pb"].setDisabled(False)
 		elif control_mode == CONTROL_MODE_TORQUE_CONTROL:
-			self.ct[axis]["torque_sb"].setDisabled(False)
+			# self.ct[axis]["torque_sb"].setDisabled(False)
 			self.ct[axis]["torque_cw_pb"].setDisabled(False)
 			self.ct[axis]["torque_ccw_pb"].setDisabled(False)
 			self.ct[axis]["torque_stop_pb"].setDisabled(False)

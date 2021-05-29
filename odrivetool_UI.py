@@ -287,6 +287,11 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 		# pal.setColor(QPalette::Window, Qt::blue);
 		self.sender().checkedButton().setPalette(pal)
 
+
+		pal = QtGui.QPalette()
+		pal.setColor(QtGui.QPalette.Button, QtCore.Qt.yellow)
+		self.pb_apply.setPalette(pal)
+
 		if str(path_list) in self.changed_settings:
 			# print("FOUND ITEM")
 			self.changed_settings[str(path_list)]["value"] = item_value
@@ -397,29 +402,22 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 
 
 	def odrive_reboot(self):
-		
 		my_drive = self.select_odrive()
-
 		try:
-			
 			# self.deleteItems(self.button_layout)
 			self.controller_window.odrive_stopped()
 			self.controller_window.close()
 		except:
 			pass
-
-
 		try:
 			my_drive.reboot()
 		except Exception as e:
 			print("exception rebooting,: {}".format(e))
 			# print("did we reboot?")
-
 		try:
 			self.odrive_worker.stop()
 		except Exception as e:
 			print("exception stopping, closing: {}".format(e))
-			
 		self.deleteItems(self.sb_layout)
 		self.deleteItems(self.button_layout)
 		self.odrive_connect()
@@ -467,6 +465,17 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 
 	def function_button_pressed(self):
 		print(self.sender().objectName())
+		button_name = self.sender().objectName()
+		
+		if button_name == "clear_errors":
+			my_drive = self.select_odrive()
+			path_list = []
+			path_list = self.find_tree_parents(self.treeView.selectedIndexes()[0], path_list)
+			path_list.reverse()
+			# print(path_list)
+			exec_string = "my_drive.{}.clear_errors()".format(path_list[1])
+			exec(exec_string)
+
 
 	def add_function(self, item, my_drive):
 		hbox = QtWidgets.QHBoxLayout()

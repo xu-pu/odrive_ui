@@ -5,7 +5,7 @@ import pyqtgraph as pg
 # import odrive
 from odrive.enums import *
 
-class ControllerWindow(QtWidgets.QWidget, ):
+class ControllerWindow(QtWidgets.QWidget):
 	app_name = "Controller"
 	def __init__(self):
 		# Simple reason why we use it here is that it allows us to
@@ -16,6 +16,10 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.setWindowTitle(self.app_name)
 		self.resize(1280, 720)
 		# self.setCentralWidget(self.pushButton)
+
+		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
+		self.quit_shortcut.activated.connect(self.close_application)
+
 		self.new_layout = QtWidgets.QGridLayout()
 		self.setLayout(self.new_layout)
 		# self.layout.addWidget(pushButton)
@@ -73,8 +77,8 @@ class ControllerWindow(QtWidgets.QWidget, ):
 		self.verticalLayout.addWidget(self.plotWidget_position)
 		
 
-		
-
+		self.control_statusBar = QtWidgets.QLabel()
+		self.verticalLayout.addWidget(self.control_statusBar)
 		# self.showAxis1_checkBox = QtWidgets.QCheckBox()
 		# self.showAxis1_checkBox.setEnabled(True)
 		# self.showAxis1_checkBox.setChecked(True)
@@ -220,6 +224,15 @@ class ControllerWindow(QtWidgets.QWidget, ):
 
 		self.axis0_state = None
 		self.axis1_state = None
+
+	def close_application(self):
+		self.close()
+		# print("Closing!!!")
+		# try:
+		# 	self.odrive_worker.stop()
+		# except Exception as e:
+		# 	print("exception stopping, closing: {}".format(e))
+		# sys.exit()
 
 	def setup_control_axis(self, axis):
 		size_width = 50
@@ -520,20 +533,37 @@ class ControllerWindow(QtWidgets.QWidget, ):
 	def torque_button_pressed(self):
 		button_name = self.sender().objectName()
 		axis = button_name[-5:]
+		value = self.ct[axis]["torque_sb"].value()
+		if button_name[:-5] == "torque_ccw_pb":
+			value = value * -1
+		elif button_name[:-5] == "torque_stop_pb":
+			value = 0
 		# print("Button {}, Axis {}".format(button_name, axis))
-		exec("self.my_drive.{}.controller.input_torque = {}".format(axis, self.ct[axis]["torque_sb"].value()))
+		exec_string = "self.my_drive.{}.controller.input_torque = {}".format(axis, value)
+		print(exec_string)
+		exec(exec_string)
 
 	def velocity_button_pressed(self):
 		button_name = self.sender().objectName()
 		axis = button_name[-5:]
+		value = self.ct[axis]["velocity_sb"].value()
+		if button_name[:-5] == "velocity_ccw_pb":
+			value = value * -1
+		elif button_name[:-5] == "velocity_stop_pb":
+			value = 0
 		# print("Button {}, Axis {}".format(button_name, axis))
-		exec("self.my_drive.{}.controller.input_torque = {}".format(axis, self.ct[axis]["velocity_sb"].value()))
+		exec_string = "self.my_drive.{}.controller.input_vel = {}".format(axis, value)
+		print(exec_string)
+		exec(exec_string)
+		
 
 	def position_button_pressed(self):
 		button_name = self.sender().objectName()
 		axis = button_name[-5:]
 		# print("Button {}, Axis {}".format(button_name, axis))
-		exec("self.my_drive.{}.controller.input_torque = {}".format(axis, self.ct[axis]["position_sb"].value()))
+		exec_string = "self.my_drive.{}.controller.input_pos = {}".format(axis, self.ct[axis]["position_sb"].value())
+		exec(exec_string)
+		# print(exec_string)
 
 	def update_controller_mode(self):
 		# print("Controller mode {}".format(self.my_drive.axis0.controller.config.control_mode))
@@ -566,13 +596,195 @@ class ControllerWindow(QtWidgets.QWidget, ):
 			self.ct["axis1"]["torque_label"].setChecked(True)
 			self.axis_controller_fields_position_enabled(CONTROL_MODE_TORQUE_CONTROL, 1)
 
+	def error_checks(self):
+		# axis0_error = hex(self.my_drive.axis0.error)[2:]
+		# axis1_error = hex(self.my_drive.axis1.error)[2:]
+		axis0_message = "A0: "
+		axis1_message = "A1: "
+		axis0_error = self.check_axis_errors(hex(self.my_drive.axis0.error)[2:])
+		axis1_error = self.check_axis_errors(hex(self.my_drive.axis1.error)[2:])
+		axis0_encoder_error = self.check_axis_encoder_errors(hex(self.my_drive.axis0.encoder.error)[2:])
+		axis1_encoder_error = self.check_axis_encoder_errors(hex(self.my_drive.axis1.encoder.error)[2:])
+		axis0_motor_error = self.check_axis_motor_errors(hex(self.my_drive.axis0.motor.error)[2:])
+		axis1_motor_error = self.check_axis_motor_errors(hex(self.my_drive.axis1.motor.error)[2:])
+
+		axis0_error += ", E: "
+		axis1_error += ", E: "
+
+		axis0_error += axis0_encoder_error
+		axis1_error += axis1_encoder_error
+
+		axis0_error += ", M: "
+		axis1_error += ", M: "
+
+		axis0_error += axis0_motor_error
+		axis1_error += axis1_motor_error
+
+		axis0_message += axis0_error
+		axis1_message += axis1_error
+
+		self.control_statusBar.setText(axis0_message + "    " + axis1_message)
+
+	def check_axis_motor_errors(self, motor_error):
+		error_string = ""
+		if len(motor_error) == 1:
+			first_bit = motor_error
+			error_string = self.check_motor_error_b1(first_bit)
+		elif len(motor_error) == 2:
+			first_bit = motor_error[1]
+			second_bit = motor_error[0]
+			error_string = self.check_motor_error_b1(first_bit)
+			error_string += " - "
+			error_string += self.check_motor_error_b2(second_bit)
+		elif len(motor_error) == 3:
+			first_bit = motor_error[2]
+			second_bit = motor_error[1]
+			third_bit = motor_error[0]
+			error_string = self.check_motor_error_b1(first_bit)
+			error_string += " - "
+			error_string += self.check_motor_error_b2(second_bit)
+			error_string += " - "
+			error_string += self.check_motor_error_b3(third_bit)
+		return error_string
+
+	def check_motor_error_b1(self, bit):
+		error_string = "NULL"
+		if bit == "0": #ERROR_NONE = 0x00,
+			error_string = "No errors"
+		elif bit == "1": #ERROR_PHASE_RESISTANCE_OUT_OF_RANGE = 0x0001,
+			error_string = "ERROR_PHASE_RESISTANCE_OUT_OF_RANGE"
+		elif bit == "2": #ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE = 0x0002,
+			error_string = "ERROR_PHASE_INDUCTANCE_OUT_OF_RANGE"
+		elif bit == "4": #ERROR_ADC_FAILED = 0x0004,
+			error_string = "ERROR_ADC_FAILED"
+		elif bit == "8": #ERROR_DRV_FAULT = 0x0008,
+			error_string = "ERROR_DRV_FAULT"
+		return error_string
+
+	def check_motor_error_b2(self, bit):
+		error_string = " "
+		if bit == "1": #ERROR_CONTROL_DEADLINE_MISSED = 0x0010,
+			error_string = "ERROR_CONTROL_DEADLINE_MISSED"
+		elif bit == "2": #ERROR_NOT_IMPLEMENTED_MOTOR_TYPE = 0x0020,
+			error_string = "ERROR_NOT_IMPLEMENTED_MOTOR_TYPE"
+		elif bit == "4": #ERROR_BRAKE_CURRENT_OUT_OF_RANGE = 0x0040,
+			error_string = "ERROR_BRAKE_CURRENT_OUT_OF_RANGE"
+		elif bit == "8": #ERROR_MODULATION_MAGNITUDE = 0x0080,
+			error_string = "ERROR_MODULATION_MAGNITUDE"
+		return error_string
+
+	def check_motor_error_b3(self, bit):
+		error_string = " "
+		if bit == "1": #ERROR_BRAKE_DEADTIME_VIOLATION = 0x0100,
+			error_string = "ERROR_BRAKE_DEADTIME_VIOLATION"
+		elif bit == "2": #ERROR_UNEXPECTED_TIMER_CALLBACK = 0x0200,
+			error_string = "ERROR_UNEXPECTED_TIMER_CALLBACK"
+		elif bit == "4": #ERROR_CURRENT_SENSE_SATURATION = 0x0400
+			error_string = "ERROR_CURRENT_SENSE_SATURATION"
+		return error_string
+
+	def check_axis_encoder_errors(self, encoder_error):
+		error_string = ""
+		if len(encoder_error) == 1:
+			first_bit = encoder_error
+			error_string = self.check_encoder_error_b1(first_bit)
+		elif len(encoder_error) == 2:
+			first_bit = encoder_error[1]
+			second_bit = encoder_error[0]
+			error_string = self.check_encoder_error_b1(first_bit)
+			error_string += " - "
+			error_string += self.check_encoder_error_b2(second_bit)
+		return error_string
+
+	def check_encoder_error_b1(self, bit):
+		error_string = "NULL"
+		if bit == "0": #ERROR_NONE = 0x00,
+			error_string = "No errors"
+		elif bit == "1": #ERROR_UNSTABLE_GAIN = 0x01,
+			error_string = "ERROR_UNSTABLE_GAIN"
+		elif bit == "2": #ERROR_CPR_OUT_OF_RANGE = 0x02,
+			error_string = "ERROR_CPR_OUT_OF_RANGE"
+		elif bit == "4": #ERROR_NO_RESPONSE = 0x04,
+			error_string = "ERROR_NO_RESPONSE"
+		elif bit == "8": #ERROR_UNSUPPORTED_ENCODER_MODE = 0x08,
+			error_string = "ERROR_UNSUPPORTED_ENCODER_MODE"
+		return error_string
+
+	def check_encoder_error_b2(self, bit):
+		error_string = " "
+		if bit == "1": #ERROR_ILLEGAL_HALL_STATE = 0x10,
+			error_string = "ERROR_ILLEGAL_HALL_STATE"
+		elif bit == "2": #ERROR_INDEX_NOT_FOUND_YET = 0x20,
+			error_string = "ERROR_INDEX_NOT_FOUND_YET"
+		return error_string
+
+
+	def check_axis_errors(self, axis_error):
+		error_string = ""
+		if len(axis_error) == 1:
+			first_bit = axis_error
+			error_string = self.check_axis_error_b1(first_bit)
+		elif len(axis_error) == 2:
+			first_bit = axis_error[1]
+			second_bit = axis_error[0]
+			error_string = self.check_axis_error_b1(first_bit)
+			error_string += " - "
+			error_string += self.check_axis_error_b2(second_bit)
+		elif len(axis_error) == 3:
+			first_bit = axis_error[2]
+			second_bit = axis_error[1]
+			third_bit = axis_error[0]
+			error_string = self.check_axis_error_b1(first_bit)
+			error_string += " - "
+			error_string += self.check_axis_error_b2(second_bit)
+			error_string += " - "
+			error_string += self.check_axis_error_b3(third_bit)
+		return error_string
+
+
+	def check_axis_error_b1(self, bit):
+		error_string = "NULL"
+		if bit == "0": #ERROR_NONE = 0x00,
+			error_string = "No errors"
+		elif bit == "1": #ERROR_INVALID_STATE = 0x01, //<! an invalid state was requested
+			error_string = "ERROR_INVALID_STATE"
+		elif bit == "2": #ERROR_DC_BUS_UNDER_VOLTAGE = 0x02,
+			error_string = "ERROR_DC_BUS_UNDER_VOLTAGE"
+		elif bit == "4": #ERROR_DC_BUS_OVER_VOLTAGE = 0x04,
+			error_string = "ERROR_DC_BUS_OVER_VOLTAGE"
+		elif bit == "8": #ERROR_CURRENT_MEASUREMENT_TIMEOUT = 0x08,
+			error_string = "ERROR_CURRENT_MEASUREMENT_TIMEOUT"
+		return error_string
+
+	def check_axis_error_b2(self, bit):
+		error_string = " "
+		if bit == "1": #ERROR_BRAKE_RESISTOR_DISARMED = 0x10, //<! the brake resistor was unexpectedly disarmed
+			error_string = "ERROR_BRAKE_RESISTOR_DISARMED"
+		elif bit == "2": #ERROR_MOTOR_DISARMED = 0x20, //<! the motor was unexpectedly disarmed
+			error_string = "ERROR_MOTOR_DISARMED"
+		elif bit == "4": #ERROR_MOTOR_FAILED = 0x40, // Go to motor.hpp for information, check odrvX.axisX.motor.error for error value
+			error_string = "ERROR_MOTOR_FAILED"
+		elif bit == "8": #ERROR_SENSORLESS_ESTIMATOR_FAILED = 0x80,
+			error_string = "ERROR_SENSORLESS_ESTIMATOR_FAILED"
+		return error_string
+
+	def check_axis_error_b3(self, bit):
+		error_string = " "
+		if bit == "1": #ERROR_ENCODER_FAILED = 0x100, // Go to encoder.hpp for information, check odrvX.axisX.encoder.error for error value
+			error_string = "ERROR_ENCODER_FAILED"
+		elif bit == "2": #ERROR_CONTROLLER_FAILED = 0x200,
+			error_string = "ERROR_CONTROLLER_FAILED"
+		elif bit == "4": #ERROR_POS_CTRL_DURING_SENSORLESS = 0x400,
+			error_string = "ERROR_POS_CTRL_DURING_SENSORLESS"
+		return error_string
+
 	def update_statuses(self):
 		# pass
 		# self.update_voltage()
 		try:
 			self.update_machine_state()
 			self.update_controller_mode()
-			# self.error_checks()
+			self.error_checks()
 		except Exception as e:
 			print(e)
 			# self.odrive_disconnected_exception()

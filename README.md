@@ -2,10 +2,10 @@
 
 Forked from [ui_odrivetool](https://gitlab.com/p87942130/ui_odrivetool) on GitLab
 
-Tested on Ubuntu 18.04 - Python 3.7.7 - ODrive python 0.5.2 (later version won't work)
+Tested on Ubuntu 18.04 - Python 3.9 - ODrive python 0.5.1 (later version won't work)
 
 ```shell
-pip install odrive=0.5.2
+pip install odrive=0.5.1
 ```
 
 Make sure you can run odrivetool and it can find odrive board connected.

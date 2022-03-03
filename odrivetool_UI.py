@@ -37,7 +37,7 @@ ICON_OPEN_CONTROLLER_PATH = "Icons/odrive_icons/odrive_icons_OpenController2.png
 version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_minor","hw_version_major", "hw_version_minor", "fw_version_unreleased","hw_version_variant"]
 
 
-class odrive_MainWindow(object):
+class ODriveMainWindow(object):
 	def setupUi(self, MainWindow):
 		MainWindow.setObjectName("MainWindow")
 		MainWindow.resize(1280, 720)
@@ -101,7 +101,7 @@ class odrive_MainWindow(object):
 		MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
 
-class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
+class ExampleApp(QtWidgets.QMainWindow, ODriveMainWindow):
 	app_name = "Odrive Tester"
 	def __init__(self):
 		# Simple reason why we use it here is that it allows us to

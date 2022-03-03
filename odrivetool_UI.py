@@ -21,6 +21,8 @@ import pyqtgraph as pg
 from control_window import ControllerWindow
 from serialThread import OdriveWorker
 
+APP_NAME = "Odrive Tester"
+
 ICON_TRUE_PATH = "Icons/true.png"
 ICON_FALSE_PATH = "Icons/false.png"
 ICON_NOSTATE_PATH = "Icons/NoState.jpg"
@@ -101,7 +103,6 @@ class ODriveMainWindow(QtWidgets.QMainWindow):
 		_translate = QtCore.QCoreApplication.translate
 		MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
-	app_name = "Odrive Tester"
 	def __init__(self):
 		# Simple reason why we use it here is that it allows us to
 		# access variables, methods etc in the design.py file
@@ -109,7 +110,7 @@ class ODriveMainWindow(QtWidgets.QMainWindow):
 		self.setupUi(self)  # This is defined in design.py file automatically
 							# It sets up layout and widgets that are defined
 
-		self.setWindowTitle(self.app_name)
+		self.setWindowTitle(self.APP_NAME)
 
 		self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
 		self.quit_shortcut.activated.connect(self.close_application)
@@ -130,8 +131,6 @@ class ODriveMainWindow(QtWidgets.QMainWindow):
 		self.connect_icon.addPixmap(QtGui.QPixmap(ICON_CONNECT_PATH), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 		self.connect_to_odrive_action.setIcon(self.connect_icon)
 		self.connect_to_odrive_action.triggered.connect(self.odrive_connect)
-
-		
 
 		self.open_controller = self.mainToolBar.addAction("Open Controller")
 		self.open_controller_icon = QtGui.QIcon()

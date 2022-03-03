@@ -36,6 +36,7 @@ ICON_OPEN_CONTROLLER_PATH = "Icons/odrive_icons/odrive_icons_OpenController2.png
 
 version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_minor","hw_version_major", "hw_version_minor", "fw_version_unreleased","hw_version_variant"]
 
+
 class odrive_MainWindow(object):
 	def setupUi(self, MainWindow):
 		MainWindow.setObjectName("MainWindow")
@@ -98,8 +99,6 @@ class odrive_MainWindow(object):
 	def retranslateUi(self, MainWindow):
 		_translate = QtCore.QCoreApplication.translate
 		MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-
-
 
 
 class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
@@ -1267,11 +1266,14 @@ class ExampleApp(QtWidgets.QMainWindow, odrive_MainWindow):
 			# self.testmdi.show()
 		return model
 
-def main():
-	app = QtWidgets.QApplication(sys.argv)  # A new instance of QApplication
-	form = ExampleApp()                 # We set the form to be our (design)
-	form.show()                         # Show the form
-	app.exec_()                         # and execute the app
 
-if __name__ == '__main__':              # if we're running file directly and not importing it
-	main()                              # run the main function
+def main():
+	app = QtWidgets.QApplication(sys.argv)
+	form = ExampleApp()
+	form.show()
+	app.exec_()
+
+
+if __name__ == '__main__':
+	main()
+

@@ -1,10 +1,9 @@
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 import odrive
 import time
 
-class odriveWorker(QtCore.QThread):
+
+class OdriveWorker(QtCore.QThread):
 	# add some signals here
 	odrive_found_sig = QtCore.pyqtSignal('PyQt_PyObject')
 	
@@ -17,7 +16,6 @@ class odriveWorker(QtCore.QThread):
 
 	def set_odrive_number(self, number):
 		self.odrive_number = number
-
 
 	def run(self):
 		self.my_drive = odrive.find_any(find_multiple=self.odrive_number)

@@ -19,7 +19,7 @@ from pyqtgraph import PlotWidget
 import pyqtgraph as pg
 
 from control_window import ControllerWindow
-from serialThread import odriveWorker
+from serialThread import OdriveWorker
 
 ICON_TRUE_PATH = "Icons/true.png"
 ICON_FALSE_PATH = "Icons/false.png"
@@ -1185,7 +1185,7 @@ class ExampleApp(QtWidgets.QMainWindow, ODriveMainWindow):
 		
 		# self.odrive_connect()
 		self.statusBar.showMessage("Connecting... \t This might take a while.")
-		self.odrive_worker = odriveWorker()
+		self.odrive_worker = OdriveWorker()
 		self.odrive_worker.odrive_found_sig.connect(self.odrive_connected)
 		self.odrive_worker.set_odrive_number(self.odrive_number_sbox.value())
 		self.odrive_worker.start()

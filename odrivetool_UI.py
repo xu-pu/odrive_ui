@@ -37,7 +37,8 @@ ICON_OPEN_CONTROLLER_PATH = "Icons/odrive_icons/odrive_icons_OpenController2.png
 version_ignore_list = ["fw_version_revision", "fw_version_major", "fw_version_minor","hw_version_major", "hw_version_minor", "fw_version_unreleased","hw_version_variant"]
 
 
-class ODriveMainWindow(object):
+class ODriveMainWindow(QtWidgets.QMainWindow):
+
 	def setupUi(self, MainWindow):
 		MainWindow.setObjectName("MainWindow")
 		MainWindow.resize(1280, 720)
@@ -100,8 +101,6 @@ class ODriveMainWindow(object):
 		_translate = QtCore.QCoreApplication.translate
 		MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
-
-class ExampleApp(QtWidgets.QMainWindow, ODriveMainWindow):
 	app_name = "Odrive Tester"
 	def __init__(self):
 		# Simple reason why we use it here is that it allows us to
@@ -1269,7 +1268,7 @@ class ExampleApp(QtWidgets.QMainWindow, ODriveMainWindow):
 
 def main():
 	app = QtWidgets.QApplication(sys.argv)
-	form = ExampleApp()
+	form = ODriveMainWindow()
 	form.show()
 	app.exec_()
 
